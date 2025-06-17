@@ -1,0 +1,118 @@
+class Collider extends Component implements ICollider {
+    public type: ColliderType = ColliderType.Box;
+    public width: number = 50;
+    public height: number = 50;
+    public radius: number = 25;
+    public offset: Vector2D = Vector2.zero();
+    public isTrigger: boolean = false;
+    public layers: number[] = [CollisionLayer.Default];
+    public mask: number[] = [CollisionLayer.All];
+
+    constructor(gameObject: IGameObject, type: ColliderType = ColliderType.Box) {
+        super(gameObject);
+        this.type = type;
+    }
+
+    public static createBox(gameObject: IGameObject, width: number, height: number, offset?: Vector2D): Collider {
+        const collider = new Collider(gameObject, ColliderType.Box);
+        collider.width = width;
+        collider.height = height;
+        if (offset) collider.offset = offset;
+        return collider;
+    }
+
+    public static createCircle(gameObject: IGameObject, radius: number, offset?: Vector2D): Collider {
+        const collider = new Collider(gameObject, ColliderType.Circle);
+        collider.radius = radius;
+        if (offset) collider.offset = offset;
+        return collider;
+    }
+
+    public getBounds(): Rectangle {
+        const transform = this.gameObject.getComponent(Transform);
+        if (!transform) {
+            return { x: 0, y: 0, width: 0, height: 0 };
+        }
+
+        const worldPos = transform.getWorldPosition();
+        const pos = new Vector2(worldPos.x + this.offset.x, worldPos.y + this.offset.y);
+        
+        switch (this.type) {
+            case ColliderType.Box:
+                return {
+                    x: pos.x - this.width / 2,
+                    y: pos.y - this.height / 2,
+                    width: this.width,
+                    height: this.height
+                };
+                
+            case ColliderType.Circle:
+                return {
+                    x: pos.x - this.radius,
+                    y: pos.y - this.radius,
+                    width: this.radius * 2,
+                    height: this.radius * 2
+                };
+                
+            default:
+                return { 
+                    x: pos.x, 
+                    y: pos.y, 
+                    width: this.width, 
+                    height: this.height 
+                };
+        }
+    }
+
+    public onCollision(other: ICollidable, collisionInfo: CollisionInfo): void {        
+        if (this.isTrigger) {
+            this.dispatchEvent('triggerEnter', { other, collisionInfo });
+        } else {
+            this.dispatchEvent('collisionEnter', { other, collisionInfo });
+        }
+    }
+
+    public getCollisionLayers(): number[] {
+        return this.layers;
+    }
+
+    public setCollisionLayers(layers: number[]): void {
+        this.layers = layers;
+    }
+
+    public canCollideWith(other: ICollider): boolean {
+        const canThisCollide = this.mask.some(layer => other.layers.includes(layer));
+        const canOtherCollide = other.mask.some(layer => this.layers.includes(layer));
+        return canThisCollide && canOtherCollide;
+    }
+
+    public update(deltaTime: number): void { }
+
+    public render(ctx: CanvasRenderingContext2D): void { }
+
+    public serialize(): SerializedData {
+        return {
+            ...super.serialize(),
+            type: this.type,
+            width: this.width,
+            height: this.height,
+            radius: this.radius,
+            offset: this.offset,
+            isTrigger: this.isTrigger,
+            layers: this.layers,
+            mask: this.mask
+        };
+    }
+
+    public deserialize(data: SerializedData): void {
+        super.deserialize(data);
+        this.type = data.type || ColliderType.Box;
+        this.width = data.width || 50;
+        this.height = data.height || 50;
+        this.radius = data.radius || 25;
+        this.offset = data.offset || Vector2.zero();
+        this.isTrigger = data.isTrigger || false;
+        this.layers = data.layers || CollisionLayer.Default;
+        this.mask = data.mask || CollisionLayer.All;
+    }
+}

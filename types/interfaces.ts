@@ -82,8 +82,8 @@ interface ICollider extends IComponent, ICollidable {
     radius: number;
     offset: Vector2D;
     isTrigger: boolean;
-    layers: number;
-    mask: number;
+    layers: number[];
+    mask: number[];
     
     canCollideWith(other: ICollider): boolean;
 }
