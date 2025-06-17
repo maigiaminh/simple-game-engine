@@ -1,5 +1,5 @@
 import { Component } from '../core/Component';
-import { IGameObject, IRigidBody } from '../types/interfaces';
+import { IGameObject, IRigidBody, SerializedData, Vector2D, ComponentConstructor } from '../types/general';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
 
@@ -47,7 +47,7 @@ export class RigidBody extends Component implements IRigidBody {
 
         this.velocity = this.velocity.multiply(Math.pow(this.drag, dt));
 
-        const transform = this.gameObject.getComponent(Transform);
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>);
         if (transform) {
             const deltaPos = this.velocity.multiply(dt);
             transform.translate(deltaPos);
@@ -71,10 +71,15 @@ export class RigidBody extends Component implements IRigidBody {
 
     public deserialize(data: SerializedData): void {
         super.deserialize(data);
-        this.velocity = data.velocity || Vector2.zero();
-        this.mass = data.mass || 1;
-        this.drag = data.drag || 0.98;
+        if (Vector2.isVector2D(data.velocity)) {
+            this.velocity = new Vector2(data.velocity.x, data.velocity.y);
+        } else {
+            this.velocity = Vector2.zero();
+        }
+
+        this.mass = typeof data.mass === 'number' ? data.mass : 1;
+        this.drag = typeof data.drag === 'number' ? data.drag : 0.98;
         this.useGravity = data.useGravity !== false;
-        this.isKinematic = data.isKinematic || false;
+        this.isKinematic = !!data.isKinematic;
     }
 }

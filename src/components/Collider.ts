@@ -1,6 +1,5 @@
 import { Component } from '../core/Component';
-import { ICollider, ICollidable, IGameObject, CollisionInfo } from '../types/interfaces';
-import { ColliderType, CollisionLayer } from '../types/enums';
+import { ICollider, ICollidable, IGameObject, CollisionInfo, ColliderType, CollisionLayer, Vector2D, Rectangle, SerializedData, ComponentConstructor } from '../types/general';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
 
@@ -35,7 +34,7 @@ class Collider extends Component implements ICollider {
     }
 
     public getBounds(): Rectangle {
-        const transform = this.gameObject.getComponent(Transform);
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>);
         if (!transform) {
             return { x: 0, y: 0, width: 0, height: 0 };
         }
@@ -112,13 +111,19 @@ class Collider extends Component implements ICollider {
 
     public deserialize(data: SerializedData): void {
         super.deserialize(data);
-        this.type = data.type || ColliderType.Box;
-        this.width = data.width || 50;
-        this.height = data.height || 50;
-        this.radius = data.radius || 25;
-        this.offset = data.offset || Vector2.zero();
-        this.isTrigger = data.isTrigger || false;
-        this.layers = data.layers || CollisionLayer.Default;
-        this.mask = data.mask || CollisionLayer.All;
+        this.type = (typeof data.type === 'string' ? data.type as unknown as ColliderType : ColliderType.Box);
+        this.width = (typeof data.width === 'number' ? data.width : 50);
+        this.height = (typeof data.height === 'number' ? data.height : 50);
+        this.radius = (typeof data.radius === 'number' ? data.radius : 25);
+
+        if (Vector2.isVector2D(data.offset)) {
+            this.offset = new Vector2(data.offset.x, data.offset.y);
+        } else {
+            this.offset = Vector2.zero();
+        }        
+
+        this.isTrigger = (typeof data.isTrigger === 'boolean' ? data.isTrigger : false);
+        this.layers = Array.isArray(data.layers) ? data.layers : [CollisionLayer.Default];
+        this.mask = Array.isArray(data.mask) ? data.mask : [CollisionLayer.All];
     }
 }

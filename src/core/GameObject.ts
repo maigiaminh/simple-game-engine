@@ -1,4 +1,4 @@
-import { IGameObject, IComponent, GameObjectConfig, ComponentConstructor, ITransform } from '../types/interfaces';
+import { IGameObject, IComponent, GameObjectConfig, ComponentConstructor, ITransform, Vector2D, SerializedData } from '../types/general';
 import { EventEmitter } from './EventEmitter';
 import { Transform } from '../components/Transform';
 import { Vector2 } from '../utils/Vector2';
@@ -86,7 +86,7 @@ export class GameObject extends EventEmitter implements IGameObject {
     }
 
     public getTransform(): ITransform {
-        return this.getComponent(Transform)!;
+        return this.getComponent(Transform as ComponentConstructor<Transform>)!;
     }
 
     public awake(): void {
@@ -239,15 +239,24 @@ export class GameObject extends EventEmitter implements IGameObject {
     }
 
     public deserialize(data: SerializedData): void {
-        this.name = data.name || this.name;
-        this.tag = data.tag || this.tag;
-        this.layer = data.layer || this.layer;
+        if (typeof data.name === 'string') {
+            this.name = data.name;
+        }
+        if (typeof data.tag === 'string') {
+            this.tag = data.tag;
+        }
+        if (typeof data.layer === 'number') {
+            this.layer = data.layer;
+        }
         this.active = data.active !== false;
         
-        if (data.components) {
+        if (data.components && typeof data.components === 'object' && data.components !== null) {
             this.components.forEach((component, name) => {
-                if (data.components[name]) {
-                    component.deserialize(data.components[name]);
+                if (
+                    Object.prototype.hasOwnProperty.call(data.components, name) &&
+                    (data.components as Record<string, unknown>)[name]
+                ) {
+                    component.deserialize((data.components as Record<string, SerializedData>)[name] as SerializedData);
                 }
             });
         }

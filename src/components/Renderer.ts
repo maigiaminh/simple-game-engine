@@ -1,5 +1,5 @@
 import { Component } from '../core/Component';
-import { IGameObject, IRenderer } from '../types/interfaces';
+import { IGameObject, IRenderer, RGBAColor, SerializedData, ComponentConstructor } from '../types/general';
 import { Color } from '../utils/Color';
 import { Transform } from './Transform';
 
@@ -33,7 +33,7 @@ class Renderer extends Component implements IRenderer {
     public render(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible()) return;
 
-        const transform = this.gameObject.getComponent(Transform);
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>);
         if (!transform) return;
 
         ctx.save();
@@ -66,8 +66,13 @@ class Renderer extends Component implements IRenderer {
 
     public deserialize(data: SerializedData): void {
         super.deserialize(data);
-        if (data.color) {
-            this.color = data.color;
+        if (Color.isRGBAColor(data.color)) {
+            this.color = {
+                r: data.color.r,
+                g: data.color.g,
+                b: data.color.b,
+                a: data.color.a
+            };
         }
         this.visible = data.visible !== false;
     }

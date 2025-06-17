@@ -1,3 +1,5 @@
+import { Vector2D } from "../types/general";
+
 export class Vector2 implements Vector2D {
     public x: number;
     public y: number;
@@ -90,5 +92,14 @@ export class Vector2 implements Vector2D {
 
     public static fromAngle(angle: number, magnitude: number = 1): Vector2 {
         return new Vector2(Math.cos(angle) * magnitude, Math.sin(angle) * magnitude);
+    }
+
+    public static isVector2D(obj: unknown): obj is Vector2D {
+        return (
+            typeof obj === 'object' &&
+            obj !== null &&
+            typeof (obj as { x: unknown }).x === 'number' &&
+            typeof (obj as { y: unknown }).y === 'number'
+        );
     }
 }

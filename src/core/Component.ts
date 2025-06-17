@@ -1,4 +1,4 @@
-import { IComponent, IGameObject } from '../types/interfaces';
+import { IComponent, IGameObject, SerializedData } from '../types/general';
 import { EventEmitter } from './EventEmitter';
 
 export abstract class Component extends EventEmitter implements IComponent {
@@ -78,6 +78,6 @@ export abstract class Component extends EventEmitter implements IComponent {
     }
 
     public deserialize(data: SerializedData): void {
-        this.enabled = data.enabled ?? true;
+        this.enabled = typeof data.enabled === 'boolean' ? data.enabled : true;
     }
 }

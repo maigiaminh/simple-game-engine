@@ -1,3 +1,4 @@
+import { RGBAColor } from '../types/general';
 import { MathUtils } from './MathUtils';
 
 export class Color {
@@ -136,6 +137,17 @@ export class Color {
 
     public static lerp(a: Color, b: Color, t: number): Color {
         return a.lerp(b, t);
+    }
+
+    public static isRGBAColor(obj: unknown): obj is RGBAColor {
+        return (
+            typeof obj === 'object' &&
+            obj !== null &&
+            typeof (obj as { r: unknown }).r === 'number' &&
+            typeof (obj as { g: unknown }).g === 'number' &&
+            typeof (obj as { b: unknown }).b === 'number' &&
+            typeof (obj as { a: unknown }).a === 'number'
+        );
     }
 
     public static readonly WHITE = new Color(255, 255, 255);

@@ -1,4 +1,132 @@
-import { ColliderType, CameraType, SceneState, MouseButton, ResourceType, EventPhase, TouchPhase } from "./enums";
+// ==================== CORE TYPES ====================
+// #region Core Types
+type Vector2D = {
+    x: number;
+    y: number;
+};
+
+type Rectangle = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+};
+
+type Circle = {
+    x: number;
+    y: number;
+    radius: number;
+};
+
+type Size = {
+    width: number;
+    height: number;
+};
+
+type Point = {
+    x: number;
+    y: number;
+};
+
+// Color types
+type RGBColor = {
+    r: number;
+    g: number;
+    b: number;
+};
+
+type RGBAColor = RGBColor & {
+    a: number;
+};
+
+type HSLColor = {
+    h: number;
+    s: number;
+    l: number;
+};
+
+type ColorValue = string | RGBColor | RGBAColor | HSLColor;
+
+type SerializedData = {
+    [key: string]: unknown;
+};
+// #endregion
+
+
+// ==================== ENUMS ====================
+// #region Enums
+export enum InputType {
+    Keyboard = 'keyboard',
+    Mouse = 'mouse',
+    Touch = 'touch',
+}
+
+export enum MouseButton {
+    Left = 0,
+    Middle = 1,
+    Right = 2
+}
+
+export enum TouchPhase {
+    Began = 'began',
+    Moved = 'moved',
+    Stationary = 'stationary',
+    Ended = 'ended',
+    Canceled = 'canceled'
+}
+
+export enum ColliderType {
+    Box = 'Box',
+    Circle = 'Circle',
+    Polygon = 'Circle'
+}
+
+export enum CollisionLayer {
+    Default = 0,
+    Player = 1,
+    Enemy = 2,
+    Projectile = 3,
+    Environment = 4,
+    Trigger = 5,
+    UI = 6,
+    Ground = 7,
+    All = 8
+}
+
+export enum ResourceType {
+    Image = 'image',
+    Audio = 'audio',
+    Text = 'text',
+    JSON = 'json',
+    Font = 'font'
+}
+
+export enum LoadState {
+    NotLoaded = 'not_loaded',
+    Loading = 'loading',
+    Loaded = 'loaded',
+    Error = 'error'
+}
+
+export enum SceneState {
+    NotLoaded = 'not_loaded',
+    Loading = 'loading',
+    Loaded = 'loaded',
+    Unloading = 'unloading'
+}
+
+export enum CameraType {
+    Orthographic = 'Orthographic',
+    Perspective = 'Perspective'
+}
+
+export enum EventPhase {
+    Capture = 'capture',
+    Target = 'target',
+    Bubble = 'bubble'
+}
+// #endregion
+
 // ==================== CORE INTERFACES ====================
 // #region Core Interfaces
 export interface IUpdatable {
@@ -204,8 +332,8 @@ export interface IAudioManager {
 }
 
 export interface IResourceManager {
-    loadResource(name: string, url: string, type: ResourceType): Promise<any>;
-    getResource<T = any>(name: string): T | null;
+    loadResource(name: string, url: string, type: ResourceType): Promise<unknown>;
+    getResource<T = unknown>(name: string): T | null;
     hasResource(name: string): boolean;
     unloadResource(name: string): void;
     unloadAll(): void;
@@ -262,14 +390,14 @@ export interface IGameEngine {
 // #region Event Interfaces
 export interface GameEvent {
     type: string;
-    target: any;
-    currentTarget: any;
+    target: unknown;
+    currentTarget: unknown;
     phase: EventPhase;
     bubbles: boolean;
     cancelable: boolean;
     defaultPrevented: boolean;
     timeStamp: number;
-    data?: any;
+    data?: unknown;
     
     preventDefault(): void;
     stopPropagation(): void;
@@ -279,7 +407,7 @@ export interface GameEvent {
 export interface IEventEmitter {
     addEventListener(type: string, listener: GameEventListener, options?: GameEventListenerOptions): void;
     removeEventListener(type: string, listener: GameEventListener): void;
-    dispatchEvent(event: GameEvent | string, data?: any): boolean;
+    dispatchEvent(event: GameEvent | string, data?: unknown): boolean;
     removeAllEventListeners(type?: string): void;
 }
 // #endregion
@@ -371,7 +499,7 @@ export interface GameEventListenerOptions {
 
 // ==================== UTILITY TYPES ====================
 // #region Utility Types
-export type ComponentConstructor<T extends IComponent> = new (...args: any[]) => T;
+export type ComponentConstructor<T extends IComponent> = new (...args: unknown[]) => T;
 export type GameEventListener = (event: GameEvent) => void;
 export type UpdateFunction = (deltaTime: number) => void;
 export type RenderFunction = (ctx: CanvasRenderingContext2D) => void;

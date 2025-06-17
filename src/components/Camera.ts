@@ -1,8 +1,7 @@
 import { Component } from '../core/Component';
-import { ICamera, IGameObject } from '../types/interfaces';
-import { CameraType } from '../types/enums';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
+import { CameraType, ICamera, IGameObject, Rectangle, SerializedData, Vector2D, ComponentConstructor } from '../types/general';
 
 export class Camera extends Component implements ICamera {
     public type: CameraType = CameraType.Orthographic;
@@ -30,7 +29,7 @@ export class Camera extends Component implements ICamera {
     }
 
     public worldToScreen(worldPoint: Vector2D, canvasSize: Vector2D): Vector2D {
-        const transform = this.gameObject.getComponent(Transform)!;
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!;
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset);
         
         return new Vector2(
@@ -40,7 +39,7 @@ export class Camera extends Component implements ICamera {
     }
 
     public screenToWorld(screenPoint: Vector2D, canvasSize: Vector2D): Vector2D {
-        const transform = this.gameObject.getComponent(Transform)!;
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!;
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset);
         
         return new Vector2(
@@ -55,7 +54,7 @@ export class Camera extends Component implements ICamera {
     }
 
     private getViewBounds(canvasSize: Vector2D): Rectangle {
-        const transform = this.gameObject.getComponent(Transform)!;
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!;
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset);
         
         const halfWidth = canvasSize.x / 2;
@@ -79,7 +78,7 @@ export class Camera extends Component implements ICamera {
 
         if (this.target) {
             const targetPos = this.target.getPosition();
-            const transform = this.gameObject.getComponent(Transform)!;
+            const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!;
             const currentPos = transform.getWorldPosition();
             
             if (this.followSmoothing > 0) {
@@ -117,9 +116,9 @@ export class Camera extends Component implements ICamera {
 
     public deserialize(data: SerializedData): void {
         super.deserialize(data);
-        this.type = data.type || CameraType.Orthographic;
-        this.size = data.size || 5;
-        this.fieldOfView = data.fieldOfView || 60;
-        this.followSmoothing = data.followSmoothing || 5;
+        this.type = (typeof data.type === 'string' ? data.type : CameraType.Orthographic) as CameraType;
+        this.size = typeof data.size === 'number' ? data.size : 5;
+        this.fieldOfView = typeof data.fieldOfView === 'number' ? data.fieldOfView : 60;
+        this.followSmoothing = typeof data.followSmoothing === 'number' ? data.followSmoothing : 5;
     }
 }

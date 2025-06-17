@@ -1,21 +1,20 @@
-import { EventPhase } from "../types/enums";
+import { EventPhase, IEventEmitter, GameEvent, GameEventListener, GameEventListenerOptions } from "../types/general";
 import { Time } from "../utils/Time";
-import { IEventEmitter, GameEvent, GameEventListener, GameEventListenerOptions } from "../types/interfaces";
 
 export class GameEventImplement implements GameEvent {
     public type: string;
-    public target: any;
-    public currentTarget: any;
+    public target: unknown;
+    public currentTarget: unknown;
     public phase: EventPhase;
     public bubbles: boolean;
     public cancelable: boolean;
     public defaultPrevented: boolean = false;
     public timeStamp: number;
-    public data?: any;
+    public data?: unknown;
 
     private _propagationStopped: boolean = false;
 
-    constructor(type: string, options: { bubbles?: boolean, cancelable?: boolean, data?: any } = {}) {
+    constructor(type: string, options: { bubbles?: boolean, cancelable?: boolean, data?: unknown } = {}) {
         this.type = type;
         this.bubbles = options.bubbles || false;
         this.cancelable = options.cancelable || false;
@@ -67,7 +66,7 @@ export class EventEmitter implements IEventEmitter {
         }
     }
 
-    public dispatchEvent(event: GameEvent | string, data?: any): boolean {
+    public dispatchEvent(event: GameEvent | string, data?: unknown): boolean {
         const evt = typeof event === 'string' ? new GameEventImplement(event, { data }) : event;
         
         if (!evt.target) {

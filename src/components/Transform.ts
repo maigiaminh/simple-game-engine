@@ -1,5 +1,5 @@
 import { Component } from '../core/Component';
-import { ITransform, IGameObject } from '../types/interfaces';
+import { ITransform, IGameObject, SerializedData } from '../types/general';
 import { Vector2 } from '../utils/Vector2';
 
 export class Transform extends Component implements ITransform {
@@ -134,11 +134,13 @@ export class Transform extends Component implements ITransform {
 
     public deserialize(data: SerializedData): void {
         super.deserialize(data);
-        if (data.position) {
+        if (Vector2.isVector2D(data.position)) {
             this.position = new Vector2(data.position.x, data.position.y);
         }
-        this.rotation = data.rotation || 0;
-        if (data.scale) {
+
+        this.rotation = typeof data.rotation === 'number' ? data.rotation : 0;
+        
+        if (Vector2.isVector2D(data.scale)) {
             this.scale = new Vector2(data.scale.x, data.scale.y);
         }
         this.markNeedsUpdate();
