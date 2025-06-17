@@ -1,4 +1,10 @@
-class Camera extends Component implements ICamera {
+import { Component } from '../core/Component';
+import { ICamera, IGameObject } from '../types/interfaces';
+import { CameraType } from '../types/enums';
+import { Vector2 } from '../utils/Vector2';
+import { Transform } from './Transform';
+
+export class Camera extends Component implements ICamera {
     public type: CameraType = CameraType.Orthographic;
     public size: number = 5;
     public fieldOfView: number = 60;

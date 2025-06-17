@@ -1,4 +1,7 @@
-abstract class Component extends EventEmitter implements IComponent {
+import { IComponent, IGameObject } from '../types/interfaces';
+import { EventEmitter } from './EventEmitter';
+
+export abstract class Component extends EventEmitter implements IComponent {
     protected gameObject: IGameObject;
     protected enabled: boolean = true;
     protected destroyed: boolean = false;

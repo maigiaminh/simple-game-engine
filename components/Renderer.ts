@@ -1,3 +1,8 @@
+import { Component } from '../core/Component';
+import { IGameObject, IRenderer } from '../types/interfaces';
+import { Color } from '../utils/Color';
+import { Transform } from './Transform';
+
 class Renderer extends Component implements IRenderer {
     public color: RGBAColor = Color.WHITE;
     public visible: boolean = true;

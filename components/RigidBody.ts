@@ -1,4 +1,9 @@
-class RigidBody extends Component implements IRigidBody {
+import { Component } from '../core/Component';
+import { IGameObject, IRigidBody } from '../types/interfaces';
+import { Vector2 } from '../utils/Vector2';
+import { Transform } from './Transform';
+
+export class RigidBody extends Component implements IRigidBody {
     public velocity: Vector2 = Vector2.zero();
     public acceleration: Vector2 = Vector2.zero();
     public mass: number = 1;

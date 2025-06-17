@@ -1,16 +1,16 @@
-enum InputType {
+export enum InputType {
     Keyboard = 'keyboard',
     Mouse = 'mouse',
     Touch = 'touch',
 }
 
-enum MouseButton {
+export enum MouseButton {
     Left = 0,
     Middle = 1,
     Right = 2
 }
 
-enum TouchPhase {
+export enum TouchPhase {
     Began = 'began',
     Moved = 'moved',
     Stationary = 'stationary',
@@ -18,13 +18,13 @@ enum TouchPhase {
     Canceled = 'canceled'
 }
 
-enum ColliderType {
+export enum ColliderType {
     Box = 'box',
     Circle = 'circle',
     Polygon = 'polygon'
 }
 
-enum CollisionLayer {
+export enum CollisionLayer {
     Default = 0,
     Player = 1,
     Enemy = 2,
@@ -36,7 +36,7 @@ enum CollisionLayer {
     All = 8
 }
 
-enum ResourceType {
+export enum ResourceType {
     Image = 'image',
     Audio = 'audio',
     Text = 'text',
@@ -44,26 +44,26 @@ enum ResourceType {
     Font = 'font'
 }
 
-enum LoadState {
+export enum LoadState {
     NotLoaded = 'not_loaded',
     Loading = 'loading',
     Loaded = 'loaded',
     Error = 'error'
 }
 
-enum SceneState {
+export enum SceneState {
     NotLoaded = 'not_loaded',
     Loading = 'loading',
     Loaded = 'loaded',
     Unloading = 'unloading'
 }
 
-enum CameraType {
+export enum CameraType {
     Orthographic = 'orthographic',
     Perspective = 'perspective'
 }
 
-enum EventPhase {
+export enum EventPhase {
     Capture = 'capture',
     Target = 'target',
     Bubble = 'bubble'

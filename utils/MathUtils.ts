@@ -1,4 +1,4 @@
-class MathUtils {
+export class MathUtils {
     public static readonly PI = Math.PI;
     public static readonly TWO_PI = Math.PI * 2;
     public static readonly HALF_PI = Math.PI * 0.5;

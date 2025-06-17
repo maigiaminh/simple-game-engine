@@ -1,4 +1,4 @@
-class Time {
+export class Time {
     private static _deltaTime: number = 0;
     private static _unscaledDeltaTime: number = 0;
     private static _totalTime: number = 0;

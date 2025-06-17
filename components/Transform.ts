@@ -1,4 +1,8 @@
-class Transform extends Component implements ITransform {
+import { Component } from '../core/Component';
+import { ITransform, IGameObject } from '../types/interfaces';
+import { Vector2 } from '../utils/Vector2';
+
+export class Transform extends Component implements ITransform {
     public position: Vector2;
     public rotation: number;
     public scale: Vector2;

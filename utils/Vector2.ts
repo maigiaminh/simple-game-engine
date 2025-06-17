@@ -1,4 +1,4 @@
-class Vector2 implements Vector2D {
+export class Vector2 implements Vector2D {
     public x: number;
     public y: number;
 

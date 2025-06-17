@@ -1,3 +1,9 @@
+import { Component } from '../core/Component';
+import { ICollider, ICollidable, IGameObject, CollisionInfo } from '../types/interfaces';
+import { ColliderType, CollisionLayer } from '../types/enums';
+import { Vector2 } from '../utils/Vector2';
+import { Transform } from './Transform';
+
 class Collider extends Component implements ICollider {
     public type: ColliderType = ColliderType.Box;
     public width: number = 50;

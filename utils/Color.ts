@@ -1,4 +1,6 @@
-class Color {
+import { MathUtils } from './MathUtils';
+
+export class Color {
     public r: number;
     public g: number;
     public b: number;

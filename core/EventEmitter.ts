@@ -1,4 +1,8 @@
-class GameEventImplement implements GameEvent {
+import { EventPhase } from "../types/enums";
+import { Time } from "../utils/Time";
+import { IEventEmitter, GameEvent, GameEventListener, GameEventListenerOptions } from "../types/interfaces";
+
+export class GameEventImplement implements GameEvent {
     public type: string;
     public target: any;
     public currentTarget: any;
@@ -39,7 +43,7 @@ class GameEventImplement implements GameEvent {
     }
 }
 
-class EventEmitter implements IEventEmitter {
+export class EventEmitter implements IEventEmitter {
     private events: Map<string, Array<{ listener: GameEventListener, options: GameEventListenerOptions }>> = new Map();
 
     public addEventListener(type: string, listener: GameEventListener, options: GameEventListenerOptions = {}): void {

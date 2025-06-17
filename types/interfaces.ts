@@ -1,37 +1,37 @@
-
+import { ColliderType, CameraType, SceneState, MouseButton, ResourceType, EventPhase, TouchPhase } from "./enums";
 // ==================== CORE INTERFACES ====================
 // #region Core Interfaces
-interface IUpdatable {
+export interface IUpdatable {
     update(deltaTime: number): void;
     setEnabled(enabled: boolean): void;
     isEnabled(): boolean;
 }
 
-interface IRenderable {
+export interface IRenderable {
     render(ctx: CanvasRenderingContext2D): void;
     setVisible(visible: boolean): void;
     isVisible(): boolean;
 }
 
-interface ICollidable {
+export interface ICollidable {
     getBounds(): Rectangle;
     onCollision(other: ICollidable, collisionInfo: CollisionInfo): void;
     getCollisionLayers(): number[];
     setCollisionLayers(layers: number[]): void;
 }
 
-interface IDestroyable {
+export interface IDestroyable {
     destroy(): void;
     isDestroyed(): boolean;
     onDestroy(): void;
 }
 
-interface ISerializable {
+export interface ISerializable {
     serialize(): SerializedData;
     deserialize(data: SerializedData): void;
 }
 
-interface ILifecycle {
+export interface ILifecycle {
     awake(): void;
     start(): void;
     onEnable(): void;
@@ -42,12 +42,12 @@ interface ILifecycle {
 
 // ==================== COMPONENT INTERFACES ====================
 // #region Component Interfaces
-interface IComponent extends IUpdatable, IRenderable, ILifecycle, ISerializable {
+export interface IComponent extends IUpdatable, IRenderable, ILifecycle, ISerializable {
     getGameObject(): IGameObject;
     getType(): string;
 }
 
-interface ITransform extends IComponent {
+export interface ITransform extends IComponent {
     position: Vector2D;
     rotation: number;
     scale: Vector2D;
@@ -67,7 +67,7 @@ interface ITransform extends IComponent {
     getChildren(): ITransform[];
 }
 
-interface IRenderer extends IComponent {
+export interface IRenderer extends IComponent {
     color: RGBAColor;
     visible: boolean;
     
@@ -75,7 +75,7 @@ interface IRenderer extends IComponent {
     setColor(color: RGBAColor): void;
 }
 
-interface ICollider extends IComponent, ICollidable {
+export interface ICollider extends IComponent, ICollidable {
     type: ColliderType;
     width: number;
     height: number;
@@ -88,7 +88,7 @@ interface ICollider extends IComponent, ICollidable {
     canCollideWith(other: ICollider): boolean;
 }
 
-interface IRigidBody extends IComponent {
+export interface IRigidBody extends IComponent {
     velocity: Vector2D;
     acceleration: Vector2D;
     mass: number;
@@ -101,7 +101,7 @@ interface IRigidBody extends IComponent {
     getVelocity(): Vector2D;
 }
 
-interface ICamera extends IComponent {
+export interface ICamera extends IComponent {
     type: CameraType;
     size: number;
     fieldOfView: number;
@@ -117,7 +117,7 @@ interface ICamera extends IComponent {
 
 // ==================== GAME OBJECT INTERFACE ====================
 // #region Game Object Interface
-interface IGameObject extends IUpdatable, IRenderable, IDestroyable, ISerializable, ILifecycle {
+export interface IGameObject extends IUpdatable, IRenderable, IDestroyable, ISerializable, ILifecycle {
     readonly id: string;
     name: string;
     tag: string;
@@ -145,7 +145,7 @@ interface IGameObject extends IUpdatable, IRenderable, IDestroyable, ISerializab
 
 // ==================== SCENE INTERFACE ====================
 // #region Scene Interface
-interface IScene extends IUpdatable, IRenderable, ISerializable {
+export interface IScene extends IUpdatable, IRenderable, ISerializable {
     getName(): string;
     getState(): SceneState;
     getLoadProgress(): number;
@@ -168,7 +168,7 @@ interface IScene extends IUpdatable, IRenderable, ISerializable {
 
 // ==================== SYSTEM INTERFACES ====================
 // #region System Interfaces
-interface IInputManager {
+export interface IInputManager {
     update(): void;
     
     // Keyboard
@@ -190,7 +190,7 @@ interface IInputManager {
     isEnabled(): boolean;
 }
 
-interface IAudioManager {
+export interface IAudioManager {
     loadSound(name: string, url: string): Promise<void>;
     playSound(name: string, options?: PlaySoundOptions): void;
     stopSound(name: string): void;
@@ -203,7 +203,7 @@ interface IAudioManager {
     isEnabled(): boolean;
 }
 
-interface IResourceManager {
+export interface IResourceManager {
     loadResource(name: string, url: string, type: ResourceType): Promise<any>;
     getResource<T = any>(name: string): T | null;
     hasResource(name: string): boolean;
@@ -213,7 +213,7 @@ interface IResourceManager {
     getLoadProgress(): LoadProgress;
 }
 
-interface ICollisionManager {
+export interface ICollisionManager {
     addCollider(collider: ICollider): void;
     removeCollider(collider: ICollider): void;
     checkCollisions(): void;
@@ -227,7 +227,7 @@ interface ICollisionManager {
     getActiveCollisionCount(): number;
 }
 
-interface IGameEngine {
+export interface IGameEngine {
     // Scene management
     addScene(name: string, scene: IScene): void;
     setScene(name: string): Promise<void>;
@@ -260,7 +260,7 @@ interface IGameEngine {
 
 // ==================== EVENT INTERFACES ====================
 // #region Event Interfaces
-interface GameEvent {
+export interface GameEvent {
     type: string;
     target: any;
     currentTarget: any;
@@ -276,7 +276,7 @@ interface GameEvent {
     stopImmediatePropagation(): void;
 }
 
-interface IEventEmitter {
+export interface IEventEmitter {
     addEventListener(type: string, listener: GameEventListener, options?: GameEventListenerOptions): void;
     removeEventListener(type: string, listener: GameEventListener): void;
     dispatchEvent(event: GameEvent | string, data?: any): boolean;
@@ -286,7 +286,7 @@ interface IEventEmitter {
 
 // ==================== DATA STRUCTURES ====================
 // #region Data Structures
-interface CollisionInfo {
+export interface CollisionInfo {
     point: Vector2D;
     normal: Vector2D;
     penetration: number;
@@ -295,7 +295,7 @@ interface CollisionInfo {
     relativeVelocity: Vector2D;
 }
 
-interface RaycastHit {
+export interface RaycastHit {
     collider: ICollider;
     point: Vector2D;
     normal: Vector2D;
@@ -303,7 +303,7 @@ interface RaycastHit {
     gameObject: IGameObject;
 }
 
-interface GameTouch {
+export interface GameTouch {
     id: number;
     position: Vector2D;
     deltaPosition: Vector2D;
@@ -313,7 +313,7 @@ interface GameTouch {
     timestamp: number;
 }
 
-interface LoadProgress {
+export interface LoadProgress {
     totalResources: number;
     loadedResources: number;
     failedResources: number;
@@ -323,7 +323,7 @@ interface LoadProgress {
     percentage: number;
 }
 
-interface PerformanceStats {
+export interface PerformanceStats {
     fps: number;
     frameTime: number;
     updateTime: number;
@@ -334,7 +334,7 @@ interface PerformanceStats {
 
 // ==================== CONFIGURATION INTERFACES ====================
 // #region Configuration Interfaces
-interface EngineConfig {
+export interface EngineConfig {
     canvasId: string;
     width?: number;
     height?: number;
@@ -344,7 +344,7 @@ interface EngineConfig {
     enableAudio?: boolean;
 }
 
-interface GameObjectConfig {
+export interface GameObjectConfig {
     position?: Vector2D;
     rotation?: number;
     scale?: Vector2D;
@@ -354,7 +354,7 @@ interface GameObjectConfig {
     name?: string;
 }
 
-interface PlaySoundOptions {
+export interface PlaySoundOptions {
     volume?: number;
     pitch?: number;
     loop?: boolean;
@@ -362,7 +362,7 @@ interface PlaySoundOptions {
     fadeIn?: number;
 }
 
-interface GameEventListenerOptions {
+export interface GameEventListenerOptions {
     once?: boolean;
     capture?: boolean;
     priority?: number;
@@ -371,14 +371,14 @@ interface GameEventListenerOptions {
 
 // ==================== UTILITY TYPES ====================
 // #region Utility Types
-type ComponentConstructor<T extends IComponent> = new (...args: any[]) => T;
-type GameEventListener = (event: GameEvent) => void;
-type UpdateFunction = (deltaTime: number) => void;
-type RenderFunction = (ctx: CanvasRenderingContext2D) => void;
+export type ComponentConstructor<T extends IComponent> = new (...args: any[]) => T;
+export type GameEventListener = (event: GameEvent) => void;
+export type UpdateFunction = (deltaTime: number) => void;
+export type RenderFunction = (ctx: CanvasRenderingContext2D) => void;
 
 // ==================== FACTORY TYPES ====================
 
-interface ComponentFactory {
+export interface ComponentFactory {
     createTransform(gameObject: IGameObject, position?: Vector2D): ITransform;
     createRenderer(gameObject: IGameObject): IRenderer;
     createCollider(gameObject: IGameObject, type: ColliderType, width?: number, height?: number): ICollider;
@@ -386,7 +386,7 @@ interface ComponentFactory {
     createCamera(gameObject: IGameObject): ICamera;
 }
 
-interface GameObjectFactory {
+export interface GameObjectFactory {
     createEmpty(name?: string): IGameObject;
     createWithTransform(position?: Vector2D, rotation?: number, scale?: Vector2D): IGameObject;
     createSprite(imageName: string, position?: Vector2D): IGameObject;
@@ -396,14 +396,14 @@ interface GameObjectFactory {
 
 // ==================== ANIMATION INTERFACES ====================
 // #region Animation Interfaces
-interface IAnimation {
+export interface IAnimation {
     name: string;
     frames: number[];
     frameTime: number;
     loop: boolean;
 }
 
-interface IAnimator extends IComponent {
+export interface IAnimator extends IComponent {
     playAnimation(name: string): void;
     stopAnimation(): void;
     addAnimation(animation: IAnimation): void;
@@ -414,7 +414,7 @@ interface IAnimator extends IComponent {
 
 // ==================== PARTICLE SYSTEM INTERFACES ====================
 // #region Particle System Interfaces
-interface IParticle {
+export interface IParticle {
     position: Vector2D;
     velocity: Vector2D;
     life: number;
@@ -426,7 +426,7 @@ interface IParticle {
     render(ctx: CanvasRenderingContext2D): void;
 }
 
-interface IParticleSystem extends IComponent {
+export interface IParticleSystem extends IComponent {
     emit(count: number): void;
     burst(count: number): void;
     clear(): void;
@@ -444,7 +444,7 @@ interface IParticleSystem extends IComponent {
 
 // ==================== UI INTERFACES ====================
 // #region UI Interfaces
-interface IUIElement extends IComponent {
+export interface IUIElement extends IComponent {
     setLocalPosition(position: Vector2D): void;
     setAnchor(anchor: Vector2D): void;
     setPivot(pivot: Vector2D): void;
@@ -455,13 +455,13 @@ interface IUIElement extends IComponent {
     getChildren(): IUIElement[];
 }
 
-interface IButton extends IUIElement {
+export interface IButton extends IUIElement {
     setText(text: string): void;
     setOnClick(callback: () => void): void;
     setColors(background: RGBAColor, text: RGBAColor, hover: RGBAColor): void;
 }
 
-interface ILabel extends IUIElement {
+export interface ILabel extends IUIElement {
     setText(text: string): void;
     setColor(color: RGBAColor): void;
     setFont(font: string): void;
