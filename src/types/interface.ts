@@ -1,4 +1,4 @@
-import { CameraType, ColliderType, EventPhase, LoadState, MouseButton, ResourceType, SceneState, TouchPhase } from "./enums";
+import { CameraType, ColliderType, EventPhase, LoadState, MouseButton, ResourceType, SceneState, TouchPhase, UIAnchor } from "./enums";
 import { Rectangle, RGBAColor, SerializedData, Vector2D } from "./general";
 // ==================== CORE INTERFACES ====================
 // #region Core Interfaces
@@ -456,7 +456,7 @@ export interface IParticleSystem extends IComponent {
 // #region UI Interfaces
 export interface IUIElement extends IComponent {
     setLocalPosition(position: Vector2D): void;
-    setAnchor(anchor: Vector2D): void;
+    setAnchor(anchor: UIAnchor): void;
     setPivot(pivot: Vector2D): void;
     
     addChild(child: IUIElement): void;
@@ -495,3 +495,13 @@ export interface AudioSource {
     isPlaying: boolean;
 }
 //#endregion
+
+// ==================== ANIMATION INTERFACES ====================
+// #region Animation Interfaces
+export interface GameAnimation {
+    name: string;
+    frames: HTMLImageElement[];
+    frameTime: number;
+    loop: boolean;
+    currentFrame: number;
+}

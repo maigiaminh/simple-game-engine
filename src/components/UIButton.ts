@@ -1,0 +1,173 @@
+import { ButtonState, UIAnchor } from "../types/enums";
+import { RGBAColor, Vector2D, SerializedData } from "../types/general";
+import { IGameObject } from "../types/interface";
+import { Color } from "../utils/Color";
+import { UILabel } from "./UILabel";
+import { UIPanel } from "./UIPanel";
+
+export class UIButton extends UIPanel {
+    public label: UILabel | null = null;
+    public state: ButtonState = ButtonState.Normal;
+    
+    public normalColor: RGBAColor = Color.GRAY;
+    public hoverColor: RGBAColor = Color.LIGHT_GRAY;
+    public pressedColor: RGBAColor = Color.DARK_GRAY;
+    public disabledColor: RGBAColor = new Color(64, 64, 64, 128);
+    
+    public normalTextColor: RGBAColor = Color.WHITE;
+    public hoverTextColor: RGBAColor = Color.WHITE;
+    public pressedTextColor: RGBAColor = Color.LIGHT_GRAY;
+    public disabledTextColor: RGBAColor = Color.DARK_GRAY;
+    
+    private onClick: (() => void) | null = null;
+    private onHover: (() => void) | null = null;
+    private onPress: (() => void) | null = null;
+    private onRelease: (() => void) | null = null;
+    
+    private isMouseOver: boolean = false;
+    private isMouseDown: boolean = false;
+
+    constructor(gameObject: IGameObject, text: string = 'Button') {
+        super(gameObject);
+        
+        this.label = new UILabel(gameObject, text);
+        this.label.anchor = UIAnchor.MiddleCenter;
+        this.label.textAlign = 'center';
+        this.label.textBaseline = 'middle';
+        
+        this.addChild(this.label);
+        
+        this.updateAppearance();
+    }
+
+    public setText(text: string): void {
+        if (this.label) {
+            this.label.setText(text);
+        }
+    }
+
+    public setOnClick(callback: () => void): void {
+        this.onClick = callback;
+    }
+
+    public setOnHover(callback: () => void): void {
+        this.onHover = callback;
+    }
+
+    public setOnPress(callback: () => void): void {
+        this.onPress = callback;
+    }
+
+    public setOnRelease(callback: () => void): void {
+        this.onRelease = callback;
+    }
+
+    public setColors(background: RGBAColor, text: RGBAColor, hover: RGBAColor): void {
+        this.normalColor = background;
+        this.normalTextColor = text;
+        this.hoverColor = hover;
+        this.updateAppearance();
+    }
+
+    public setEnabled(enabled: boolean): void {
+        super.setEnabled(enabled);
+        this.state = enabled ? ButtonState.Normal : ButtonState.Disabled;
+        this.updateAppearance();
+    }
+
+    public handleMouseMove(mousePos: Vector2D): void {
+        if (!this.isEnabled()) return;
+
+        const bounds = this.getWorldBounds();
+        const wasMouseOver = this.isMouseOver;
+        
+        this.isMouseOver = mousePos.x >= bounds.x && 
+                          mousePos.x <= bounds.x + bounds.width &&
+                          mousePos.y >= bounds.y && 
+                          mousePos.y <= bounds.y + bounds.height;
+
+        if (this.isMouseOver && !wasMouseOver) {
+            this.state = this.isMouseDown ? ButtonState.Pressed : ButtonState.Hovered;
+            this.onHover?.();
+        } else if (!this.isMouseOver && wasMouseOver) {
+            this.state = ButtonState.Normal;
+        }
+
+        this.updateAppearance();
+    }
+
+    public handleMouseDown(mousePos: Vector2D): void {
+        if (!this.isEnabled() || !this.isMouseOver) return;
+
+        this.isMouseDown = true;
+        this.state = ButtonState.Pressed;
+        this.onPress?.();
+        this.updateAppearance();
+    }
+
+    public handleMouseUp(mousePos: Vector2D): void {
+        if (!this.isEnabled()) return;
+
+        const wasMouseDown = this.isMouseDown;
+        this.isMouseDown = false;
+        
+        if (wasMouseDown && this.isMouseOver) {
+            this.onClick?.();
+        }
+        
+        this.state = this.isMouseOver ? ButtonState.Hovered : ButtonState.Normal;
+        this.onRelease?.();
+        this.updateAppearance();
+    }
+
+    private updateAppearance(): void {
+        switch (this.state) {
+            case ButtonState.Normal:
+                this.backgroundColor = this.normalColor;
+                if (this.label) this.label.color = this.normalTextColor;
+                break;
+            case ButtonState.Hovered:
+                this.backgroundColor = this.hoverColor;
+                if (this.label) this.label.color = this.hoverTextColor;
+                break;
+            case ButtonState.Pressed:
+                this.backgroundColor = this.pressedColor;
+                if (this.label) this.label.color = this.pressedTextColor;
+                break;
+            case ButtonState.Disabled:
+                this.backgroundColor = this.disabledColor;
+                if (this.label) this.label.color = this.disabledTextColor;
+                break;
+        }
+    }
+
+    public serialize(): SerializedData {
+        return {
+            ...super.serialize(),
+            state: this.state,
+            normalColor: this.normalColor,
+            hoverColor: this.hoverColor,
+            pressedColor: this.pressedColor,
+            disabledColor: this.disabledColor,
+            normalTextColor: this.normalTextColor,
+            hoverTextColor: this.hoverTextColor,
+            pressedTextColor: this.pressedTextColor,
+            disabledTextColor: this.disabledTextColor
+        };
+    }
+
+    public deserialize(data: SerializedData): void {
+        super.deserialize(data);
+        if (typeof data.state === 'string') {
+            this.state = data.state as ButtonState;
+        }
+        if (Color.isRGBAColor(data.normalColor)) {
+            this.normalColor = data.normalColor;
+        }
+        if (Color.isRGBAColor(data.hoverColor)) {
+            this.hoverColor = data.hoverColor;
+        }
+
+        this.updateAppearance();
+    }
+}

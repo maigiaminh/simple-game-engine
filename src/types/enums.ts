@@ -71,4 +71,23 @@ export enum EventPhase {
     Target = 'target',
     Bubble = 'bubble'
 }
+
+export enum UIAnchor {
+    TopLeft = 'TopLeft',
+    TopCenter = 'TopCenter',
+    TopRight = 'TopRight',
+    MiddleLeft = 'MiddleLeft',
+    MiddleCenter = 'MiddleCenter',
+    MiddleRight = 'MiddleRight',
+    BottomLeft = 'BottomLeft',
+    BottomCenter = 'BottomCenter',
+    BottomRight = 'BottomRight'
+}
+
+export enum ButtonState {
+    Normal = 'Normal',
+    Hovered = 'Hovered',
+    Pressed = 'Pressed',
+    Disabled = 'Disabled'
+}
 // #endregion

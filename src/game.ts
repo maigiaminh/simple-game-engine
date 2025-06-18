@@ -1,8 +1,13 @@
 import { Renderer } from "./components/Renderer";
 import { RigidBody } from "./components/RigidBody";
+import { UIButton } from "./components/UIButton";
+import { UILabel } from "./components/UILabel";
+import { UIPanel } from "./components/UIPanel";
 import { GameEngine } from "./core/GameEngine";
 import { GameObject } from "./core/GameObject";
 import { Scene } from "./core/Scene";
+import { ResourceType, UIAnchor } from "./types/enums";
+import { Color } from "./utils/Color";
 
 
 class SimpleScene extends Scene {
@@ -45,10 +50,12 @@ class Game {
 
         const engine = new GameEngine({
             canvasId: 'game-canvas',
-            width: 1920,
-            height: 1080,
+            width: 1000,
+            height: 800,
             targetFPS: 60,
         });
+
+        // await this.preloadAssets(engine);
 
         const scene = new SimpleScene();
         const player = new GameObject({ name: 'Player', position: { x: 400, y: 300 } });
@@ -76,6 +83,30 @@ class Game {
             if (input.isKeyPressed('ArrowDown')) vy += speed;
             rigidBody.setVelocity({ x: vx, y: vy });
         });
+
+        return engine;
+    }
+
+    static async preloadAssets(engine: GameEngine): Promise<void> {
+        const resourceManager = engine.getResourceManager();
+        
+        const imagesToLoad = [
+            { name: 'test', url: 'assets/images/test.png' },
+        ];
+        
+        for (const imageData of imagesToLoad) {
+            await resourceManager.loadResource(imageData.name, imageData.url, ResourceType.Image);
+        }
+
+        const audioToLoad = [
+            { name: 'test', url: 'assets/audio/test.mp3' },
+        ];
+
+        for (const audioData of audioToLoad) {
+            await resourceManager.loadResource(audioData.name, audioData.url, ResourceType.Audio);
+        }
+        
+        console.log('Assets preloaded');
     }
 }
 
