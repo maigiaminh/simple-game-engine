@@ -1,4 +1,5 @@
-import { IComponent, IGameObject, SerializedData } from '../types/general';
+import { SerializedData } from '../types/general';
+import { IComponent, IGameObject } from '../types/interface';
 import { EventEmitter } from './EventEmitter';
 
 export abstract class Component extends EventEmitter implements IComponent {

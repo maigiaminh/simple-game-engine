@@ -1,5 +1,5 @@
 import { EventEmitter } from "../core/EventEmitter";
-import { AudioClip, AudioSource, IAudioManager, PlaySoundOptions } from "../types/general";
+import { IAudioManager, AudioClip, AudioSource, PlaySoundOptions } from "../types/interface";
 
 export class AudioManager extends EventEmitter implements IAudioManager {
     private audioContext: AudioContext | null = null;

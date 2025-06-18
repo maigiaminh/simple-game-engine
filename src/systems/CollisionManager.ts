@@ -1,5 +1,6 @@
 import { EventEmitter } from "../core/EventEmitter";
-import { CollisionInfo, ICollider, ICollisionManager, RaycastHit, Rectangle } from "../types/general";
+import { Rectangle } from "../types/general";
+import { CollisionInfo, ICollider, ICollisionManager, RaycastHit } from "../types/interface";
 import { Vector2 } from "../utils/Vector2";
 
 export class CollisionManager extends EventEmitter implements ICollisionManager {

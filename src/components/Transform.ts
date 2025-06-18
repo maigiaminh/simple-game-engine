@@ -1,5 +1,6 @@
 import { Component } from '../core/Component';
-import { ITransform, IGameObject, SerializedData } from '../types/general';
+import { SerializedData } from '../types/general';
+import { ITransform, IGameObject } from '../types/interface';
 import { Vector2 } from '../utils/Vector2';
 
 export class Transform extends Component implements ITransform {

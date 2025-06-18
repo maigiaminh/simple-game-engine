@@ -1,7 +1,8 @@
 import { EventEmitter } from '../core/EventEmitter';
-import { IInputManager, InputType, MouseButton, TouchPhase, GameTouch } from '../types/general';
 import { Time } from '../utils/Time';
 import { Vector2 } from '../utils/Vector2';
+import { InputType, MouseButton, TouchPhase } from '../types/enums';
+import { GameTouch, IInputManager } from '../types/interface';
 
 export class InputManager extends EventEmitter implements IInputManager {
     private keyStates: Map<string, boolean> = new Map();

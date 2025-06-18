@@ -1,5 +1,6 @@
 import { Component } from '../core/Component';
-import { IGameObject, IRigidBody, SerializedData, Vector2D, ComponentConstructor } from '../types/general';
+import { SerializedData, Vector2D } from '../types/general';
+import { IRigidBody, IGameObject, ComponentConstructor } from '../types/interface';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
 

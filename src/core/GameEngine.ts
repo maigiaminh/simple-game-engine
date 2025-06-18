@@ -1,10 +1,10 @@
-import { EngineConfig, IAudioManager, ICollisionManager, IGameEngine, IInputManager, IResourceManager, IScene } from "../types/general";
 import { EventEmitter } from "./EventEmitter";
 import { AudioManager } from "../systems/AudioManager";
 import { CollisionManager } from "../systems/CollisionManager";
 import { InputManager } from "../systems/InputManager";
 import { ResourceManager } from "../systems/ResourceManager";
 import { Time } from "../utils/Time";
+import { IGameEngine, IScene, IInputManager, IAudioManager, IResourceManager, ICollisionManager, EngineConfig } from "../types/interface";
 
 export class GameEngine extends EventEmitter implements IGameEngine {
     private canvas: HTMLCanvasElement;
@@ -12,10 +12,10 @@ export class GameEngine extends EventEmitter implements IGameEngine {
     private scenes: Map<string, IScene> = new Map();
     private currentScene: IScene | null = null;
     
-    private inputManager: IInputManager;
-    private audioManager: IAudioManager;
-    private resourceManager: IResourceManager;
-    private collisionManager: ICollisionManager;
+    private inputManager!: IInputManager;
+    private audioManager!: IAudioManager;
+    private resourceManager!: IResourceManager;
+    private collisionManager!: ICollisionManager;
     
     private isRunning: boolean = false;
     private isPaused: boolean = false;

@@ -1,9 +1,11 @@
 import { Component } from '../core/Component';
-import { ICollider, ICollidable, IGameObject, CollisionInfo, ColliderType, CollisionLayer, Vector2D, Rectangle, SerializedData, ComponentConstructor } from '../types/general';
+import { ColliderType, CollisionLayer } from '../types/enums';
+import { Vector2D, Rectangle, SerializedData } from '../types/general';
+import { ICollider, IGameObject, ComponentConstructor, ICollidable, CollisionInfo } from '../types/interface';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
 
-class Collider extends Component implements ICollider {
+export class Collider extends Component implements ICollider {
     public type: ColliderType = ColliderType.Box;
     public width: number = 50;
     public height: number = 50;

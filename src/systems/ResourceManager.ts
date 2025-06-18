@@ -1,5 +1,6 @@
 import { EventEmitter } from "../core/EventEmitter";
-import { IResourceManager, LoadProgress, LoadState, ResourceInfo, ResourceType } from "../types/general";
+import { ResourceType, LoadState } from "../types/enums";
+import { IResourceManager, LoadProgress, ResourceInfo } from "../types/interface";
 
 export class ResourceManager<T = unknown> extends EventEmitter implements IResourceManager {
     private resources: Map<string, ResourceInfo<unknown>> = new Map();

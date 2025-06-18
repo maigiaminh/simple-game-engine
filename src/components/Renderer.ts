@@ -1,9 +1,10 @@
 import { Component } from '../core/Component';
-import { IGameObject, IRenderer, RGBAColor, SerializedData, ComponentConstructor } from '../types/general';
+import { RGBAColor, SerializedData } from '../types/general';
+import { IRenderer, IGameObject, ComponentConstructor } from '../types/interface';
 import { Color } from '../utils/Color';
 import { Transform } from './Transform';
 
-class Renderer extends Component implements IRenderer {
+export class Renderer extends Component implements IRenderer {
     public color: RGBAColor = Color.WHITE;
     public visible: boolean = true;
     protected image: HTMLImageElement | null = null;

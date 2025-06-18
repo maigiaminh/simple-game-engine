@@ -1,7 +1,8 @@
-import { IGameObject, IComponent, GameObjectConfig, ComponentConstructor, ITransform, Vector2D, SerializedData } from '../types/general';
+import { Vector2D, SerializedData } from '../types/general';
 import { EventEmitter } from './EventEmitter';
 import { Transform } from '../components/Transform';
 import { Vector2 } from '../utils/Vector2';
+import { IGameObject, IComponent, GameObjectConfig, ComponentConstructor, ITransform } from '../types/interface';
 
 export class GameObject extends EventEmitter implements IGameObject {
     public readonly id: string;

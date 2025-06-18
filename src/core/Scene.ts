@@ -1,4 +1,6 @@
-import { IScene, IGameObject, ICamera, SceneState, SerializedData } from '../types/general';
+import { SceneState } from '../types/enums';
+import { SerializedData } from '../types/general';
+import { ICamera, IGameObject, IScene } from '../types/interface';
 import { EventEmitter } from './EventEmitter';
 
 export abstract class Scene extends EventEmitter implements IScene {

@@ -1,4 +1,5 @@
-import { EventPhase, IEventEmitter, GameEvent, GameEventListener, GameEventListenerOptions } from "../types/general";
+import { EventPhase } from "../types/enums";
+import { GameEvent, GameEventListener, GameEventListenerOptions, IEventEmitter } from "../types/interface";
 import { Time } from "../utils/Time";
 
 export class GameEventImplement implements GameEvent {

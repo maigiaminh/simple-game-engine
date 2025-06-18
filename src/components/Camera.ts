@@ -1,7 +1,9 @@
 import { Component } from '../core/Component';
 import { Vector2 } from '../utils/Vector2';
 import { Transform } from './Transform';
-import { CameraType, ICamera, IGameObject, Rectangle, SerializedData, Vector2D, ComponentConstructor } from '../types/general';
+import { Rectangle, SerializedData, Vector2D } from '../types/general'
+import { CameraType } from '../types/enums';
+import { ICamera, IGameObject, ComponentConstructor } from '../types/interface';
 
 export class Camera extends Component implements ICamera {
     public type: CameraType = CameraType.Orthographic;
