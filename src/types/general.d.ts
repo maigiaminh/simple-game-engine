@@ -458,6 +458,15 @@ export interface PerformanceStats {
     renderTime: number;
     memoryUsage: number;
 }
+
+interface ResourceInfo<T = unknown> {
+    name: string;
+    url: string;
+    type: ResourceType;
+    state: LoadState;
+    data: unknown;
+    error?: Error;
+}
 // #endregion
 
 // ==================== CONFIGURATION INTERFACES ====================
@@ -596,3 +605,20 @@ export interface ILabel extends IUIElement {
     setTextAlign(align: CanvasTextAlign): void;
 }
 // #endregion
+
+// ==================== AUDIO INTERFACES ====================
+// #region Audio Interfaces
+export interface AudioClip {
+    name: string;
+    buffer: AudioBuffer;
+    volume: number;
+    loop: boolean;
+}
+
+export interface AudioSource {
+    clip: AudioClip;
+    source: AudioBufferSourceNode;
+    gainNode: GainNode;
+    isPlaying: boolean;
+}
+//#endregion
