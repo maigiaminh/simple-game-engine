@@ -10,7 +10,7 @@ export class Camera extends Component implements ICamera {
     public size: number = 5;
     public fieldOfView: number = 60;
     
-    private target: IGameObject | null = null;
+    public target: IGameObject | null = null;
     private followSmoothing: number = 5;
     
     private shakeIntensity: number = 0;

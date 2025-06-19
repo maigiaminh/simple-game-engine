@@ -17,7 +17,10 @@ export interface IRenderable {
 export interface ICollidable {
     getBounds(): Rectangle;
     onCollision(other: ICollidable, collisionInfo: CollisionInfo): void;
+    onCollisionExit(other: ICollidable): void;
     getCollisionLayers(): number[];
+    getCollisionMask(): number[];
+    setCollisionMask(mask: number[]): void;
     setCollisionLayers(layers: number[]): void;
 }
 

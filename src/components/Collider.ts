@@ -79,12 +79,24 @@ export class Collider extends Component implements ICollider {
         }
     }
 
+    public onCollisionExit(other: ICollider): void {
+        this.dispatchEvent('collisionExit', { other });
+    }
+
     public getCollisionLayers(): number[] {
         return this.layers;
     }
 
+    public getCollisionMask(): number[] {
+        return this.mask;
+    }
+
     public setCollisionLayers(layers: number[]): void {
         this.layers = layers;
+    }
+
+    public setCollisionMask(mask: number[]): void {
+        this.mask = mask;
     }
 
     public canCollideWith(other: ICollider): boolean {

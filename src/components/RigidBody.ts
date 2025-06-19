@@ -11,7 +11,8 @@ export class RigidBody extends Component implements IRigidBody {
     public drag: number = 0.98;
     public useGravity: boolean = true;
     public isKinematic: boolean = false;
-    
+    public isGrounded: boolean = false;
+
     private force: Vector2 = Vector2.zero();
     private static readonly GRAVITY: Vector2 = new Vector2(0, 500); 
 
@@ -47,10 +48,14 @@ export class RigidBody extends Component implements IRigidBody {
         this.velocity = this.velocity.add(this.acceleration.multiply(dt));
 
         this.velocity = this.velocity.multiply(Math.pow(this.drag, dt));
+        
+        if (this.isGrounded && this.velocity.y > 0)
+            this.velocity.y = 0;
 
         const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>);
         if (transform) {
             const deltaPos = this.velocity.multiply(dt);
+            if (this.isGrounded && deltaPos.y > 0) deltaPos.y = 0;
             transform.translate(deltaPos);
         }
 

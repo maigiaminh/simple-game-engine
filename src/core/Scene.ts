@@ -1,6 +1,8 @@
+import { Transform } from '../components/Transform';
+import { GAME_CONFIG } from '../config/GameConfig';
 import { SceneState } from '../types/enums';
 import { SerializedData } from '../types/general';
-import { ICamera, IGameObject, IScene } from '../types/interface';
+import { ComponentConstructor, ICamera, IGameObject, IScene } from '../types/interface';
 import { EventEmitter } from './EventEmitter';
 
 export abstract class Scene extends EventEmitter implements IScene {
@@ -31,6 +33,11 @@ export abstract class Scene extends EventEmitter implements IScene {
 
     public isVisible(): boolean {
         return this.visible;
+    }
+
+    public setMainCamera(camera: ICamera): void {
+        this.mainCamera = camera;
+        this.dispatchEvent('mainCameraSet', { camera });
     }
 
     constructor(name: string) {
@@ -202,27 +209,36 @@ export abstract class Scene extends EventEmitter implements IScene {
                 gameObject.update(deltaTime);
             }
         });
-
-        this.onUpdate(deltaTime);
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
         if (this.state !== SceneState.Loaded) return;
+        ctx.save();
 
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        const camera = this.getMainCamera();
+        if (camera) {
+            const transform = camera.getGameObject().getComponent(Transform as ComponentConstructor<Transform>);
+            if (transform) {
+                const cameraPos = transform.getWorldPosition();
+                ctx.translate(0, -cameraPos.y + GAME_CONFIG.CANVAS.HEIGHT / 2);
+            }
+        }
 
+        this.renderGameObjects(ctx);
+
+        ctx.restore();
+    }
+
+    private renderGameObjects(ctx: CanvasRenderingContext2D): void {
         const sortedObjects = Array.from(this.gameObjects.values())
             .filter(obj => obj.isActive())
             .sort((a, b) => a.layer - b.layer);
-
-        sortedObjects.forEach(gameObject => gameObject.render(ctx));
-
-        this.onRender(ctx);
+        sortedObjects.forEach(gameObject => {
+            if (gameObject.isVisible()) {
+                gameObject.render(ctx);
+            }
+        });
     }
-
-    protected abstract onUpdate(deltaTime: number): void;
-    protected abstract onRender(ctx: CanvasRenderingContext2D): void;
 
     public getMainCamera(): ICamera | null {
         return this.mainCamera;

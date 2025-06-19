@@ -6,39 +6,56 @@ import { Vector2 } from "../utils/Vector2";
 export class CollisionManager extends EventEmitter implements ICollisionManager {
     private colliders: Set<ICollider> = new Set();
 
+    private collisionMap: Map<ICollider, Set<ICollider>> = new Map();
+
     public addCollider(collider: ICollider): void {
         this.colliders.add(collider);
     }
 
     public removeCollider(collider: ICollider): void {
         this.colliders.delete(collider);
+        this.collisionMap.delete(collider);
+        for (const set of this.collisionMap.values()) {
+            set.delete(collider);
+        }
     }
 
     public checkCollisions(): void {
         const colliderArray = Array.from(this.colliders);
-        
+        if (colliderArray.length < 2) return;
+
+        const newMap: Map<ICollider, Set<ICollider>> = new Map();
+
         for (let i = 0; i < colliderArray.length; i++) {
             for (let j = i + 1; j < colliderArray.length; j++) {
                 const colliderA = colliderArray[i];
                 const colliderB = colliderArray[j];
-                
-                if (!this.canCollide(colliderA, colliderB)) continue;
-                
+                if (!colliderA.canCollideWith(colliderB)) continue;
+
                 if (this.checkAABBCollision(colliderA.getBounds(), colliderB.getBounds())) {
-                    const collisionInfo = this.createCollisionInfo(colliderA, colliderB);
-                    colliderA.onCollision(colliderB, collisionInfo);
-                    colliderB.onCollision(colliderA, collisionInfo);
+                    const info = this.createCollisionInfo(colliderA, colliderB);
+                    colliderA.onCollision(colliderB, info);
+                    colliderB.onCollision(colliderA, info);
+                    if (!newMap.has(colliderA)) newMap.set(colliderA, new Set());
+                    if (!newMap.has(colliderB)) newMap.set(colliderB, new Set());
+                    newMap.get(colliderA)!.add(colliderB);
+                    newMap.get(colliderB)!.add(colliderA);
                 }
             }
         }
+
+        for (const [colliderA, set] of this.collisionMap) {
+            for (const colliderB of set) {
+                if (!newMap.get(colliderA)?.has(colliderB)) {
+                    colliderA.onCollisionExit?.(colliderB);
+                    colliderB.onCollisionExit?.(colliderA);
+                }
+            }
+        }
+
+        this.collisionMap = newMap;
     }
 
-    private canCollide(colliderA: ICollider, colliderB: ICollider): boolean {
-        const layersA = colliderA.getCollisionLayers();
-        const layersB = colliderB.getCollisionLayers();
-        
-        return layersA.some(layerA => layersB.includes(layerA));
-    }
 
     private checkAABBCollision(boundsA: Rectangle, boundsB: Rectangle): boolean {
         return boundsA.x < boundsB.x + boundsB.width &&

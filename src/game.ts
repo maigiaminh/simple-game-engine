@@ -1,10 +1,9 @@
 import { GameEngine } from "./core/GameEngine";
 import { Scene } from "./core/Scene";
-import { ResourceType, UIAnchor } from "./types/enums";
+import { ResourceType } from "./types/enums";
 
 class SimpleScene extends Scene {
     protected async onLoad(): Promise<void> {
-        console.log('SimpleScene loaded');
     }
 
     protected async onUnload(): Promise<void> {
@@ -14,7 +13,8 @@ class SimpleScene extends Scene {
     protected onUpdate(deltaTime: number): void {
     }
 
-    protected onRender(ctx: CanvasRenderingContext2D): void { }
+    protected onRender(ctx: CanvasRenderingContext2D): void {
+    }
 
     constructor() {
         super('MainScene');
