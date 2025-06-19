@@ -4,7 +4,8 @@ import { CollisionManager } from "../systems/CollisionManager";
 import { InputManager } from "../systems/InputManager";
 import { ResourceManager } from "../systems/ResourceManager";
 import { Time } from "../utils/Time";
-import { IGameEngine, IScene, IInputManager, IAudioManager, IResourceManager, ICollisionManager, EngineConfig } from "../types/interface";
+import { IGameEngine, IScene, IInputManager, IAudioManager, IResourceManager, ICollisionManager, EngineConfig, IUIManager } from "../types/interface";
+import { UIManager } from "../systems/UIManager";
 
 export class GameEngine extends EventEmitter implements IGameEngine {
     private canvas: HTMLCanvasElement;
@@ -16,6 +17,7 @@ export class GameEngine extends EventEmitter implements IGameEngine {
     private audioManager!: IAudioManager;
     private resourceManager!: IResourceManager;
     private collisionManager!: ICollisionManager;
+    private uiManager!: IUIManager;
     
     private isRunning: boolean = false;
     private isPaused: boolean = false;
@@ -67,6 +69,7 @@ export class GameEngine extends EventEmitter implements IGameEngine {
         this.audioManager = new AudioManager();
         this.resourceManager = new ResourceManager();
         this.collisionManager = new CollisionManager();
+        this.uiManager = new UIManager(this.canvas);
     }
 
     public addScene(name: string, scene: IScene): void {
@@ -189,6 +192,10 @@ export class GameEngine extends EventEmitter implements IGameEngine {
 
     public getCollisionManager(): ICollisionManager {
         return this.collisionManager;
+    }
+
+    public getUIManager(): IUIManager {
+        return this.uiManager;
     }
 
     public getCanvas(): HTMLCanvasElement {

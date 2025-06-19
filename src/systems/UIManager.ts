@@ -1,14 +1,15 @@
 import { UIButton } from "../components/UIButton";
+import { EventEmitter } from "../core/EventEmitter";
 import { UIElement } from "../core/UIElement";
-import { IUIElement } from "../types/interface";
+import { IUIElement, IUIManager } from "../types/interface";
 import { Vector2 } from "../utils/Vector2";
-import { InputManager } from "./InputManager";
 
-export class UIManager {
+export class UIManager  extends EventEmitter implements IUIManager{
     private canvas: HTMLCanvasElement;
     private rootElements: UIElement[] = [];
 
     constructor(canvas: HTMLCanvasElement) {
+        super();
         this.canvas = canvas;
         this.setupEventListeners();
     }

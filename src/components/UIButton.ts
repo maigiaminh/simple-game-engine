@@ -1,3 +1,4 @@
+import { GameObject } from "../core/GameObject";
 import { ButtonState, UIAnchor } from "../types/enums";
 import { RGBAColor, Vector2D, SerializedData } from "../types/general";
 import { IGameObject } from "../types/interface";
@@ -30,10 +31,13 @@ export class UIButton extends UIPanel {
     constructor(gameObject: IGameObject, text: string = 'Button') {
         super(gameObject);
         
-        this.label = new UILabel(gameObject, text);
-        this.label.anchor = UIAnchor.MiddleCenter;
-        this.label.textAlign = 'center';
-        this.label.textBaseline = 'middle';
+        const labelGO = new GameObject({ name: 'ButtonLabel', position: { x: 0, y: 0 } });
+        const label = new UILabel(labelGO, text);
+        label.textAlign = 'center';
+        label.textBaseline = 'middle';
+
+        this.label = label;
+        this.anchor = UIAnchor.MiddleCenter;
         
         this.addChild(this.label);
         

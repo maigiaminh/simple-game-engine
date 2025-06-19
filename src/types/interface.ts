@@ -257,6 +257,13 @@ export interface IGameEngine {
     
     destroy(): void;
 }
+
+export interface IUIManager {
+    addRootElement(element: IUIElement): void;
+    removeRootElement(element: IUIElement): void;
+    update(deltaTime: number): void;
+    render(ctx: CanvasRenderingContext2D): void;
+}
 // #endregion
 
 // ==================== EVENT INTERFACES ====================

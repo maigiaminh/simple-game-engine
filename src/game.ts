@@ -1,14 +1,6 @@
-import { Renderer } from "./components/Renderer";
-import { RigidBody } from "./components/RigidBody";
-import { UIButton } from "./components/UIButton";
-import { UILabel } from "./components/UILabel";
-import { UIPanel } from "./components/UIPanel";
 import { GameEngine } from "./core/GameEngine";
-import { GameObject } from "./core/GameObject";
 import { Scene } from "./core/Scene";
 import { ResourceType, UIAnchor } from "./types/enums";
-import { Color } from "./utils/Color";
-
 
 class SimpleScene extends Scene {
     protected async onLoad(): Promise<void> {
@@ -22,13 +14,7 @@ class SimpleScene extends Scene {
     protected onUpdate(deltaTime: number): void {
     }
 
-    protected onRender(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.font = '20px Arial';
-        ctx.fillStyle = 'white';
-        ctx.fillText('Use Arrow Keys to Move the Player', 20, 30);
-        ctx.restore();
-    }
+    protected onRender(ctx: CanvasRenderingContext2D): void { }
 
     constructor() {
         super('MainScene');
@@ -56,33 +42,6 @@ class Game {
         });
 
         // await this.preloadAssets(engine);
-
-        const scene = new SimpleScene();
-        const player = new GameObject({ name: 'Player', position: { x: 400, y: 300 } });
-        const renderer = new Renderer(player);
-        renderer.setColor({ r: 0, g: 150, b: 255, a: 1 });
-        player.addComponent(renderer);
-
-        const rigidBody = new RigidBody(player, 1);
-        rigidBody.useGravity = false;
-        player.addComponent(rigidBody);
-
-        scene.addGameObject(player);
-
-        engine.addScene('main', scene);
-        await engine.setScene('main');
-        engine.start();
-
-        const input = engine.getInputManager();
-        engine.addEventListener('engineUpdate', () => {
-            const speed = 200;
-            let vx = 0, vy = 0;
-            if (input.isKeyPressed('ArrowLeft')) vx -= speed;
-            if (input.isKeyPressed('ArrowRight')) vx += speed;
-            if (input.isKeyPressed('ArrowUp')) vy -= speed;
-            if (input.isKeyPressed('ArrowDown')) vy += speed;
-            rigidBody.setVelocity({ x: vx, y: vy });
-        });
 
         return engine;
     }
