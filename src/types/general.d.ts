@@ -1,50 +1,45 @@
-type Vector2D = {
-    x: number;
-    y: number;
-};
-
 type Rectangle = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-};
+    x: number
+    y: number
+    width: number
+    height: number
+}
 
 type Circle = {
-    x: number;
-    y: number;
-    radius: number;
-};
+    x: number
+    y: number
+    radius: number
+}
 
 type Size = {
-    width: number;
-    height: number;
-};
+    width: number
+    height: number
+}
 
 type Point = {
-    x: number;
-    y: number;
-};
+    x: number
+    y: number
+}
 
 // Color types
 type RGBColor = {
-    r: number;
-    g: number;
-    b: number;
-};
+    r: number
+    g: number
+    b: number
+}
 
 export type RGBAColor = RGBColor & {
-    a: number;
-};
+    a: number
+}
 
 export type HSLColor = {
-    h: number;
-    s: number;
-    l: number;
-};
+    h: number
+    s: number
+    l: number
+}
 
-export type ColorValue = string | RGBColor | RGBAColor | HSLColor;
+export type ColorValue = string | RGBColor | RGBAColor | HSLColor
 
 export type SerializedData = {
-    [key: string]: unknown;
-};
+    [key: string]: unknown
+}

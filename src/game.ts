@@ -1,37 +1,34 @@
-import { GameEngine } from "./core/GameEngine";
-import { Scene } from "./core/Scene";
-import { ResourceType } from "./types/enums";
+import { GameEngine } from './core/GameEngine'
+import { Scene } from './core/Scene'
+import { ResourceType } from './types/enums'
 
 class SimpleScene extends Scene {
-    protected async onLoad(): Promise<void> {
-    }
+    protected async onLoad(): Promise<void> {}
 
     protected async onUnload(): Promise<void> {
-        console.log('SimpleScene unloaded');
+        console.log('SimpleScene unloaded')
     }
 
-    protected onUpdate(deltaTime: number): void {
-    }
+    protected onUpdate(deltaTime: number): void {}
 
-    protected onRender(ctx: CanvasRenderingContext2D): void {
-    }
+    protected onRender(ctx: CanvasRenderingContext2D): void {}
 
     constructor() {
-        super('MainScene');
+        super('MainScene')
     }
 }
 
 class Game {
     constructor() {
-        throw new Error("Use Game.create() instead of new Game()");
+        throw new Error('Use Game.create() instead of new Game()')
     }
 
-    static async create() {
-        let canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
+    static async create(): Promise<GameEngine> {
+        let canvas = document.getElementById('game-canvas') as HTMLCanvasElement
         if (!canvas) {
-            canvas = document.createElement('canvas');
-            canvas.id = 'game-canvas';
-            document.body.appendChild(canvas);
+            canvas = document.createElement('canvas')
+            canvas.id = 'game-canvas'
+            document.body.appendChild(canvas)
         }
 
         const engine = new GameEngine({
@@ -39,36 +36,32 @@ class Game {
             width: 1000,
             height: 800,
             targetFPS: 60,
-        });
+        })
 
         // await this.preloadAssets(engine);
 
-        return engine;
+        return engine
     }
 
     static async preloadAssets(engine: GameEngine): Promise<void> {
-        const resourceManager = engine.getResourceManager();
-        
-        const imagesToLoad = [
-            { name: 'test', url: 'assets/images/test.png' },
-        ];
-        
+        const resourceManager = engine.getResourceManager()
+
+        const imagesToLoad = [{ name: 'test', url: 'assets/images/test.png' }]
+
         for (const imageData of imagesToLoad) {
-            await resourceManager.loadResource(imageData.name, imageData.url, ResourceType.Image);
+            await resourceManager.loadResource(imageData.name, imageData.url, ResourceType.IMAGE)
         }
 
-        const audioToLoad = [
-            { name: 'test', url: 'assets/audio/test.mp3' },
-        ];
+        const audioToLoad = [{ name: 'test', url: 'assets/audio/test.mp3' }]
 
         for (const audioData of audioToLoad) {
-            await resourceManager.loadResource(audioData.name, audioData.url, ResourceType.Audio);
+            await resourceManager.loadResource(audioData.name, audioData.url, ResourceType.AUDIO)
         }
-        
-        console.log('Assets preloaded');
+
+        console.log('Assets preloaded')
     }
 }
 
 (async () => {
-    await Game.create();
-})();
+    await Game.create()
+})()

@@ -1,38 +1,31 @@
-import { Component } from '../core/Component';
-import { GameObject } from '../core/GameObject';
-import { Transform } from './Transform';
-import { Collider } from './Collider';
-import { Renderer } from './Renderer';
-import { ComponentConstructor, IGameObject, IScene } from '../types/interface';
-import { ColliderType, CollisionLayer } from '../types/enums';
-import { Vector2 } from '../utils/Vector2';
-import { Color } from '../utils/Color';
-import { MathUtils } from '../utils/MathUtils';
-import { GAME_CONFIG } from '../config/GameConfig';
+import { Component } from '../core/Component'
+import { Renderer } from './Renderer'
+import { ComponentConstructor, IGameObject } from '../types/interface'
+import { Color } from '../utils/Color'
 
 export class Platform extends Component {
-    private hasObstacle: boolean = false;
+    private hasObstacle = false
 
     constructor(gameObject: IGameObject) {
-        super(gameObject);
+        super(gameObject)
     }
 
     public onAwake(): void {
-        const renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>);
+        const renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>)
         if (renderer) {
-            renderer.setColor(Color.GREEN);
+            renderer.setColor(Color.GREEN)
         }
     }
 
     public setHasObstacle(hasObstacle: boolean): void {
-        this.hasObstacle = hasObstacle;
+        this.hasObstacle = hasObstacle
     }
 
     public getHasObstacle(): boolean {
-        return this.hasObstacle;
+        return this.hasObstacle
     }
 
-    public update(deltaTime: number): void { }
+    public update(deltaTime: number): void {}
 
-    public render(ctx: CanvasRenderingContext2D): void { }
+    public render(ctx: CanvasRenderingContext2D): void {}
 }

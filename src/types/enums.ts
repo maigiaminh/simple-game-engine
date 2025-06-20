@@ -1,93 +1,92 @@
-
 // ==================== ENUMS ====================
 // #region Enums
 export enum InputType {
-    Keyboard = 'keyboard',
-    Mouse = 'mouse',
-    Touch = 'touch',
+    KEYBOARD = 'keyboard',
+    MOUSE = 'mouse',
+    TOUCH = 'touch',
 }
 
 export enum MouseButton {
-    Left = 0,
-    Middle = 1,
-    Right = 2
+    LEFT = 0,
+    MIDDLE = 1,
+    RIGHT = 2,
 }
 
 export enum TouchPhase {
-    Began = 'began',
-    Moved = 'moved',
-    Stationary = 'stationary',
-    Ended = 'ended',
-    Canceled = 'canceled'
+    BEGAN = 'began',
+    MOVED = 'moved',
+    STATIONARY = 'stationary',
+    ENDED = 'ended',
+    CANCELED = 'canceled',
 }
 
 export enum ColliderType {
-    Box = 'Box',
-    Circle = 'Circle',
-    Polygon = 'Circle'
+    BOX = 'box',
+    CIRCLE = 'circle',
+    POLYGON = 'polygon',
 }
 
 export enum CollisionLayer {
-    Default = 0,
-    Player = 1,
-    Enemy = 2,
-    Projectile = 3,
-    Environment = 4,
-    Trigger = 5,
+    DEFAULT = 0,
+    PLAYER = 1,
+    ENEMY = 2,
+    PROJECTILE = 3,
+    ENVIRONMENT = 4,
+    TRIGGER = 5,
     UI = 6,
-    Ground = 7,
-    All = 8
+    GROUND = 7,
+    ALL = 8,
 }
 
 export enum ResourceType {
-    Image = 'image',
-    Audio = 'audio',
-    Text = 'text',
+    IMAGE = 'image',
+    AUDIO = 'audio',
+    TEXT = 'text',
     JSON = 'json',
-    Font = 'font'
+    FONT = 'font',
 }
 
 export enum LoadState {
-    NotLoaded = 'not_loaded',
-    Loading = 'loading',
-    Loaded = 'loaded',
-    Error = 'error'
+    NOT_LOADED = 'not_loaded',
+    LOADING = 'loading',
+    LOADED = 'loaded',
+    ERROR = 'error',
 }
 
 export enum SceneState {
-    NotLoaded = 'not_loaded',
-    Loading = 'loading',
-    Loaded = 'loaded',
-    Unloading = 'unloading'
+    NOT_LOADED = 'not_loaded',
+    LOADING = 'loading',
+    LOADED = 'loaded',
+    UNLOADING = 'unloading',
 }
 
 export enum CameraType {
-    Orthographic = 'Orthographic',
-    Perspective = 'Perspective'
+    ORTHOGRAPHIC = 'orthographic',
+    PERSPECTIVE = 'perspective',
 }
 
 export enum EventPhase {
-    Capture = 'capture',
-    Target = 'target',
-    Bubble = 'bubble'
+    CAPTURE = 'capture',
+    TARGET = 'target',
+    BUBBLE = 'bubble',
 }
 
 export enum UIAnchor {
-    TopLeft = 'TopLeft',
-    TopCenter = 'TopCenter',
-    TopRight = 'TopRight',
-    MiddleLeft = 'MiddleLeft',
-    MiddleCenter = 'MiddleCenter',
-    MiddleRight = 'MiddleRight',
-    BottomLeft = 'BottomLeft',
-    BottomCenter = 'BottomCenter',
-    BottomRight = 'BottomRight'
+    TOP_LEFT = 'top_left',
+    TOP_CENTER = 'top_center',
+    TOP_RIGHT = 'top_right',
+    MIDDLE_LEFT = 'middle_left',
+    MIDDLE_CENTER = 'middle_center',
+    MIDDLE_RIGHT = 'middle_right',
+    BOTTOM_LEFT = 'bottom_left',
+    BOTTOM_CENTER = 'bottom_center',
+    BOTTOM_RIGHT = 'bottom_right',
 }
 
 export enum ButtonState {
-    Normal = 'Normal',
-    Hovered = 'Hovered',
-    Pressed = 'Pressed',
-    Disabled = 'Disabled'
+    NORMAL = 'normal',
+    HOVERED = 'hovered',
+    PRESSED = 'pressed',
+    DISABLED = 'disabled',
 }
 // #endregion
