@@ -1,6 +1,5 @@
 import { Component } from '../core/Component'
-import { ColliderType, CollisionLayer } from '../types/enums'
-import { Rectangle, SerializedData } from '../types/general'
+import { ColliderType, CollisionLayer, GAME_EVENTS } from '../types/enums'
 import { IGameObject, ComponentConstructor, ICollidable, CollisionInfo } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 import { Transform } from './Transform'
@@ -82,14 +81,18 @@ export class Collider extends Component implements Collider {
 
     public onCollision(other: ICollidable, collisionInfo: CollisionInfo): void {
         if (this.isTrigger) {
-            this.dispatchEvent('triggerEnter', { other, collisionInfo })
+            this.dispatchEvent(GAME_EVENTS.TRIGGER_ENTER, { other, collisionInfo })
         } else {
-            this.dispatchEvent('collisionEnter', { other, collisionInfo })
+            this.dispatchEvent(GAME_EVENTS.COLLISION_ENTER, { other, collisionInfo })
         }
     }
 
     public onCollisionExit(other: Collider): void {
-        this.dispatchEvent('collisionExit', { other })
+        if (this.isTrigger) {
+            this.dispatchEvent(GAME_EVENTS.TRIGGER_EXIT, { other })
+        } else {
+            this.dispatchEvent(GAME_EVENTS.COLLISION_EXIT, { other })
+        }
     }
 
     public getCollisionLayers(): number[] {

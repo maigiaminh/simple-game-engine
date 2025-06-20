@@ -1,5 +1,4 @@
 import { UIElement } from '../core/UIElement'
-import { RGBAColor, Rectangle, SerializedData } from '../types/general'
 import { IGameObject } from '../types/interface'
 import { Color } from '../utils/Color'
 

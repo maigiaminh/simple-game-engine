@@ -5,9 +5,9 @@ import { Obstacle } from './Obstacle'
 import { Renderer } from './Renderer'
 
 export class StaticObstacle extends Obstacle {
-    protected staticType: 'cactus' | 'spike' | 'rock'
+    protected staticType: StaticType
 
-    constructor(gameObject: IGameObject, staticType: 'cactus' | 'spike' | 'rock' = 'cactus') {
+    constructor(gameObject: IGameObject, staticType: StaticType) {
         super(gameObject, `static_${staticType}`)
         this.staticType = staticType
     }
@@ -61,7 +61,7 @@ export class StaticObstacle extends Obstacle {
         }
     }
 
-    public getStaticType(): 'cactus' | 'spike' | 'rock' {
+    public getStaticType(): StaticType {
         return this.staticType
     }
 }

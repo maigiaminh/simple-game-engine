@@ -1,6 +1,5 @@
 import { Transform } from '../components/Transform'
 import { UIAnchor } from '../types/enums'
-import { Rectangle, SerializedData } from '../types/general'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 import { Component } from './Component'
@@ -9,13 +8,13 @@ export class UIElement extends Component {
     public anchor: UIAnchor = UIAnchor.TOP_LEFT
     public pivot: Vector2 = Vector2.zero()
     public size: Vector2 = new Vector2(100, 50)
-    public margin: { top: number; right: number; bottom: number; left: number } = {
+    public margin: BoxSpacing = {
         top: 0,
         right: 0,
         bottom: 0,
         left: 0,
     }
-    public padding: { top: number; right: number; bottom: number; left: number } = {
+    public padding: BoxSpacing = {
         top: 5,
         right: 5,
         bottom: 5,

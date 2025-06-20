@@ -1,5 +1,4 @@
 import { Component } from '../core/Component'
-import { RGBAColor, SerializedData } from '../types/general'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Color } from '../utils/Color'
 import { Transform } from './Transform'

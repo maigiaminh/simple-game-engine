@@ -28,18 +28,32 @@ type RGBColor = {
     b: number
 }
 
-export type RGBAColor = RGBColor & {
+type RGBAColor = RGBColor & {
     a: number
 }
 
-export type HSLColor = {
+type HSLColor = {
     h: number
     s: number
     l: number
 }
 
-export type ColorValue = string | RGBColor | RGBAColor | HSLColor
+type ColorValue = string | RGBColor | RGBAColor | HSLColor
 
-export type SerializedData = {
+type SerializedData = {
     [key: string]: unknown
+}
+
+type StaticType = 'cactus' | 'spike' | 'rock'
+type MovingType = 'bird' | 'cloud' | 'ufo'
+type MovingPattern = 'horizontal' | 'circular' | 'zigzag' | 'vertical'
+type BirdPattern = 'horizontal' | 'circular' | 'zigzag'
+type CloudPattern = 'horizontal' | 'circular'
+type UfoPattern = 'circular' | 'zigzag'
+
+type BoxSpacing = {
+    top: number
+    right: number
+    bottom: number
+    left: number
 }

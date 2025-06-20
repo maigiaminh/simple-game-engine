@@ -1,7 +1,6 @@
 import { Collider } from '../components/Collider'
 import { EventEmitter } from '../core/EventEmitter'
-import { Rectangle } from '../types/general'
-import { CollisionInfo, RaycastHit } from '../types/interface'
+import { CollisionInfo, RaycastAABB, RaycastHit } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 
 export class CollisionManager extends EventEmitter {
@@ -121,7 +120,7 @@ export class CollisionManager extends EventEmitter {
         direction: Vector2,
         bounds: Rectangle,
         maxDistance: number
-    ): { point: Vector2; normal: Vector2; distance: number } | null {
+    ): RaycastAABB | null {
         const invDir = { x: 1 / direction.x, y: 1 / direction.y }
 
         const t1 = (bounds.x - origin.x) * invDir.x

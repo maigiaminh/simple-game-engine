@@ -1,8 +1,7 @@
 import { Camera } from '../components/Camera'
 import { Transform } from '../components/Transform'
 import { GAME_CONFIG } from '../config/GameConfig'
-import { SceneState } from '../types/enums'
-import { SerializedData } from '../types/general'
+import { GAME_EVENTS, SceneState } from '../types/enums'
 import { ComponentConstructor, IGameObject, IScene } from '../types/interface'
 import { EventEmitter } from './EventEmitter'
 
@@ -38,7 +37,7 @@ export abstract class Scene extends EventEmitter implements IScene {
 
     public setMainCamera(camera: Camera): void {
         this.mainCamera = camera
-        this.dispatchEvent('mainCameraSet', { camera })
+        this.dispatchEvent(GAME_EVENTS.MAIN_CAMERA_SET, { camera })
     }
 
     constructor(name: string) {
@@ -76,7 +75,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             gameObject.start()
         }
 
-        this.dispatchEvent('gameObjectAdded', { gameObject })
+        this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_ADDED, { gameObject })
     }
 
     public removeGameObject(gameObject: IGameObject): void {
@@ -100,7 +99,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             }
         }
 
-        this.dispatchEvent('gameObjectRemoved', { gameObject })
+        this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_REMOVED, { gameObject })
     }
 
     public findGameObject(id: string): IGameObject | null {
@@ -153,10 +152,10 @@ export abstract class Scene extends EventEmitter implements IScene {
 
             this.state = SceneState.LOADED
             this.loadProgress = 1
-            this.dispatchEvent('sceneLoaded')
+            this.dispatchEvent(GAME_EVENTS.SCENE_LOADED)
         } catch (error) {
             this.state = SceneState.NOT_LOADED
-            this.dispatchEvent('sceneLoadError', { error })
+            this.dispatchEvent(GAME_EVENTS.SCENE_LOAD_ERROR, { error })
             throw error
         }
     }
@@ -176,9 +175,9 @@ export abstract class Scene extends EventEmitter implements IScene {
 
             this.state = SceneState.NOT_LOADED
             this.loadProgress = 0
-            this.dispatchEvent('sceneUnloaded')
+            this.dispatchEvent(GAME_EVENTS.SCENE_UNLOADED)
         } catch (error) {
-            this.dispatchEvent('sceneUnloadError', { error })
+            this.dispatchEvent(GAME_EVENTS.SCENE_UNLOAD_ERROR, { error })
             throw error
         }
     }

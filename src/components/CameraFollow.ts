@@ -3,7 +3,13 @@ import { Transform } from './Transform'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameConfig'
-import { Rectangle } from '../types/general'
+
+type CameraViewBounds = {
+    top: number
+    bottom: number
+    left: number
+    right: number
+}
 
 export class CameraFollow extends Camera {
     private offset: Vector2 = new Vector2(0, GAME_CONFIG.CAMERA.FOLLOW_OFFSET)
@@ -58,7 +64,7 @@ export class CameraFollow extends Camera {
         }
     }
 
-    public getCameraViewBounds(): { top: number; bottom: number; left: number; right: number } {
+    public getCameraViewBounds(): CameraViewBounds {
         const transform = this.gameObject.getComponent(
             Transform as ComponentConstructor<Transform>
         )!

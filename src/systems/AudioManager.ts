@@ -1,4 +1,5 @@
 import { EventEmitter } from '../core/EventEmitter'
+import { GAME_EVENTS } from '../types/enums'
 import { AudioClip, AudioSource, PlaySoundOptions } from '../types/interface'
 
 export class AudioManager extends EventEmitter {
@@ -26,7 +27,9 @@ export class AudioManager extends EventEmitter {
             this.masterGainNode = this.audioContext.createGain()
             this.masterGainNode.connect(this.audioContext.destination)
 
-            document.addEventListener('click', this.resumeAudioContext.bind(this), { once: true })
+            document.addEventListener('click', this.resumeAudioContext.bind(this), {
+                once: true,
+            })
             document.addEventListener('keydown', this.resumeAudioContext.bind(this), { once: true })
         } catch (e) {
             console.warn('Web Audio API not supported:', e)
@@ -61,7 +64,7 @@ export class AudioManager extends EventEmitter {
             }
 
             this.clips.set(name, clip)
-            this.dispatchEvent('audioClipLoaded', { clip })
+            this.dispatchEvent(GAME_EVENTS.AUDIO_CLIP_LOADED, { clip })
         } catch (error) {
             console.error(`Failed to load audio clip: ${name}`, error)
             throw error

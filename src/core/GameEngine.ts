@@ -6,6 +6,7 @@ import { ResourceManager } from '../systems/ResourceManager'
 import { Time } from '../utils/Time'
 import { IScene, EngineConfig } from '../types/interface'
 import { UIManager } from '../systems/UIManager'
+import { GAME_EVENTS } from '../types/enums'
 
 export class GameEngine extends EventEmitter implements GameEngine {
     private static instance: GameEngine | null = null
@@ -53,7 +54,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
 
         if (!GameEngine.instance) GameEngine.instance = this
 
-        this.dispatchEvent('engineInitialized')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_INITIALIZED)
     }
 
     public static getInstance(): GameEngine {
@@ -90,7 +91,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
 
     public addScene(name: string, scene: IScene): void {
         this.scenes.set(name, scene)
-        this.dispatchEvent('sceneAdded', { name, scene })
+        this.dispatchEvent(GAME_EVENTS.SCENE_ADDED, { name, scene })
     }
 
     public async setScene(name: string): Promise<void> {
@@ -107,7 +108,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
         this.currentScene = scene
         await this.currentScene.load()
 
-        this.dispatchEvent('sceneChanged', { name, scene })
+        this.dispatchEvent(GAME_EVENTS.SCENE_CHANGED, { name, scene })
     }
 
     public getCurrentScene(): IScene | null {
@@ -123,23 +124,23 @@ export class GameEngine extends EventEmitter implements GameEngine {
         Time.reset()
 
         this.gameLoop(this.lastTime)
-        this.dispatchEvent('engineStarted')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_STARTED)
     }
 
     public stop(): void {
         this.isRunning = false
-        this.dispatchEvent('engineStopped')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_STOPPED)
     }
 
     public pause(): void {
         this.isPaused = true
-        this.dispatchEvent('enginePaused')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_PAUSED)
     }
 
     public resume(): void {
         this.isPaused = false
         this.lastTime = performance.now()
-        this.dispatchEvent('engineResumed')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_RESUMED)
     }
 
     private gameLoop(currentTime: number): void {
@@ -171,7 +172,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
 
         this.collisionManager.checkCollisions()
 
-        this.dispatchEvent('engineUpdate', { deltaTime })
+        this.dispatchEvent(GAME_EVENTS.ENGINE_UPDATED, { deltaTime })
     }
 
     private render(): void {
@@ -181,7 +182,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
             this.currentScene.render(this.ctx)
         }
 
-        this.dispatchEvent('engineRender')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_RENDERED)
     }
 
     private updatePerformanceStats(): void {
@@ -250,6 +251,6 @@ export class GameEngine extends EventEmitter implements GameEngine {
         this.audioManager.stopAllSounds()
 
         this.removeAllEventListeners()
-        this.dispatchEvent('engineDestroyed')
+        this.dispatchEvent(GAME_EVENTS.ENGINE_DESTROYED)
     }
 }

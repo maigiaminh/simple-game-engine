@@ -1,7 +1,6 @@
 import { Component } from '../core/Component'
 import { Vector2 } from '../utils/Vector2'
 import { Transform } from './Transform'
-import { Rectangle, SerializedData } from '../types/general'
 import { CameraType } from '../types/enums'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 

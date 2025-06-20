@@ -1,7 +1,7 @@
 import { Component } from '../core/Component'
 import { Collider } from './Collider'
 import { IGameObject, ComponentConstructor, GameEvent } from '../types/interface'
-import { CollisionLayer } from '../types/enums'
+import { CollisionLayer, GAME_EVENTS } from '../types/enums'
 import { GameEngine } from '../core/GameEngine'
 
 export abstract class Obstacle extends Component {
@@ -28,7 +28,7 @@ export abstract class Obstacle extends Component {
             collider.mask = [CollisionLayer.PLAYER]
             collider.isTrigger = true
 
-            collider.addEventListener('triggerEnter', this.onPlayerCollision.bind(this))
+            collider.addEventListener(GAME_EVENTS.TRIGGER_ENTER, this.onPlayerCollision.bind(this))
         }
     }
 
@@ -44,7 +44,7 @@ export abstract class Obstacle extends Component {
     }
 
     protected onPlayerHit(player: IGameObject): void {
-        this.dispatchEvent('playerHitObstacle', {
+        this.dispatchEvent(GAME_EVENTS.PLAYER_HIT_OBSTACLE, {
             obstacle: this.gameObject,
             player: player,
             obstacleType: this.obstacleType,

@@ -1,6 +1,5 @@
 import { GameObject } from '../core/GameObject'
 import { ButtonState, UIAnchor } from '../types/enums'
-import { RGBAColor, SerializedData } from '../types/general'
 import { IGameObject } from '../types/interface'
 import { Color } from '../utils/Color'
 import { Vector2 } from '../utils/Vector2'

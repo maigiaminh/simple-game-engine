@@ -15,104 +15,72 @@ export class ObstacleFactory {
         this.scene = scene
     }
 
+    private createStaticObstacle(position: Vector2, type: StaticType): IGameObject {
+        const staticTypeMap = {
+            cactus: 'CACTUS',
+            spike: 'SPIKE',
+            rock: 'ROCK',
+        } as const
+        const config = GAME_CONFIG.OBSTACLES[staticTypeMap[type]]
+        const size = { width: config.WIDTH, height: config.HEIGHT }
+        const obstacleGO = new GameObject({
+            name: `${type}_${Date.now()}`,
+            tag: 'Obstacle',
+            layer: 2,
+            position,
+        })
+        obstacleGO.addComponent(new Renderer(obstacleGO))
+        obstacleGO.addComponent(Collider.createBox(obstacleGO, size.width, size.height))
+        obstacleGO.addComponent(new StaticObstacle(obstacleGO, type))
+        this.scene.addGameObject(obstacleGO)
+        return obstacleGO
+    }
+
     public createCactus(position: Vector2): IGameObject {
-        return this.createStaticObstacle(position, 'cactus', {
-            width: GAME_CONFIG.OBSTACLES.CACTUS.WIDTH,
-            height: GAME_CONFIG.OBSTACLES.CACTUS.HEIGHT,
-        })
+        return this.createStaticObstacle(position, 'cactus')
     }
-
     public createSpike(position: Vector2): IGameObject {
-        return this.createStaticObstacle(position, 'spike', {
-            width: GAME_CONFIG.OBSTACLES.SPIKE.WIDTH,
-            height: GAME_CONFIG.OBSTACLES.SPIKE.HEIGHT,
-        })
+        return this.createStaticObstacle(position, 'spike')
     }
-
     public createRock(position: Vector2): IGameObject {
-        return this.createStaticObstacle(position, 'rock', {
-            width: GAME_CONFIG.OBSTACLES.ROCK.WIDTH,
-            height: GAME_CONFIG.OBSTACLES.ROCK.HEIGHT,
-        })
+        return this.createStaticObstacle(position, 'rock')
     }
-
-    private createStaticObstacle(
+    private createMovingObstacle(
         position: Vector2,
-        type: 'cactus' | 'spike' | 'rock',
+        type: MovingType,
+        pattern: MovingPattern | undefined,
         size: { width: number; height: number }
     ): IGameObject {
         const obstacleGO = new GameObject({
             name: `${type}_${Date.now()}`,
             tag: 'Obstacle',
             layer: 2,
-            position: position,
+            position,
         })
-
-        const renderer = new Renderer(obstacleGO)
-        obstacleGO.addComponent(renderer)
-
-        const collider = Collider.createBox(obstacleGO, size.width, size.height)
-        obstacleGO.addComponent(collider)
-
-        const obstacle = new StaticObstacle(obstacleGO, type)
-        obstacleGO.addComponent(obstacle)
-
+        obstacleGO.addComponent(new Renderer(obstacleGO))
+        obstacleGO.addComponent(Collider.createBox(obstacleGO, size.width, size.height))
+        obstacleGO.addComponent(new MovingObstacle(obstacleGO, type, pattern))
         this.scene.addGameObject(obstacleGO)
-        console.log('scene:', this.scene.getAllGameObjects())
         return obstacleGO
     }
 
-    public createBird(
-        position: Vector2,
-        pattern: 'horizontal' | 'circular' | 'zigzag' = 'horizontal'
-    ): IGameObject {
+    public createBird(position: Vector2, pattern: BirdPattern = 'horizontal'): IGameObject {
         return this.createMovingObstacle(position, 'bird', pattern, {
             width: GAME_CONFIG.OBSTACLES.BIRD.WIDTH,
             height: GAME_CONFIG.OBSTACLES.BIRD.HEIGHT,
         })
     }
-
-    public createCloud(
-        position: Vector2,
-        pattern: 'horizontal' | 'circular' = 'horizontal'
-    ): IGameObject {
+    public createCloud(position: Vector2, pattern: CloudPattern = 'horizontal'): IGameObject {
         return this.createMovingObstacle(position, 'cloud', pattern, {
             width: 60,
             height: 30,
         })
     }
-
-    public createUfo(position: Vector2, pattern: 'circular' | 'zigzag' = 'circular'): IGameObject {
+    public createUfo(position: Vector2, pattern: UfoPattern = 'circular'): IGameObject {
         return this.createMovingObstacle(position, 'ufo', pattern, {
             width: 40,
             height: 20,
         })
-    }
-
-    private createMovingObstacle(
-        position: Vector2,
-        type: 'bird' | 'cloud' | 'ufo',
-        pattern: 'horizontal' | 'circular' | 'zigzag' | 'vertical',
-        size: { width: number; height: number }
-    ): IGameObject {
-        const obstacleGO = new GameObject({
-            name: `${type}_${Date.now()}`,
-            tag: 'Obstacle',
-            layer: 2,
-            position: position,
-        })
-
-        const renderer = new Renderer(obstacleGO)
-        obstacleGO.addComponent(renderer)
-
-        const collider = Collider.createBox(obstacleGO, size.width, size.height)
-        obstacleGO.addComponent(collider)
-
-        const obstacle = new MovingObstacle(obstacleGO, type, pattern)
-        obstacleGO.addComponent(obstacle)
-
-        this.scene.addGameObject(obstacleGO)
-        return obstacleGO
     }
 
     public createRandomObstacle(position: Vector2): IGameObject {
@@ -127,7 +95,7 @@ export class ObstacleFactory {
             { type: 'moving', subtype: 'bird', chance: GAME_CONFIG.OBSTACLES.BIRD.SPAWN_CHANCE },
             { type: 'moving', subtype: 'cloud', chance: GAME_CONFIG.OBSTACLES.CLOUD.SPAWN_CHANCE },
             { type: 'moving', subtype: 'ufo', chance: GAME_CONFIG.OBSTACLES.UFO.SPAWN_CHANCE },
-        ]
+        ] as const
 
         const randomValue = MathUtils.random(0, 1)
         let cumulativeChance = 0
@@ -136,37 +104,27 @@ export class ObstacleFactory {
             cumulativeChance += obstacle.chance
             if (randomValue <= cumulativeChance) {
                 if (obstacle.type === 'static') {
-                    switch (obstacle.subtype) {
-                        case 'cactus':
-                            return this.createCactus(position)
-                        case 'spike':
-                            return this.createSpike(position)
-                        case 'rock':
-                            return this.createRock(position)
-                    }
+                    return this.createStaticObstacle(position, obstacle.subtype)
                 } else {
-                    const patterns = ['horizontal', 'circular', 'zigzag']
-                    const randomPattern = MathUtils.randomChoice(patterns)
-
-                    switch (obstacle.subtype) {
-                        case 'bird':
-                            return this.createBird(
-                                position,
-                                randomPattern as 'horizontal' | 'circular' | 'zigzag'
-                            )
-                        case 'cloud':
-                            return this.createCloud(
-                                position,
-                                randomPattern as 'horizontal' | 'circular'
-                            )
-                        case 'ufo':
-                            return this.createUfo(position, randomPattern as 'circular' | 'zigzag')
+                    if (obstacle.subtype === 'bird') {
+                        const patterns: BirdPattern[] = ['horizontal', 'circular', 'zigzag']
+                        const randomPattern = MathUtils.randomChoice(patterns)
+                        return this.createBird(position, randomPattern)
+                    }
+                    if (obstacle.subtype === 'cloud') {
+                        const patterns: CloudPattern[] = ['horizontal', 'circular']
+                        const randomPattern = MathUtils.randomChoice(patterns)
+                        return this.createCloud(position, randomPattern)
+                    }
+                    if (obstacle.subtype === 'ufo') {
+                        const patterns: UfoPattern[] = ['circular', 'zigzag']
+                        const randomPattern = MathUtils.randomChoice(patterns)
+                        return this.createUfo(position, randomPattern)
                     }
                 }
                 break
             }
         }
-
         return this.createCactus(position)
     }
 }

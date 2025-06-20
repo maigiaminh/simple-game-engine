@@ -5,7 +5,7 @@ import { RigidBody } from './RigidBody'
 import { Collider } from './Collider'
 import { Renderer } from './Renderer'
 import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../types/interface'
-import { CollisionLayer } from '../types/enums'
+import { CollisionLayer, GAME_EVENTS } from '../types/enums'
 import { Vector2 } from '../utils/Vector2'
 import { Color } from '../utils/Color'
 import { GAME_CONFIG } from '../config/GameConfig'
@@ -28,8 +28,6 @@ export class Player extends Component {
     }
 
     public onAwake(): void {
-        console.log('🔵 Player awakening...')
-
         this.transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!
         this.rigidBody = this.gameObject.getComponent(RigidBody as ComponentConstructor<RigidBody>)!
         this.collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)!
@@ -53,8 +51,11 @@ export class Player extends Component {
         this.collider.layers = [CollisionLayer.PLAYER]
         this.collider.mask = [CollisionLayer.GROUND, CollisionLayer.ENVIRONMENT]
 
-        this.collider.addEventListener('collisionEnter', this.onCollisionEnter.bind(this))
-        this.collider.addEventListener('collisionExit', this.onCollisionExit.bind(this))
+        this.collider.addEventListener(
+            GAME_EVENTS.COLLISION_ENTER,
+            this.onCollisionEnter.bind(this)
+        )
+        this.collider.addEventListener(GAME_EVENTS.COLLISION_EXIT, this.onCollisionExit.bind(this))
 
         this.gameObject.tag = 'Player'
     }
@@ -94,14 +95,13 @@ export class Player extends Component {
     }
 
     private jump(): void {
-        console.log('Player jumped!')
         this.rigidBody.setVelocity(
             new Vector2(this.rigidBody.getVelocity().x, GAME_CONFIG.PLAYER.JUMP_FORCE)
         )
         this.isGrounded = false
         this.canJump = false
 
-        this.dispatchEvent('playerJump')
+        this.dispatchEvent(GAME_EVENTS.PLAYER_JUMPED)
     }
 
     private updateMovement(): void {
@@ -123,7 +123,6 @@ export class Player extends Component {
         }
 
         if (position.y > GAME_CONFIG.CANVAS.HEIGHT + 200) {
-            console.log('💀 Player fell! Respawning...')
             this.respawn()
         }
     }
@@ -198,8 +197,6 @@ export class Player extends Component {
 
         this.isGrounded = false
         this.canJump = true
-
-        console.log('🔄 Player respawned!')
     }
 
     public getScore(): number {

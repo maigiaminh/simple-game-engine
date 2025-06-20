@@ -1,4 +1,5 @@
 import { GAME_CONFIG } from '../config/GameConfig'
+import { GAME_EVENTS } from '../types/enums'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Color } from '../utils/Color'
 import { MathUtils } from '../utils/MathUtils'
@@ -230,7 +231,7 @@ export class MovingObstacle extends Obstacle {
                 playerRigidBody.addForce(pushForce)
             }
 
-            this.dispatchEvent('playerPushed', {
+            this.dispatchEvent(GAME_EVENTS.PLAYER_PUSHED, {
                 obstacle: this.gameObject,
                 player: player,
                 pushDirection: this.moveDirection,

@@ -5,7 +5,6 @@ import { RigidBody } from '../components/RigidBody'
 import { Transform } from '../components/Transform'
 import { Vector2 } from '../utils/Vector2'
 import { ColliderType, EventPhase, LoadState, ResourceType, SceneState, TouchPhase } from './enums'
-import { Rectangle, RGBAColor, SerializedData } from './general'
 // ==================== CORE INTERFACES ====================
 // #region Core Interfaces
 export interface IUpdatable {
@@ -151,6 +150,12 @@ export interface RaycastHit {
     gameObject: IGameObject
 }
 
+export interface RaycastAABB {
+    point: Vector2
+    normal: Vector2
+    distance: number
+}
+
 export interface GameTouch {
     id: number
     position: Vector2
@@ -165,8 +170,6 @@ export interface LoadProgress {
     totalResources: number
     loadedResources: number
     failedResources: number
-    bytesLoaded: number
-    totalBytes: number
     currentResource: string
     percentage: number
 }
@@ -223,6 +226,12 @@ export interface GameEventListenerOptions {
     once?: boolean
     capture?: boolean
     priority?: number
+}
+
+export type GameEventOptions = {
+    bubbles?: boolean
+    cancelable?: boolean
+    data?: unknown
 }
 // #endregion
 

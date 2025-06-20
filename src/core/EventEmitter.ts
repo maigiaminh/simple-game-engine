@@ -1,8 +1,13 @@
 import { EventPhase } from '../types/enums'
-import { GameEvent, GameEventListener, GameEventListenerOptions } from '../types/interface'
+import {
+    GameEvent,
+    GameEventListener,
+    GameEventListenerOptions,
+    GameEventOptions,
+} from '../types/interface'
 import { Time } from '../utils/Time'
 
-export class GameEventImplement implements GameEvent {
+export class GameEventImplement {
     public type: string
     public target: unknown
     public currentTarget: unknown
@@ -15,10 +20,7 @@ export class GameEventImplement implements GameEvent {
 
     private _propagationStopped = false
 
-    constructor(
-        type: string,
-        options: { bubbles?: boolean; cancelable?: boolean; data?: unknown } = {}
-    ) {
+    constructor(type: string, options: GameEventOptions = {}) {
         this.type = type
         this.bubbles = options.bubbles || false
         this.cancelable = options.cancelable || false

@@ -1,5 +1,5 @@
 import { EventEmitter } from '../core/EventEmitter'
-import { ResourceType, LoadState } from '../types/enums'
+import { ResourceType, LoadState, GAME_EVENTS } from '../types/enums'
 import { LoadProgress, ResourceInfo } from '../types/interface'
 
 export class ResourceManager<T = unknown> extends EventEmitter {
@@ -37,12 +37,12 @@ export class ResourceManager<T = unknown> extends EventEmitter {
             resourceInfo.data = data
             resourceInfo.state = LoadState.LOADED
 
-            this.dispatchEvent('resourceLoaded', { resource: resourceInfo })
+            this.dispatchEvent(GAME_EVENTS.RESOURCE_LOADED, { resource: resourceInfo })
             return data
         } catch (error) {
             resourceInfo.state = LoadState.ERROR
             resourceInfo.error = error as Error
-            this.dispatchEvent('resourceError', { resource: resourceInfo, error })
+            this.dispatchEvent(GAME_EVENTS.RESOURCE_LOAD_ERROR, { resource: resourceInfo, error })
             throw error
         } finally {
             this.loadingPromises.delete(name)
@@ -55,19 +55,22 @@ export class ResourceManager<T = unknown> extends EventEmitter {
         switch (type) {
             case ResourceType.IMAGE:
                 return this.loadImage(url)
-
             case ResourceType.AUDIO:
-                return this.loadAudioBuffer(url)
-
+                return this.loadAndCheck(url, (r) => r.arrayBuffer())
             case ResourceType.TEXT:
-                return this.loadText(url)
-
+                return this.loadAndCheck(url, (r) => r.text())
             case ResourceType.JSON:
-                return this.loadJSON(url)
-
+                return this.loadAndCheck(url, (r) => r.json())
             default:
                 throw new Error(`Unsupported resource type: ${type}`)
         }
+    }
+
+    private async loadAndCheck<R>(url: string, parser: (r: Response) => Promise<R>): Promise<R> {
+        const response = await fetch(url)
+        if (!response.ok)
+            throw new Error(`Failed to load: ${response.status} ${response.statusText}`)
+        return parser(response)
     }
 
     private async loadImage(url: string): Promise<HTMLImageElement> {
@@ -80,30 +83,6 @@ export class ResourceManager<T = unknown> extends EventEmitter {
 
             img.src = url
         })
-    }
-
-    private async loadAudioBuffer(url: string): Promise<ArrayBuffer> {
-        const response = await fetch(url)
-        if (!response.ok) {
-            throw new Error(`Failed to load audio: ${response.status} ${response.statusText}`)
-        }
-        return await response.arrayBuffer()
-    }
-
-    private async loadText(url: string): Promise<string> {
-        const response = await fetch(url)
-        if (!response.ok) {
-            throw new Error(`Failed to load text: ${response.status} ${response.statusText}`)
-        }
-        return await response.text()
-    }
-
-    private async loadJSON(url: string): Promise<unknown> {
-        const response = await fetch(url)
-        if (!response.ok) {
-            throw new Error(`Failed to load JSON: ${response.status} ${response.statusText}`)
-        }
-        return await response.json()
     }
 
     public getResource<T = unknown>(name: string): T | null {
@@ -141,8 +120,6 @@ export class ResourceManager<T = unknown> extends EventEmitter {
             totalResources,
             loadedResources,
             failedResources,
-            bytesLoaded: 0,
-            totalBytes: 0,
             currentResource,
             percentage,
         }

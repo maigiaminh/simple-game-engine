@@ -1,5 +1,4 @@
 import { Component } from '../core/Component'
-import { SerializedData } from '../types/general'
 import { IGameObject } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 

@@ -1,4 +1,3 @@
-import { RGBAColor } from '../types/general'
 import { MathUtils } from './MathUtils'
 
 export class Color {
@@ -18,10 +17,10 @@ export class Color {
         return new Color(this.r, this.g, this.b, this.a)
     }
 
-    public set(r: number, g: number, b: number, a = 1): Color {
-        this.r = MathUtils.clamp(r, 0, 255)
-        this.g = MathUtils.clamp(g, 0, 255)
-        this.b = MathUtils.clamp(b, 0, 255)
+    public set(rgba: RGBAColor, a = 1): Color {
+        this.r = MathUtils.clamp(rgba.r, 0, 255)
+        this.g = MathUtils.clamp(rgba.g, 0, 255)
+        this.b = MathUtils.clamp(rgba.b, 0, 255)
         this.a = MathUtils.clamp(a, 0, 1)
         return this
     }
@@ -40,7 +39,7 @@ export class Color {
         return `#${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`
     }
 
-    public toHSL(): { h: number; s: number; l: number } {
+    public toHSL(): HSLColor {
         const r = this.r / 255
         const g = this.g / 255
         const b = this.b / 255
@@ -108,10 +107,10 @@ export class Color {
             : new Color()
     }
 
-    public static fromHSL(h: number, s: number, l: number, a = 1): Color {
-        h = h / 360
-        s = s / 100
-        l = l / 100
+    public static fromHSL(hsl: HSLColor, a = 1): Color {
+        hsl.h = hsl.h / 360
+        hsl.s = hsl.s / 100
+        hsl.l = hsl.l / 100
 
         const hue2rgb = (p: number, q: number, t: number): number => {
             if (t < 0) t += 1
@@ -124,14 +123,14 @@ export class Color {
 
         let r: number, g: number, b: number
 
-        if (s === 0) {
-            r = g = b = l
+        if (hsl.s === 0) {
+            r = g = b = hsl.l
         } else {
-            const q = l < 0.5 ? l * (1 + s) : l + s - l * s
-            const p = 2 * l - q
-            r = hue2rgb(p, q, h + 1 / 3)
-            g = hue2rgb(p, q, h)
-            b = hue2rgb(p, q, h - 1 / 3)
+            const q = hsl.l < 0.5 ? hsl.l * (1 + hsl.s) : hsl.l + hsl.s - hsl.l * hsl.s
+            const p = 2 * hsl.l - q
+            r = hue2rgb(p, q, hsl.h + 1 / 3)
+            g = hue2rgb(p, q, hsl.h)
+            b = hue2rgb(p, q, hsl.h - 1 / 3)
         }
 
         return new Color(r * 255, g * 255, b * 255, a)
