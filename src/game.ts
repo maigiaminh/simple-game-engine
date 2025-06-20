@@ -1,9 +1,10 @@
-import { GameEngine } from './core/GameEngine'
+import { GameCore } from './core/GameCore'
 import { Scene } from './core/Scene'
-import { ResourceType } from './types/enums'
 
 class SimpleScene extends Scene {
-    protected async onLoad(): Promise<void> {}
+    protected async onLoad(): Promise<void> {
+        console.log('SimpleScene loaded')
+    }
 
     protected async onUnload(): Promise<void> {
         console.log('SimpleScene unloaded')
@@ -11,57 +12,29 @@ class SimpleScene extends Scene {
 
     protected onUpdate(deltaTime: number): void {}
 
-    protected onRender(ctx: CanvasRenderingContext2D): void {}
+    protected onRender(ctx: CanvasRenderingContext2D): void {
+        ctx.save()
+        ctx.font = '32px Arial'
+        ctx.fillStyle = '#fff'
+        ctx.textAlign = 'center'
+        ctx.fillText('Welcome to Simple Game Engine!', 500, 200)
+        ctx.restore()
+    }
 
     constructor() {
         super('MainScene')
     }
 }
 
-class Game {
-    constructor() {
-        throw new Error('Use Game.create() instead of new Game()')
-    }
-
-    static async create(): Promise<GameEngine> {
-        let canvas = document.getElementById('game-canvas') as HTMLCanvasElement
-        if (!canvas) {
-            canvas = document.createElement('canvas')
-            canvas.id = 'game-canvas'
-            document.body.appendChild(canvas)
-        }
-
-        const engine = new GameEngine({
-            canvasId: 'game-canvas',
-            width: 1000,
-            height: 800,
-            targetFPS: 60,
-        })
-
-        // await this.preloadAssets(engine);
-
-        return engine
-    }
-
-    static async preloadAssets(engine: GameEngine): Promise<void> {
-        const resourceManager = engine.getResourceManager()
-
-        const imagesToLoad = [{ name: 'test', url: 'assets/images/test.png' }]
-
-        for (const imageData of imagesToLoad) {
-            await resourceManager.loadResource(imageData.name, imageData.url, ResourceType.IMAGE)
-        }
-
-        const audioToLoad = [{ name: 'test', url: 'assets/audio/test.mp3' }]
-
-        for (const audioData of audioToLoad) {
-            await resourceManager.loadResource(audioData.name, audioData.url, ResourceType.AUDIO)
-        }
-
-        console.log('Assets preloaded')
-    }
-}
-
 (async () => {
-    await Game.create()
+    await GameCore.start({
+        width: 1000,
+        height: 800,
+        targetFPS: 60,
+        scenes: [new SimpleScene()],
+        preloadAssets: {
+            images: [],
+            audio: [],
+        },
+    })
 })()

@@ -45,6 +45,9 @@ export abstract class Scene extends EventEmitter implements IScene {
         this.name = name
     }
 
+    protected abstract onUpdate(deltaTime: number): void
+    protected abstract onRender(ctx: CanvasRenderingContext2D): void
+
     public getName(): string {
         return this.name
     }
@@ -207,6 +210,8 @@ export abstract class Scene extends EventEmitter implements IScene {
                 gameObject.update(deltaTime)
             }
         })
+
+        this.onUpdate(deltaTime)
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
@@ -224,6 +229,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             }
         }
 
+        this.onRender(ctx)
         this.renderGameObjects(ctx)
 
         ctx.restore()
