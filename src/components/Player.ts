@@ -54,8 +54,9 @@ export class Player extends Component {
         this.collider.mask = [CollisionLayer.Ground, CollisionLayer.Environment];
         
         this.collider.addEventListener('collisionEnter', this.onCollisionEnter.bind(this));
-        this.collider.addEventListener('collisionExit', this.onCollisionExit.bind(this)); // Thêm dòng này
+        this.collider.addEventListener('collisionExit', this.onCollisionExit.bind(this)); 
 
+        this.gameObject.tag = 'Player';
     }
 
     public setInput(left: boolean, right: boolean, jump: boolean): void {

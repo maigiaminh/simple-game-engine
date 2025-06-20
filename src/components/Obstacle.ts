@@ -1,0 +1,93 @@
+import { Component } from '../core/Component';
+import { Collider } from './Collider';
+import { IGameObject, ComponentConstructor, GameEvent, ICollider } from '../types/interface';
+import { CollisionLayer } from '../types/enums';
+import { GameEngine } from '../core/GameEngine';
+
+
+export abstract class Obstacle extends Component {
+    protected obstacleType: string;
+    protected isActive: boolean = true;
+    protected spawnTime: number;
+
+    constructor(gameObject: IGameObject, obstacleType: string) {
+        super(gameObject);
+        this.obstacleType = obstacleType;
+        this.spawnTime = Date.now();
+    }
+
+    public onAwake(): void {
+        this.setupCollider();
+        this.setupRenderer();
+        this.setupObstacleSpecific();
+    }
+
+    protected setupCollider(): void {
+        const collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>);
+        if (collider) {
+            collider.layers = [CollisionLayer.Environment];
+            collider.mask = [CollisionLayer.Player];
+            collider.isTrigger = true;
+            
+            collider.addEventListener('triggerEnter', this.onPlayerCollision.bind(this));
+        }
+    }
+
+    protected abstract setupRenderer(): void;
+    protected abstract setupObstacleSpecific(): void;
+
+    protected onPlayerCollision(event: GameEvent): void {
+        const { other } = event.data as { other: ICollider };
+        
+        if (other.getGameObject().tag === 'Player') {
+            this.onPlayerHit(other.getGameObject());
+        }
+    }
+
+    protected onPlayerHit(player: IGameObject): void {
+        this.dispatchEvent('playerHitObstacle', { 
+            obstacle: this.gameObject, 
+            player: player, 
+            obstacleType: this.obstacleType
+        });
+
+        this.deactivate();
+    }
+
+    public deactivate(): void {
+        this.isActive = false;
+        this.gameObject.setActive(false);
+
+        const collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>);
+        if (collider && GameEngine.getInstance()) {
+            GameEngine.getInstance().getCollisionManager().removeCollider(collider);
+        }
+    }
+
+    public isObstacleActive(): boolean {
+        return this.isActive;
+    }
+
+    public getObstacleType(): string {
+        return this.obstacleType;
+    }
+
+    public update(deltaTime: number): void {
+        if (!this.isActive) return;
+        
+        this.updateObstacle(deltaTime);
+        this.checkBounds();
+    }
+
+    protected abstract updateObstacle(deltaTime: number): void;
+
+    protected checkBounds(): void { }
+
+    public render(ctx: CanvasRenderingContext2D): void {
+        if (this.isActive) {
+            this.renderEffects(ctx);
+        }
+    }
+
+    protected renderEffects(ctx: CanvasRenderingContext2D): void { }
+}

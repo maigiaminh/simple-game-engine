@@ -8,6 +8,8 @@ import { IGameEngine, IScene, IInputManager, IAudioManager, IResourceManager, IC
 import { UIManager } from "../systems/UIManager";
 
 export class GameEngine extends EventEmitter implements IGameEngine {
+    private static instance: GameEngine | null = null;
+
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
     private scenes: Map<string, IScene> = new Map();
@@ -49,8 +51,19 @@ export class GameEngine extends EventEmitter implements IGameEngine {
             this.setTargetFPS(config.targetFPS);
         }
         
+        if (!GameEngine.instance)
+            GameEngine.instance = this;
+
         this.dispatchEvent('engineInitialized');
     }
+
+    public static getInstance(): GameEngine {
+        if (!GameEngine.instance) {
+            throw new Error("GameEngine has not been initialized. Please create an instance first.");
+        }
+        return GameEngine.instance;
+    }
+
 
     private setupCanvas(width: number, height: number): void {
         this.canvas.width = width;
@@ -60,8 +73,13 @@ export class GameEngine extends EventEmitter implements IGameEngine {
         this.canvas.tabIndex = 1000;
         
         this.canvas.style.display = 'block';
-        this.canvas.style.margin = '0 auto';
+        this.canvas.style.margin = 'auto';
         this.canvas.style.border = '1px solid #333';
+
+        document.body.style.display = 'flex';
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
+        document.body.style.margin = '0';
     }
 
     private initializeSystems(): void {

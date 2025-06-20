@@ -27,13 +27,29 @@ export const GAME_CONFIG = {
             HEIGHT: 24,
             SPAWN_CHANCE: 0.2,
             MOVE_SPEED: 150
+        },
+        SPIKE: {
+            WIDTH: 20,
+            HEIGHT: 30,
+            SPAWN_CHANCE: 0.1
+        },
+        ROCK: {
+            WIDTH: 40,
+            HEIGHT: 40,
+            SPAWN_CHANCE: 0.05
+        },
+        UFO: {
+            WIDTH: 64,
+            HEIGHT: 32,
+            SPAWN_CHANCE: 0.15,
+            MOVE_SPEED: 200
+        },
+        CLOUD: {
+            WIDTH: 60,
+            HEIGHT: 30,
+            SPAWN_CHANCE: 0.2,
+            MOVE_SPEED: 80
         }
-    },
-    CLOUDS: {
-        WIDTH: 64,
-        HEIGHT: 32,
-        COUNT: 5,
-        SPEED: 50
     },
     CAMERA: {
         FOLLOW_OFFSET: 200
