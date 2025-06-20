@@ -1,60 +1,156 @@
 export const GAME_CONFIG = {
     CANVAS: {
         WIDTH: 1000,
-        HEIGHT: 800
+        HEIGHT: 800,
     },
     PLAYER: {
         WIDTH: 32,
         HEIGHT: 32,
         JUMP_FORCE: -300,
         MOVE_SPEED: 300,
-        MAX_FALL_SPEED: 1000
+        MAX_FALL_SPEED: 1000,
     },
     PLATFORM: {
         WIDTH: 80,
         HEIGHT: 20,
         SPAWN_DISTANCE: 120,
-        INITIAL_COUNT: 10
+        INITIAL_COUNT: 10,
     },
     OBSTACLES: {
         CACTUS: {
             WIDTH: 24,
             HEIGHT: 32,
-            SPAWN_CHANCE: 0.3
+            SPAWN_CHANCE: 0.3,
         },
         BIRD: {
             WIDTH: 32,
             HEIGHT: 24,
             SPAWN_CHANCE: 0.2,
-            MOVE_SPEED: 150
+            MOVE_SPEED: 150,
         },
         SPIKE: {
             WIDTH: 20,
             HEIGHT: 30,
-            SPAWN_CHANCE: 0.1
+            SPAWN_CHANCE: 0.1,
         },
         ROCK: {
             WIDTH: 40,
             HEIGHT: 40,
-            SPAWN_CHANCE: 0.05
+            SPAWN_CHANCE: 0.05,
         },
         UFO: {
             WIDTH: 64,
             HEIGHT: 32,
             SPAWN_CHANCE: 0.15,
-            MOVE_SPEED: 200
+            MOVE_SPEED: 200,
         },
         CLOUD: {
             WIDTH: 60,
             HEIGHT: 30,
             SPAWN_CHANCE: 0.2,
-            MOVE_SPEED: 80
-        }
+            MOVE_SPEED: 80,
+        },
     },
     CAMERA: {
-        FOLLOW_OFFSET: 200
+        FOLLOW_OFFSET: 200,
     },
     PHYSICS: {
-        GRAVITY: 1500
-    }
-} as const;
+        GRAVITY: 1500,
+    },
+} as const
+
+export const KEY = {
+    BACKSPACE: 'Backspace',
+    TAB: 'Tab',
+    ENTER: 'Enter',
+    SHIFT: 'Shift',
+    CTRL: 'Control',
+    ALT: 'Alt',
+    PAUSE: 'Pause',
+    CAPS_LOCK: 'CapsLock',
+    ESCAPE: 'Escape',
+    SPACE: ' ',
+    PAGE_UP: 'PageUp',
+    PAGE_DOWN: 'PageDown',
+    END: 'End',
+    HOME: 'Home',
+    LEFT: 'ArrowLeft',
+    UP: 'ArrowUp',
+    RIGHT: 'ArrowRight',
+    DOWN: 'ArrowDown',
+
+    A: 'KeyA',
+    B: 'KeyB',
+    C: 'KeyC',
+    D: 'KeyD',
+    E: 'KeyE',
+    F: 'KeyF',
+    G: 'KeyG',
+    H: 'KeyH',
+    I: 'KeyI',
+    J: 'KeyJ',
+    K: 'KeyK',
+    L: 'KeyL',
+    M: 'KeyM',
+    N: 'KeyN',
+    O: 'KeyO',
+    P: 'KeyP',
+    Q: 'KeyQ',
+    R: 'KeyR',
+    S: 'KeyS',
+    T: 'KeyT',
+    U: 'KeyU',
+    V: 'KeyV',
+    W: 'KeyW',
+    X: 'KeyX',
+    Y: 'KeyY',
+    Z: 'KeyZ',
+
+    DIGIT_0: 'Digit0',
+    DIGIT_1: 'Digit1',
+    DIGIT_2: 'Digit2',
+    DIGIT_3: 'Digit3',
+    DIGIT_4: 'Digit4',
+    DIGIT_5: 'Digit5',
+    DIGIT_6: 'Digit6',
+    DIGIT_7: 'Digit7',
+    DIGIT_8: 'Digit8',
+    DIGIT_9: 'Digit9',
+
+    NUMPAD_0: 'Numpad0',
+    NUMPAD_1: 'Numpad1',
+    NUMPAD_2: 'Numpad2',
+    NUMPAD_3: 'Numpad3',
+    NUMPAD_4: 'Numpad4',
+    NUMPAD_5: 'Numpad5',
+    NUMPAD_6: 'Numpad6',
+    NUMPAD_7: 'Numpad7',
+    NUMPAD_8: 'Numpad8',
+    NUMPAD_9: 'Numpad9',
+    NUMPAD_ADD: 'NumpadAdd',
+    NUMPAD_SUBTRACT: 'NumpadSubtract',
+    NUMPAD_MULTIPLY: 'NumpadMultiply',
+    NUMPAD_DIVIDE: 'NumpadDivide',
+    NUMPAD_DECIMAL: 'NumpadDecimal',
+    NUMPAD_ENTER: 'NumpadEnter',
+
+    F1: 'F1',
+    F2: 'F2',
+    F3: 'F3',
+    F4: 'F4',
+    F5: 'F5',
+    F6: 'F6',
+    F7: 'F7',
+    F8: 'F8',
+    F9: 'F9',
+    F10: 'F10',
+    F11: 'F11',
+    F12: 'F12',
+
+    PRINT_SCREEN: 'PrintScreen',
+    INSERT: 'Insert',
+    DELETE: 'Delete',
+    META: 'Meta',
+    CONTEXT_MENU: 'ContextMenu',
+    SCROLL_LOCK: 'ScrollLock',
+} as const
