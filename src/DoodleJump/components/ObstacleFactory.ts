@@ -1,11 +1,11 @@
-import { GAME_CONFIG } from '../config/GameConfig'
-import { GameObject } from '../core/GameObject'
-import { IScene, IGameObject } from '../types/interface'
-import { MathUtils } from '../utils/MathUtils'
-import { Vector2 } from '../utils/Vector2'
-import { Collider } from './Collider'
+import { GAME_CONFIG } from '../../config/GameConfig'
+import { GameObject } from '../../core/GameObject'
+import { IScene, IGameObject } from '../../types/interface'
+import { MathUtils } from '../../utils/MathUtils'
+import { Vector2 } from '../../utils/Vector2'
+import { Collider } from '../../components/Collider'
 import { MovingObstacle } from './MovingObstacle'
-import { Renderer } from './Renderer'
+import { Renderer } from '../../components/Renderer'
 import { StaticObstacle } from './StaticObstacle'
 
 export class ObstacleFactory {

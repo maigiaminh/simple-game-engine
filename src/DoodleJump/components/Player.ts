@@ -1,14 +1,13 @@
-// Cập nhật file: src/components/Player.ts
-import { Component } from '../core/Component'
-import { Transform } from './Transform'
-import { RigidBody } from './RigidBody'
-import { Collider } from './Collider'
-import { Renderer } from './Renderer'
-import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../types/interface'
-import { CollisionLayer, GAME_EVENTS } from '../types/enums'
-import { Vector2 } from '../utils/Vector2'
-import { Color } from '../utils/Color'
-import { GAME_CONFIG } from '../config/GameConfig'
+import { Collider } from '../../components/Collider'
+import { Renderer } from '../../components/Renderer'
+import { RigidBody } from '../../components/RigidBody'
+import { Transform } from '../../components/Transform'
+import { GAME_CONFIG } from '../../config/GameConfig'
+import { Component } from '../../core/Component'
+import { CollisionLayer, GAME_EVENTS } from '../../types/enums'
+import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../../types/interface'
+import { Color } from '../../utils/Color'
+import { Vector2 } from '../../utils/Vector2'
 
 export class Player extends Component {
     private isGrounded = false

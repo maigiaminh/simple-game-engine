@@ -60,6 +60,13 @@ export enum SceneState {
     UNLOADING = 'unloading',
 }
 
+export enum GameState {
+    PLAYING = 'playing',
+    PAUSED = 'paused',
+    GAMEOVER = 'game_over',
+    RESTART = 'restart',
+}
+
 export enum CameraType {
     ORTHOGRAPHIC = 'orthographic',
     PERSPECTIVE = 'perspective',

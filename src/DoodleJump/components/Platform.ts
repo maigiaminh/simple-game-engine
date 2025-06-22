@@ -1,7 +1,7 @@
-import { Component } from '../core/Component'
-import { Renderer } from './Renderer'
-import { ComponentConstructor, IGameObject } from '../types/interface'
-import { Color } from '../utils/Color'
+import { Renderer } from '../../components/Renderer'
+import { Component } from '../../core/Component'
+import { IGameObject, ComponentConstructor } from '../../types/interface'
+import { Color } from '../../utils/Color'
 
 export class Platform extends Component {
     private hasObstacle = false

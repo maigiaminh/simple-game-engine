@@ -1,9 +1,9 @@
-import { Component } from '../core/Component'
-import { IGameObject } from '../types/interface'
-import { MouseButton } from '../types/enums'
-import { Player } from './Player'
-import { InputManager } from '../systems/InputManager'
-import { GAME_CONFIG, KEY } from '../config/GameConfig'
+import { Component } from '../../core/Component'
+import { IGameObject } from '../../types/interface'
+import { MouseButton } from '../../types/enums'
+import { InputManager } from '../../systems/InputManager'
+import { GAME_CONFIG, KEY } from '../../config/GameConfig'
+import { Player } from '../components/Player'
 
 export class GameInput extends Component {
     private inputManager: InputManager
