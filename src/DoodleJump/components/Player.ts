@@ -1,13 +1,15 @@
+import { AnimatedRenderer } from '../../components/AnimatedRenderer'
 import { Collider } from '../../components/Collider'
-import { Renderer } from '../../components/Renderer'
 import { RigidBody } from '../../components/RigidBody'
 import { Transform } from '../../components/Transform'
-import { GAME_CONFIG } from '../../config/GameConfig'
+import { CONFIG } from '../../config/Config'
 import { Component } from '../../core/Component'
-import { CollisionLayer, GAME_EVENTS } from '../../types/enums'
+import { GameEngine } from '../../core/GameEngine'
+import { ColliderType, CollisionLayer, ENGINE_EVENTS } from '../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../../types/interface'
-import { Color } from '../../utils/Color'
 import { Vector2 } from '../../utils/Vector2'
+import { GAME_CONFIG } from '../config/GameplayConfig'
+import { GAME_EVENTS } from '../types/enums'
 
 export class Player extends Component {
     private isGrounded = false
@@ -20,7 +22,7 @@ export class Player extends Component {
     private transform!: Transform
     private rigidBody!: RigidBody
     private collider!: Collider
-    private renderer!: Renderer
+    private animatedRenderer!: AnimatedRenderer
 
     constructor(gameObject: IGameObject) {
         super(gameObject)
@@ -30,31 +32,42 @@ export class Player extends Component {
         this.transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!
         this.rigidBody = this.gameObject.getComponent(RigidBody as ComponentConstructor<RigidBody>)!
         this.collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)!
-        this.renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>)!
+        this.animatedRenderer = this.gameObject.getComponent(
+            AnimatedRenderer as ComponentConstructor<AnimatedRenderer>
+        )!
 
         console.log('Player components check:', {
             transform: !!this.transform,
             rigidBody: !!this.rigidBody,
             collider: !!this.collider,
-            renderer: !!this.renderer,
+            animatedRenderer: !!this.animatedRenderer,
         })
 
-        if (!this.transform || !this.rigidBody || !this.collider || !this.renderer) {
+        if (!this.transform || !this.rigidBody || !this.collider || !this.animatedRenderer) {
             console.error('Player missing components!')
             return
         }
 
-        this.renderer.setColor(Color.BLUE)
-        this.renderer.setVisible(true)
+        this.animatedRenderer.setVisible(true)
 
+        this.collider.setColliderSize(
+            this.animatedRenderer.getWidth(),
+            this.animatedRenderer.getHeight()
+        )
+        this.collider.setColliderType(ColliderType.BOX)
         this.collider.layers = [CollisionLayer.PLAYER]
         this.collider.mask = [CollisionLayer.GROUND, CollisionLayer.ENVIRONMENT]
 
         this.collider.addEventListener(
-            GAME_EVENTS.COLLISION_ENTER,
+            ENGINE_EVENTS.COLLISION_ENTER,
             this.onCollisionEnter.bind(this)
         )
-        this.collider.addEventListener(GAME_EVENTS.COLLISION_EXIT, this.onCollisionExit.bind(this))
+        this.collider.addEventListener(
+            ENGINE_EVENTS.COLLISION_EXIT,
+            this.onCollisionExit.bind(this)
+        )
+
+        GameEngine.getInstance().getCollisionManager().addCollider(this.collider)
 
         this.gameObject.tag = 'Player'
     }
@@ -88,7 +101,10 @@ export class Player extends Component {
             this.rigidBody.setVelocity(new Vector2(velocity.x * 0.8, velocity.y))
         }
 
-        if (this.inputJump && this.canJump && this.isGrounded) {
+        // if (this.inputJump && this.canJump && this.isGrounded) {
+        //     this.jump()
+        // }
+        if (this.inputJump) {
             this.jump()
         }
     }
@@ -100,7 +116,7 @@ export class Player extends Component {
         this.isGrounded = false
         this.canJump = false
 
-        this.dispatchEvent(GAME_EVENTS.PLAYER_JUMPED)
+        this.dispatchEvent(GAME_EVENTS.PLAYER_JUMP)
     }
 
     private updateMovement(): void {
@@ -115,34 +131,28 @@ export class Player extends Component {
 
         if (position.x < -GAME_CONFIG.PLAYER.WIDTH / 2) {
             this.transform.setPosition(
-                new Vector2(GAME_CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2, position.y)
+                new Vector2(CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2, position.y)
             )
-        } else if (position.x > GAME_CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
+        } else if (position.x > CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
             this.transform.setPosition(new Vector2(-GAME_CONFIG.PLAYER.WIDTH / 2, position.y))
         }
 
-        if (position.y > GAME_CONFIG.CANVAS.HEIGHT + 200) {
-            this.respawn()
-        }
+        // if (position.y > CONFIG.CANVAS.HEIGHT + 200) {
+        //     this.respawn()
+        // }
     }
 
     private updateVisuals(): void {
-        if (!this.renderer) return
+        if (!this.animatedRenderer) return
 
         const velocity = this.rigidBody.getVelocity()
 
-        if (this.isGrounded) {
-            if (Math.abs(velocity.x) > 10) {
-                this.renderer.setColor(Color.GREEN)
-            } else {
-                this.renderer.setColor(Color.BLUE)
-            }
+        if (velocity.x > 1) {
+            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name)
+        } else if (velocity.x < -1) {
+            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name)
         } else {
-            if (velocity.y < 0) {
-                this.renderer.setColor(Color.YELLOW)
-            } else {
-                this.renderer.setColor(Color.RED)
-            }
+            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
         }
     }
 
@@ -171,7 +181,9 @@ export class Player extends Component {
             this.transform.setPosition(
                 new Vector2(
                     transform!.getWorldPosition().x,
-                    otherTransform!.getWorldPosition().y - other.height + 0.01
+                    otherTransform!.getWorldPosition().y -
+                        other.height / 2 -
+                        this.collider.height / 2
                 )
             )
             this.isGrounded = true
@@ -187,21 +199,10 @@ export class Player extends Component {
         this.rigidBody.isGrounded = false
     }
 
-    private respawn(): void {
-        this.transform.setPosition(
-            new Vector2(GAME_CONFIG.CANVAS.WIDTH / 2, GAME_CONFIG.CANVAS.HEIGHT - 800)
-        )
-
-        this.rigidBody.setVelocity(Vector2.zero())
-
-        this.isGrounded = false
-        this.canJump = true
-    }
-
     public getScore(): number {
         if (!this.transform) return 0
 
-        const startY = GAME_CONFIG.CANVAS.HEIGHT - 150
+        const startY = CONFIG.CANVAS.HEIGHT - 150
         const currentY = this.transform.getWorldPosition().y
         return Math.max(0, Math.floor((startY - currentY) / 10))
     }

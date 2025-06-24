@@ -1,27 +1,28 @@
 import { Renderer } from '../../components/Renderer'
 import { RigidBody } from '../../components/RigidBody'
 import { Transform } from '../../components/Transform'
-import { GAME_CONFIG } from '../../config/GameConfig'
-import { GAME_EVENTS } from '../../types/enums'
+import { CONFIG } from '../../config/Config'
 import { IGameObject, ComponentConstructor } from '../../types/interface'
 import { Color } from '../../utils/Color'
 import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
+import { GAME_CONFIG } from '../config/GameplayConfig'
+import { GAME_EVENTS } from '../types/enums'
 import { Obstacle } from './Obstacle'
 
 export class MovingObstacle extends Obstacle {
-    protected movingType: 'bird' | 'cloud' | 'ufo'
+    protected movingType: MovingType
     protected moveSpeed: number
     protected moveDirection: Vector2
-    protected movePattern: 'horizontal' | 'circular' | 'zigzag' | 'vertical'
+    protected movePattern: MovingPattern
     protected startPosition: Vector2
     protected moveRange: number
     private moveTime = 0
 
     constructor(
         gameObject: IGameObject,
-        movingType: 'bird' | 'cloud' | 'ufo' = 'bird',
-        movePattern: 'horizontal' | 'circular' | 'zigzag' | 'vertical' = 'horizontal'
+        movingType: MovingType = 'bird',
+        movePattern: MovingPattern = 'horizontal'
     ) {
         super(gameObject, `moving_${movingType}`)
         this.movingType = movingType
@@ -213,10 +214,7 @@ export class MovingObstacle extends Obstacle {
         const position = this.gameObject.getPosition()
 
         const distanceFromStart = Vector2.distance(position, this.startPosition)
-        if (
-            position.y > GAME_CONFIG.CANVAS.HEIGHT + 500 ||
-            distanceFromStart > this.moveRange * 3
-        ) {
+        if (position.y > CONFIG.CANVAS.HEIGHT + 500 || distanceFromStart > this.moveRange * 3) {
             this.deactivate()
         }
     }

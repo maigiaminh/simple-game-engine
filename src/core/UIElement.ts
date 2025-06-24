@@ -97,7 +97,6 @@ export class UIElement extends Component {
     public getWorldBounds(): Rectangle {
         const worldPos = this.getWorldPosition()
         const pivotOffset = new Vector2(this.size.x * this.pivot.x, this.size.y * this.pivot.y)
-
         return {
             x: worldPos.x - pivotOffset.x,
             y: worldPos.y - pivotOffset.y,
@@ -132,7 +131,6 @@ export class UIElement extends Component {
 
             position = anchorPos.add(localPos)
         }
-
         return position
     }
 
@@ -147,7 +145,8 @@ export class UIElement extends Component {
             case UIAnchor.MIDDLE_LEFT:
                 return new Vector2(bounds.x, bounds.y + bounds.height / 2)
             case UIAnchor.MIDDLE_CENTER:
-                return new Vector2(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
+                return new Vector2(bounds.x, bounds.y)
+            // return new Vector2(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
             case UIAnchor.MIDDLE_RIGHT:
                 return new Vector2(bounds.x + bounds.width, bounds.y + bounds.height / 2)
             case UIAnchor.BOTTOM_LEFT:

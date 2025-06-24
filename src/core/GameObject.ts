@@ -2,7 +2,7 @@ import { EventEmitter } from './EventEmitter'
 import { Transform } from '../components/Transform'
 import { Vector2 } from '../utils/Vector2'
 import { IGameObject, IComponent, GameObjectConfig, ComponentConstructor } from '../types/interface'
-import { GAME_EVENTS } from '../types/enums'
+import { ENGINE_EVENTS } from '../types/enums'
 
 export class GameObject extends EventEmitter implements IGameObject {
     public readonly id: string
@@ -59,7 +59,7 @@ export class GameObject extends EventEmitter implements IGameObject {
             component.start()
         }
 
-        this.dispatchEvent(GAME_EVENTS.COMPONENT_ADDED, { component })
+        this.dispatchEvent(ENGINE_EVENTS.COMPONENT_ADDED, { component })
         return component
     }
 
@@ -75,7 +75,7 @@ export class GameObject extends EventEmitter implements IGameObject {
         if (component) {
             component.onDestroy()
             this.components.delete(componentName)
-            this.dispatchEvent(GAME_EVENTS.COMPONENT_REMOVED, { component })
+            this.dispatchEvent(ENGINE_EVENTS.COMPONENT_REMOVED, { component })
         }
     }
 
@@ -126,10 +126,10 @@ export class GameObject extends EventEmitter implements IGameObject {
 
         if (active && !wasActive) {
             this.onEnable()
-            this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_ACTIVATED)
+            this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_ACTIVATED)
         } else if (!active && wasActive) {
             this.onDisable()
-            this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_DEACTIVATED)
+            this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_DEACTIVATED)
         }
     }
 
@@ -215,7 +215,7 @@ export class GameObject extends EventEmitter implements IGameObject {
 
         this.onDestroy()
         this.removeAllEventListeners()
-        this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_DESTROYED)
+        this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_DESTROYED)
     }
 
     public isDestroyed(): boolean {

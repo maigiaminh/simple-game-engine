@@ -1,7 +1,7 @@
 import { Camera } from '../components/Camera'
 import { Transform } from '../components/Transform'
-import { GAME_CONFIG } from '../config/GameConfig'
-import { GAME_EVENTS, SceneState } from '../types/enums'
+import { CONFIG } from '../config/Config'
+import { ENGINE_EVENTS, SceneState } from '../types/enums'
 import { ComponentConstructor, IGameObject, IScene } from '../types/interface'
 import { EventEmitter } from './EventEmitter'
 
@@ -37,7 +37,7 @@ export abstract class Scene extends EventEmitter implements IScene {
 
     public setMainCamera(camera: Camera): void {
         this.mainCamera = camera
-        this.dispatchEvent(GAME_EVENTS.MAIN_CAMERA_SET, { camera })
+        this.dispatchEvent(ENGINE_EVENTS.MAIN_CAMERA_SET, { camera })
     }
 
     constructor(name: string) {
@@ -78,7 +78,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             gameObject.start()
         }
 
-        this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_ADDED, { gameObject })
+        this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_ADDED, { gameObject })
     }
 
     public removeGameObject(gameObject: IGameObject): void {
@@ -102,7 +102,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             }
         }
 
-        this.dispatchEvent(GAME_EVENTS.GAME_OBJECT_REMOVED, { gameObject })
+        this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_REMOVED, { gameObject })
     }
 
     public findGameObject(id: string): IGameObject | null {
@@ -155,10 +155,10 @@ export abstract class Scene extends EventEmitter implements IScene {
 
             this.state = SceneState.LOADED
             this.loadProgress = 1
-            this.dispatchEvent(GAME_EVENTS.SCENE_LOADED)
+            this.dispatchEvent(ENGINE_EVENTS.SCENE_LOADED)
         } catch (error) {
             this.state = SceneState.NOT_LOADED
-            this.dispatchEvent(GAME_EVENTS.SCENE_LOAD_ERROR, { error })
+            this.dispatchEvent(ENGINE_EVENTS.SCENE_LOAD_ERROR, { error })
             throw error
         }
     }
@@ -178,9 +178,9 @@ export abstract class Scene extends EventEmitter implements IScene {
 
             this.state = SceneState.NOT_LOADED
             this.loadProgress = 0
-            this.dispatchEvent(GAME_EVENTS.SCENE_UNLOADED)
+            this.dispatchEvent(ENGINE_EVENTS.SCENE_UNLOADED)
         } catch (error) {
-            this.dispatchEvent(GAME_EVENTS.SCENE_UNLOAD_ERROR, { error })
+            this.dispatchEvent(ENGINE_EVENTS.SCENE_UNLOAD_ERROR, { error })
             throw error
         }
     }
@@ -225,7 +225,7 @@ export abstract class Scene extends EventEmitter implements IScene {
                 .getComponent(Transform as ComponentConstructor<Transform>)
             if (transform) {
                 const cameraPos = transform.getWorldPosition()
-                ctx.translate(0, -cameraPos.y + GAME_CONFIG.CANVAS.HEIGHT / 2)
+                ctx.translate(0, -cameraPos.y + CONFIG.CANVAS.HEIGHT / 2)
             }
         }
 

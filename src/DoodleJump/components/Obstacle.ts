@@ -1,8 +1,9 @@
 import { Collider } from '../../components/Collider'
 import { Component } from '../../core/Component'
 import { GameEngine } from '../../core/GameEngine'
-import { CollisionLayer, GAME_EVENTS } from '../../types/enums'
+import { CollisionLayer, ENGINE_EVENTS } from '../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent } from '../../types/interface'
+import { GAME_EVENTS } from '../types/enums'
 
 export abstract class Obstacle extends Component {
     protected obstacleType: string
@@ -28,7 +29,10 @@ export abstract class Obstacle extends Component {
             collider.mask = [CollisionLayer.PLAYER]
             collider.isTrigger = true
 
-            collider.addEventListener(GAME_EVENTS.TRIGGER_ENTER, this.onPlayerCollision.bind(this))
+            collider.addEventListener(
+                ENGINE_EVENTS.TRIGGER_ENTER,
+                this.onPlayerCollision.bind(this)
+            )
         }
     }
 

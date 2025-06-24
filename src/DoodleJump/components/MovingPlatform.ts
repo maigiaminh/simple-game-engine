@@ -1,4 +1,4 @@
-import { GAME_CONFIG } from '../../config/GameConfig'
+import { CONFIG } from '../../config/Config'
 import { ComponentConstructor, IGameObject } from '../../types/interface'
 import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
@@ -21,12 +21,12 @@ export class MovingPlatform extends Platform {
             const pos = this.transform.getWorldPosition()
             const newX = pos.x + this.moveDirection * this.moveSpeed * (deltaTime / 1000)
 
-            if (newX < 50 || newX > GAME_CONFIG.CANVAS.WIDTH - 50) {
+            if (newX < 50 || newX > CONFIG.CANVAS.WIDTH - 50) {
                 this.moveDirection *= -1
             }
 
             this.transform.setPosition(
-                new Vector2(Math.max(50, Math.min(GAME_CONFIG.CANVAS.WIDTH - 50, newX)), pos.y)
+                new Vector2(Math.max(50, Math.min(CONFIG.CANVAS.WIDTH - 50, newX)), pos.y)
             )
         }
     }

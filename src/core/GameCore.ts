@@ -1,7 +1,7 @@
 import { GameEngine } from './GameEngine'
 import { Scene } from './Scene'
 import { ResourceType } from '../types/enums'
-import { GAME_CONFIG } from '../config/GameConfig'
+import { CONFIG } from '../config/Config'
 
 export class GameCore {
     private static engine: GameEngine
@@ -26,8 +26,8 @@ export class GameCore {
 
         this.engine = new GameEngine({
             canvasId: canvas.id,
-            width: config.width ?? GAME_CONFIG.CANVAS.WIDTH,
-            height: config.height ?? GAME_CONFIG.CANVAS.WIDTH,
+            width: config.width ?? CONFIG.CANVAS.WIDTH,
+            height: config.height ?? CONFIG.CANVAS.WIDTH,
             targetFPS: config.targetFPS ?? 60,
         })
 

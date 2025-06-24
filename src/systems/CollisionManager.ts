@@ -30,6 +30,12 @@ export class CollisionManager extends EventEmitter {
             for (let j = i + 1; j < colliderArray.length; j++) {
                 const colliderA = colliderArray[i]
                 const colliderB = colliderArray[j]
+                if (colliderA === colliderB) continue
+                if (
+                    this.collisionMap.has(colliderA) &&
+                    this.collisionMap.get(colliderA)?.has(colliderB)
+                )
+                    continue
                 if (!colliderA.canCollideWith(colliderB)) continue
 
                 if (this.checkAABBCollision(colliderA.getBounds(), colliderB.getBounds())) {

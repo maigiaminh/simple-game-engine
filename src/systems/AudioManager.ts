@@ -1,5 +1,5 @@
 import { EventEmitter } from '../core/EventEmitter'
-import { GAME_EVENTS } from '../types/enums'
+import { ENGINE_EVENTS } from '../types/enums'
 import { AudioClip, AudioSource, PlaySoundOptions } from '../types/interface'
 
 export class AudioManager extends EventEmitter {
@@ -64,7 +64,7 @@ export class AudioManager extends EventEmitter {
             }
 
             this.clips.set(name, clip)
-            this.dispatchEvent(GAME_EVENTS.AUDIO_CLIP_LOADED, { clip })
+            this.dispatchEvent(ENGINE_EVENTS.AUDIO_CLIP_LOADED, { clip })
         } catch (error) {
             console.error(`Failed to load audio clip: ${name}`, error)
             throw error

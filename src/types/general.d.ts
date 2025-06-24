@@ -44,13 +44,6 @@ type SerializedData = {
     [key: string]: unknown
 }
 
-type StaticType = 'cactus' | 'spike' | 'rock'
-type MovingType = 'bird' | 'cloud' | 'ufo'
-type MovingPattern = 'horizontal' | 'circular' | 'zigzag' | 'vertical'
-type BirdPattern = 'horizontal' | 'circular' | 'zigzag'
-type CloudPattern = 'horizontal' | 'circular'
-type UfoPattern = 'circular' | 'zigzag'
-
 type BoxSpacing = {
     top: number
     right: number

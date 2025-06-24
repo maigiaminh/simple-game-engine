@@ -2,7 +2,7 @@ import { Component } from '../../core/Component'
 import { IGameObject } from '../../types/interface'
 import { MouseButton } from '../../types/enums'
 import { InputManager } from '../../systems/InputManager'
-import { GAME_CONFIG, KEY } from '../../config/GameConfig'
+import { CONFIG, KEY } from '../../config/Config'
 import { Player } from '../components/Player'
 
 export class GameInput extends Component {
@@ -48,7 +48,7 @@ export class GameInput extends Component {
     private handleMouseInput(): void {
         if (this.inputManager.isMouseButtonPressed(MouseButton.LEFT)) {
             const mousePos = this.inputManager.getMousePosition()
-            const canvasWidth = GAME_CONFIG.CANVAS.WIDTH
+            const canvasWidth = CONFIG.CANVAS.WIDTH
 
             if (mousePos.x < canvasWidth / 3) {
                 this.leftPressed = true
@@ -65,7 +65,7 @@ export class GameInput extends Component {
 
         if (touches.length > 0) {
             const touch = touches[0]
-            const canvasWidth = GAME_CONFIG.CANVAS.WIDTH
+            const canvasWidth = CONFIG.CANVAS.WIDTH
 
             if (!this.isTouching) {
                 this.isTouching = true

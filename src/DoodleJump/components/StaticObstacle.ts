@@ -1,5 +1,5 @@
 import { Renderer } from '../../components/Renderer'
-import { GAME_CONFIG } from '../../config/GameConfig'
+import { CONFIG } from '../../config/Config'
 import { IGameObject, ComponentConstructor } from '../../types/interface'
 import { Color } from '../../utils/Color'
 import { Obstacle } from './Obstacle'
@@ -19,7 +19,7 @@ export class StaticObstacle extends Obstacle {
                 case 'cactus':
                     renderer.setColor(Color.DARK_GREEN)
                     break
-                case 'spike':
+                case 'landed_spike':
                     renderer.setColor(Color.GRAY)
                     break
                 case 'rock':
@@ -56,7 +56,7 @@ export class StaticObstacle extends Obstacle {
 
     protected checkBounds(): void {
         const position = this.gameObject.getPosition()
-        if (position.y > GAME_CONFIG.CANVAS.HEIGHT + 500) {
+        if (position.y > CONFIG.CANVAS.HEIGHT + 500) {
             this.deactivate()
         }
     }

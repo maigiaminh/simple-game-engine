@@ -97,14 +97,11 @@ export enum ButtonState {
     DISABLED = 'disabled',
 }
 
-export const GAME_EVENTS = {
+export const ENGINE_EVENTS = {
     TRIGGER_ENTER: 'trigger_enter',
     TRIGGER_EXIT: 'trigger_exit',
     COLLISION_ENTER: 'collision_enter',
     COLLISION_EXIT: 'collision_exit',
-    PLAYER_PUSHED: 'player_pushed',
-    PLAYER_JUMPED: 'player_jumped',
-    PLAYER_HIT_OBSTACLE: 'player_hit_obstacle',
     ENGINE_INITIALIZED: 'engine_initialized',
     ENGINE_STARTED: 'engine_started',
     ENGINE_STOPPED: 'engine_stopped',

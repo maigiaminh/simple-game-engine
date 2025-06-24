@@ -7,6 +7,8 @@ export class Renderer extends Component {
     public color: RGBAColor = Color.WHITE
     public visible = true
     protected image: HTMLImageElement | null = null
+    protected imageWidth: number | null = null
+    protected imageHeight: number | null = null
 
     constructor(gameObject: IGameObject) {
         super(gameObject)
@@ -28,6 +30,19 @@ export class Renderer extends Component {
         return this.visible && this.isEnabled()
     }
 
+    public setImageSize(width: number, height: number): void {
+        this.imageWidth = width
+        this.imageHeight = height
+    }
+
+    public getWidth(): number {
+        return this.imageWidth ?? (this.image ? this.image.width : 50)
+    }
+
+    public getHeight(): number {
+        return this.imageHeight ?? (this.image ? this.image.height : 50)
+    }
+
     public update(deltaTime: number): void {}
 
     public render(ctx: CanvasRenderingContext2D): void {
@@ -47,7 +62,9 @@ export class Renderer extends Component {
         ctx.scale(worldScale.x, worldScale.y)
 
         if (this.image) {
-            ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2)
+            const drawWidth = this.imageWidth ?? this.image.width
+            const drawHeight = this.imageHeight ?? this.image.height
+            ctx.drawImage(this.image, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
         } else {
             ctx.fillStyle = new Color(
                 this.color.r,

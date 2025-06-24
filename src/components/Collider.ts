@@ -1,7 +1,8 @@
 import { Component } from '../core/Component'
-import { ColliderType, CollisionLayer, GAME_EVENTS } from '../types/enums'
+import { ColliderType, CollisionLayer, ENGINE_EVENTS } from '../types/enums'
 import { IGameObject, ComponentConstructor, ICollidable, CollisionInfo } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
+import { Renderer } from './Renderer'
 import { Transform } from './Transform'
 
 export class Collider extends Component implements Collider {
@@ -13,6 +14,7 @@ export class Collider extends Component implements Collider {
     public isTrigger = false
     public layers: number[] = [CollisionLayer.DEFAULT]
     public mask: number[] = [CollisionLayer.ALL]
+    public renderer: Renderer
 
     constructor(gameObject: IGameObject, type: ColliderType = ColliderType.BOX) {
         super(gameObject)
@@ -68,30 +70,59 @@ export class Collider extends Component implements Collider {
                     width: this.radius * 2,
                     height: this.radius * 2,
                 }
-
+            case ColliderType.POLYGON:
+                return {
+                    x: pos.x - this.width / 2,
+                    y: pos.y - this.height / 2 - this.height / 20,
+                    width: this.width,
+                    height: this.height / 20,
+                }
             default:
                 return {
                     x: pos.x,
-                    y: pos.y,
+                    y: pos.y - this.renderer.getHeight() / 2,
                     width: this.width,
                     height: this.height,
                 }
         }
     }
 
+    public setColliderSize(width: number, height: number): void {
+        this.width = width
+        this.height = height
+    }
+
+    public setRenderer(renderer: Renderer): void {
+        this.renderer = renderer
+        if (renderer) {
+            this.width = renderer.getWidth()
+            this.height = renderer.getHeight()
+            this.radius = Math.max(this.width, this.height) / 2
+        }
+    }
+
+    public setColliderType(type: ColliderType): void {
+        this.type = type
+        if (type === ColliderType.CIRCLE) {
+            this.radius = Math.max(this.width, this.height) / 2
+        } else {
+            this.radius = 0
+        }
+    }
+
     public onCollision(other: ICollidable, collisionInfo: CollisionInfo): void {
         if (this.isTrigger) {
-            this.dispatchEvent(GAME_EVENTS.TRIGGER_ENTER, { other, collisionInfo })
+            this.dispatchEvent(ENGINE_EVENTS.TRIGGER_ENTER, { other, collisionInfo })
         } else {
-            this.dispatchEvent(GAME_EVENTS.COLLISION_ENTER, { other, collisionInfo })
+            this.dispatchEvent(ENGINE_EVENTS.COLLISION_ENTER, { other, collisionInfo })
         }
     }
 
     public onCollisionExit(other: Collider): void {
         if (this.isTrigger) {
-            this.dispatchEvent(GAME_EVENTS.TRIGGER_EXIT, { other })
+            this.dispatchEvent(ENGINE_EVENTS.TRIGGER_EXIT, { other })
         } else {
-            this.dispatchEvent(GAME_EVENTS.COLLISION_EXIT, { other })
+            this.dispatchEvent(ENGINE_EVENTS.COLLISION_EXIT, { other })
         }
     }
 
@@ -119,7 +150,16 @@ export class Collider extends Component implements Collider {
 
     public update(deltaTime: number): void {}
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        if (!this.gameObject.isVisible()) return
+
+        const bounds = this.getBounds()
+        ctx.save()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 2
+        ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height)
+        ctx.restore()
+    }
 
     public serialize(): SerializedData {
         return {

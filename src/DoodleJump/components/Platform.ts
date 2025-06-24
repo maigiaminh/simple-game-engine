@@ -5,7 +5,8 @@ import { Color } from '../../utils/Color'
 
 export class Platform extends Component {
     private hasObstacle = false
-
+    private type: PlatformType = 'normal'
+    private obstacle: IGameObject | null = null
     constructor(gameObject: IGameObject) {
         super(gameObject)
     }
@@ -25,7 +26,19 @@ export class Platform extends Component {
         return this.hasObstacle
     }
 
+    public setObstacle(obstacle: IGameObject | null): void {
+        this.obstacle = obstacle
+    }
+
+    public getObstacle(): IGameObject | null {
+        return this.obstacle
+    }
+
     public update(deltaTime: number): void {}
 
     public render(ctx: CanvasRenderingContext2D): void {}
+
+    public getPlatformType(): PlatformType {
+        return this.type
+    }
 }

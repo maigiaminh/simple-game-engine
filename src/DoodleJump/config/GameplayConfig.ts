@@ -1,0 +1,111 @@
+export const GAME_CONFIG = {
+    PLAYER: {
+        WIDTH: 32,
+        HEIGHT: 32,
+        JUMP_FORCE: -300,
+        MOVE_SPEED: 300,
+        MAX_FALL_SPEED: 1000,
+    },
+    PLATFORM: {
+        WIDTH: 156,
+        HEIGHT: 48,
+        SPAWN_DISTANCE: 120,
+        INITIAL_COUNT: 10,
+    },
+    OBSTACLES: {
+        CACTUS: {
+            ICON: 'cactus',
+            SPAWN_CHANCE: 0.3,
+            WIDTH: 32,
+            HEIGHT: 32,
+        },
+        BIRD: {
+            SPAWN_CHANCE: 0.2,
+            MOVE_SPEED: 150,
+            WIDTH: 32,
+            HEIGHT: 32,
+        },
+        LANDED_SPIKE: {
+            ICON: 'landed_spike',
+            SPAWN_CHANCE: 0.1,
+            WIDTH: 96,
+            HEIGHT: 32,
+        },
+        ROCK: {
+            ICON: 'rock',
+            SPAWN_CHANCE: 0.05,
+            WIDTH: 32,
+            HEIGHT: 32,
+        },
+        UFO: {
+            SPAWN_CHANCE: 0.15,
+            MOVE_SPEED: 200,
+        },
+    },
+    BACKGROUND: {
+        CLOUD: {
+            WIDTH: 200,
+            HEIGHT: 100,
+            MOVE_SPEED: 50,
+            COUNT: 5,
+        },
+    },
+    IMAGES: {
+        BACKGROUND: 'background',
+        CLOUD: 'cloud',
+        PLATFORMS: {
+            GROUND: 'ground',
+            PLATFORM_1: 'platform_1',
+            PLATFORM_2: 'platform_2',
+        },
+        PLAYERS: {
+            PLAYER_IDLE: 'player_idle',
+            PLAYER_MOVE_LEFT: 'player_move_left',
+            PLAYER_MOVE_RIGHT: 'player_move_right',
+            PLAYER_JUMP: 'player_jump',
+        },
+    },
+    ANIMATIONS: {
+        PLAYER_IDLE: {
+            name: 'player_idle',
+            frames: [
+                'player_idle_1',
+                'player_idle_2',
+                'player_idle_3',
+                'player_idle_4',
+                'player_idle_5',
+                'player_idle_6',
+            ],
+            frameRate: 500,
+            loop: true,
+        },
+        PLAYER_MOVE_LEFT: {
+            name: 'player_move_left',
+            frames: [
+                'player_move_left_1',
+                'player_move_left_2',
+                'player_move_left_3',
+                'player_move_left_4',
+            ],
+            frameRate: 300,
+            loop: true,
+        },
+        PLAYER_MOVE_RIGHT: {
+            name: 'player_move_right',
+            frames: [
+                'player_move_right_1',
+                'player_move_right_2',
+                'player_move_right_3',
+                'player_move_right_4',
+            ],
+            frameRate: 300,
+            loop: true,
+        },
+        PLAYER_JUMP: {
+            name: 'player_jump',
+            frames: ['player_jump_1', 'player_jump_2', 'player_jump_3'],
+            frameRate: 300,
+            loop: false,
+        },
+    },
+}

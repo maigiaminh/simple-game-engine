@@ -32,6 +32,10 @@ export class UILabel extends UIElement {
         this.textAlign = align
     }
 
+    public setTextBaseline(baseline: CanvasTextBaseline): void {
+        this.textBaseline = baseline
+    }
+
     protected onRender(ctx: CanvasRenderingContext2D): void {
         if (!this.text) return
 
@@ -42,7 +46,6 @@ export class UILabel extends UIElement {
         ctx.fillStyle = new Color(this.color.r, this.color.g, this.color.b, this.color.a).toString()
         ctx.textAlign = this.textAlign
         ctx.textBaseline = this.textBaseline
-
         if (this.wordWrap) {
             this.renderWrappedText(ctx, bounds)
         } else {
@@ -100,7 +103,7 @@ export class UILabel extends UIElement {
             case 'left':
                 return bounds.x + this.padding.left
             case 'center':
-                return bounds.x + bounds.width / 2
+                return bounds.x + bounds.width
             case 'right':
                 return bounds.x + bounds.width - this.padding.right
             default:

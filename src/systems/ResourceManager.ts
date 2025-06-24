@@ -1,5 +1,5 @@
 import { EventEmitter } from '../core/EventEmitter'
-import { ResourceType, LoadState, GAME_EVENTS } from '../types/enums'
+import { ResourceType, LoadState, ENGINE_EVENTS } from '../types/enums'
 import { LoadProgress, ResourceInfo } from '../types/interface'
 
 export class ResourceManager<T = unknown> extends EventEmitter {
@@ -37,12 +37,12 @@ export class ResourceManager<T = unknown> extends EventEmitter {
             resourceInfo.data = data
             resourceInfo.state = LoadState.LOADED
 
-            this.dispatchEvent(GAME_EVENTS.RESOURCE_LOADED, { resource: resourceInfo })
+            this.dispatchEvent(ENGINE_EVENTS.RESOURCE_LOADED, { resource: resourceInfo })
             return data
         } catch (error) {
             resourceInfo.state = LoadState.ERROR
             resourceInfo.error = error as Error
-            this.dispatchEvent(GAME_EVENTS.RESOURCE_LOAD_ERROR, { resource: resourceInfo, error })
+            this.dispatchEvent(ENGINE_EVENTS.RESOURCE_LOAD_ERROR, { resource: resourceInfo, error })
             throw error
         } finally {
             this.loadingPromises.delete(name)

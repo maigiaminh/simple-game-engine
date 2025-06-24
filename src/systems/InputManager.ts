@@ -1,7 +1,7 @@
 import { EventEmitter } from '../core/EventEmitter'
 import { Time } from '../utils/Time'
 import { Vector2 } from '../utils/Vector2'
-import { GAME_EVENTS, InputType, MouseButton, TouchPhase } from '../types/enums'
+import { ENGINE_EVENTS, InputType, MouseButton, TouchPhase } from '../types/enums'
 import { GameTouch } from '../types/interface'
 
 export class InputManager extends EventEmitter {
@@ -50,7 +50,7 @@ export class InputManager extends EventEmitter {
         const key = event.code
 
         if (!this.keyStates.get(key)) {
-            this.dispatchEvent(GAME_EVENTS.INPUT_KEY_DOWN, {
+            this.dispatchEvent(ENGINE_EVENTS.INPUT_KEY_DOWN, {
                 inputType: InputType.KEYBOARD,
                 key,
                 isPressed: true,
@@ -67,7 +67,7 @@ export class InputManager extends EventEmitter {
         const key = event.code
 
         this.keyStates.set(key, false)
-        this.dispatchEvent(GAME_EVENTS.INPUT_KEY_UP, {
+        this.dispatchEvent(ENGINE_EVENTS.INPUT_KEY_UP, {
             inputType: InputType.KEYBOARD,
             key,
             isPressed: false,
@@ -82,7 +82,7 @@ export class InputManager extends EventEmitter {
         const position = this.calculateMousePosition(event)
 
         this.mouseButtons.set(button, true)
-        this.dispatchEvent(GAME_EVENTS.INPUT_MOUSE_DOWN, {
+        this.dispatchEvent(ENGINE_EVENTS.INPUT_MOUSE_DOWN, {
             inputType: InputType.MOUSE,
             button,
             position,
@@ -98,7 +98,7 @@ export class InputManager extends EventEmitter {
         const position = this.calculateMousePosition(event)
 
         this.mouseButtons.set(button, false)
-        this.dispatchEvent(GAME_EVENTS.INPUT_MOUSE_UP, {
+        this.dispatchEvent(ENGINE_EVENTS.INPUT_MOUSE_UP, {
             inputType: InputType.MOUSE,
             button,
             position,
@@ -113,7 +113,7 @@ export class InputManager extends EventEmitter {
         this.mouseDelta = newPosition.subtract(this.mousePosition)
         this.mousePosition = newPosition
 
-        this.dispatchEvent(GAME_EVENTS.INPUT_MOUSE_MOVE, {
+        this.dispatchEvent(ENGINE_EVENTS.INPUT_MOUSE_MOVE, {
             inputType: InputType.MOUSE,
             position: this.mousePosition,
             delta: this.mouseDelta,
@@ -140,7 +140,7 @@ export class InputManager extends EventEmitter {
             }
 
             this.touches.set(touch.identifier, touchData)
-            this.dispatchEvent(GAME_EVENTS.INPUT_TOUCH_START, {
+            this.dispatchEvent(ENGINE_EVENTS.INPUT_TOUCH_START, {
                 inputType: InputType.TOUCH,
                 touchId: touch.identifier,
                 position,
@@ -165,7 +165,7 @@ export class InputManager extends EventEmitter {
             touchData.phase = TouchPhase.MOVED
             touchData.timestamp = Time.totalTime
 
-            this.dispatchEvent(GAME_EVENTS.INPUT_TOUCH_MOVE, {
+            this.dispatchEvent(ENGINE_EVENTS.INPUT_TOUCH_MOVE, {
                 inputType: InputType.TOUCH,
                 touchId: touch.identifier,
                 position: newPosition,
@@ -188,7 +188,7 @@ export class InputManager extends EventEmitter {
             touchData.phase = TouchPhase.ENDED
             touchData.timestamp = Time.totalTime
 
-            this.dispatchEvent(GAME_EVENTS.INPUT_TOUCH_END, {
+            this.dispatchEvent(ENGINE_EVENTS.INPUT_TOUCH_END, {
                 inputType: InputType.TOUCH,
                 touchId: touch.identifier,
                 position: touchData.position,

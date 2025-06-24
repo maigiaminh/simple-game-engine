@@ -2,7 +2,7 @@ import { Camera } from './Camera'
 import { Transform } from './Transform'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
-import { GAME_CONFIG } from '../config/GameConfig'
+import { CONFIG } from '../config/Config'
 
 type CameraViewBounds = {
     top: number
@@ -12,7 +12,7 @@ type CameraViewBounds = {
 }
 
 export class CameraFollow extends Camera {
-    private offset: Vector2 = new Vector2(0, GAME_CONFIG.CAMERA.FOLLOW_OFFSET)
+    private offset: Vector2 = new Vector2(0, CONFIG.CAMERA.FOLLOW_OFFSET)
     private smoothing = 5
     private highestY = 0
 
@@ -49,10 +49,7 @@ export class CameraFollow extends Camera {
         if (targetPos.y < this.highestY) {
             this.highestY = targetPos.y
 
-            const desiredPos = new Vector2(
-                GAME_CONFIG.CANVAS.WIDTH / 2,
-                targetPos.y + this.offset.y
-            )
+            const desiredPos = new Vector2(CONFIG.CANVAS.WIDTH / 2, targetPos.y + this.offset.y)
 
             if (this.smoothing > 0) {
                 const dt = deltaTime / 1000
@@ -71,10 +68,10 @@ export class CameraFollow extends Camera {
         const cameraPos = transform.getWorldPosition()
 
         return {
-            top: cameraPos.y - GAME_CONFIG.CANVAS.HEIGHT / 2,
-            bottom: cameraPos.y + GAME_CONFIG.CANVAS.HEIGHT / 2,
-            left: cameraPos.x - GAME_CONFIG.CANVAS.WIDTH / 2,
-            right: cameraPos.x + GAME_CONFIG.CANVAS.WIDTH / 2,
+            top: cameraPos.y - CONFIG.CANVAS.HEIGHT / 2,
+            bottom: cameraPos.y + CONFIG.CANVAS.HEIGHT / 2,
+            left: cameraPos.x - CONFIG.CANVAS.WIDTH / 2,
+            right: cameraPos.x + CONFIG.CANVAS.WIDTH / 2,
         }
     }
 

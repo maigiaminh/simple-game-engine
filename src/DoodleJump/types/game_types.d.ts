@@ -1,0 +1,7 @@
+type PlatformType = 'normal' | 'fragile' | 'moving' | 'spring'
+type StaticType = 'cactus' | 'landed_spike' | 'rock'
+type MovingType = 'bird' | 'cloud' | 'ufo'
+type MovingPattern = 'horizontal' | 'circular' | 'zigzag' | 'vertical'
+type BirdPattern = 'horizontal' | 'circular' | 'zigzag'
+type CloudPattern = 'horizontal' | 'circular'
+type UfoPattern = 'circular' | 'zigzag'
