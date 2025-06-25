@@ -14,6 +14,9 @@ import { GAME_EVENTS } from '../types/enums'
 export class Player extends Component {
     private isGrounded = false
     private canJump = true
+    private isUsingJetpack = false
+    private jetpack = GAME_CONFIG.ITEMS.JETPACK
+    private currentFuel = 0
 
     private inputLeft = false
     private inputRight = false
@@ -88,6 +91,22 @@ export class Player extends Component {
         this.updateMovement()
         this.checkBounds()
         this.updateVisuals()
+        this.handleJetpack(deltaTime)
+    }
+
+    public setUsingJetpack(isUsing: boolean): void {
+        this.isUsingJetpack = isUsing
+        this.currentFuel = isUsing ? this.jetpack.FUEL : 0
+    }
+
+    private handleJetpack(deltaTime: number): void {
+        if (!this.isUsingJetpack) return
+        const dt = deltaTime * 0.001
+
+        this.currentFuel -= this.jetpack.FUEL_CONSUMPTION_RATE * dt
+        if (this.currentFuel <= 0) {
+            this.setUsingJetpack(false)
+        }
     }
 
     private handleInput(): void {
@@ -101,10 +120,7 @@ export class Player extends Component {
             this.rigidBody.setVelocity(new Vector2(velocity.x * 0.8, velocity.y))
         }
 
-        // if (this.inputJump && this.canJump && this.isGrounded) {
-        //     this.jump()
-        // }
-        if (this.inputJump) {
+        if (this.inputJump && ((this.canJump && this.isGrounded) || this.isUsingJetpack)) {
             this.jump()
         }
     }
@@ -147,12 +163,26 @@ export class Player extends Component {
 
         const velocity = this.rigidBody.getVelocity()
 
-        if (velocity.x > 1) {
-            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name)
-        } else if (velocity.x < -1) {
-            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name)
+        if (this.isUsingJetpack) {
+            if (velocity.x > 1) {
+                this.animatedRenderer.playAnimation(
+                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.name
+                )
+            } else if (velocity.x < -1) {
+                this.animatedRenderer.playAnimation(
+                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.name
+                )
+            } else {
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.name)
+            }
         } else {
-            this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
+            if (velocity.x > 1) {
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name)
+            } else if (velocity.x < -1) {
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name)
+            } else {
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
+            }
         }
     }
 
@@ -161,7 +191,7 @@ export class Player extends Component {
             other: Collider
             collisionInfo: CollisionInfo
         }
-
+        if (other.isTrigger) return
         if (
             this.rigidBody.velocity.y > 0 &&
             this.transform.getWorldPosition().y <

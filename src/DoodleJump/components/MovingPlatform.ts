@@ -4,9 +4,10 @@ import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
 import { Platform } from './Platform'
 import { Transform } from '../../components/Transform'
+import { ScoreManager } from '../game_manager/ScoreManager'
 
 export class MovingPlatform extends Platform {
-    private moveSpeed = 80
+    private moveSpeed = 50
     private moveDirection = MathUtils.randomSign()
     private transform!: Transform | null
 
@@ -19,7 +20,12 @@ export class MovingPlatform extends Platform {
         super.update(deltaTime)
         if (this.transform) {
             const pos = this.transform.getWorldPosition()
-            const newX = pos.x + this.moveDirection * this.moveSpeed * (deltaTime / 1000)
+            const newX =
+                pos.x +
+                this.moveDirection *
+                    this.moveSpeed *
+                    (deltaTime / 1000) *
+                    ScoreManager.getCurrentDifficultyLevel()
 
             if (newX < 50 || newX > CONFIG.CANVAS.WIDTH - 50) {
                 this.moveDirection *= -1

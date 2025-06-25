@@ -2,7 +2,7 @@ export const GAME_CONFIG = {
     PLAYER: {
         WIDTH: 32,
         HEIGHT: 32,
-        JUMP_FORCE: -300,
+        JUMP_FORCE: -400,
         MOVE_SPEED: 300,
         MAX_FALL_SPEED: 1000,
     },
@@ -42,6 +42,23 @@ export const GAME_CONFIG = {
             MOVE_SPEED: 200,
         },
     },
+    ITEMS: {
+        TRAMPOLINE: {
+            ICON: 'trampoline',
+            SPAWN_CHANCE: 0.2,
+            WIDTH: 64,
+            HEIGHT: 64,
+            BOUNCE_FORCE: 600,
+        },
+        JETPACK: {
+            ICON: 'jetpack',
+            SPAWN_CHANCE: 0.1,
+            WIDTH: 64,
+            HEIGHT: 64,
+            FUEL: 25,
+            FUEL_CONSUMPTION_RATE: 10,
+        },
+    },
     BACKGROUND: {
         CLOUD: {
             WIDTH: 200,
@@ -52,17 +69,24 @@ export const GAME_CONFIG = {
     },
     IMAGES: {
         BACKGROUND: 'background',
+        BACKGROUND_2: 'background_2',
         CLOUD: 'cloud',
         PLATFORMS: {
-            GROUND: 'ground',
             PLATFORM_1: 'platform_1',
             PLATFORM_2: 'platform_2',
+            PLATFORM_3: 'platform_3',
+            PLATFORM_4: 'platform_4',
+            PLATFORM_5: 'platform_5',
         },
+        GROUND: 'ground',
         PLAYERS: {
             PLAYER_IDLE: 'player_idle',
             PLAYER_MOVE_LEFT: 'player_move_left',
             PLAYER_MOVE_RIGHT: 'player_move_right',
             PLAYER_JUMP: 'player_jump',
+            PLAYER_IDLE_JETPACK: 'player_idle_jetpack',
+            PLAYER_MOVE_LEFT_JETPACK: 'player_move_left_jetpack',
+            PLAYER_MOVE_RIGHT_JETPACK: 'player_move_right_jetpack',
         },
     },
     ANIMATIONS: {
@@ -79,6 +103,19 @@ export const GAME_CONFIG = {
             frameRate: 500,
             loop: true,
         },
+        PLAYER_IDLE_JETPACK: {
+            name: 'player_idle_jetpack',
+            frames: [
+                'player_idle_jetpack_1',
+                'player_idle_jetpack_2',
+                'player_idle_jetpack_3',
+                'player_idle_jetpack_4',
+                'player_idle_jetpack_5',
+                'player_idle_jetpack_6',
+            ],
+            frameRate: 500,
+            loop: true,
+        },
         PLAYER_MOVE_LEFT: {
             name: 'player_move_left',
             frames: [
@@ -86,6 +123,17 @@ export const GAME_CONFIG = {
                 'player_move_left_2',
                 'player_move_left_3',
                 'player_move_left_4',
+            ],
+            frameRate: 300,
+            loop: true,
+        },
+        PLAYER_MOVE_LEFT_JETPACK: {
+            name: 'player_move_left_jetpack',
+            frames: [
+                'player_move_left_jetpack_1',
+                'player_move_left_jetpack_2',
+                'player_move_left_jetpack_3',
+                'player_move_left_jetpack_4',
             ],
             frameRate: 300,
             loop: true,
@@ -101,6 +149,17 @@ export const GAME_CONFIG = {
             frameRate: 300,
             loop: true,
         },
+        PLAYER_MOVE_RIGHT_JETPACK: {
+            name: 'player_move_right_jetpack',
+            frames: [
+                'player_move_right_jetpack_1',
+                'player_move_right_jetpack_2',
+                'player_move_right_jetpack_3',
+                'player_move_right_jetpack_4',
+            ],
+            frameRate: 300,
+            loop: true,
+        },
         PLAYER_JUMP: {
             name: 'player_jump',
             frames: ['player_jump_1', 'player_jump_2', 'player_jump_3'],
@@ -108,4 +167,5 @@ export const GAME_CONFIG = {
             loop: false,
         },
     },
+    DIFFICULTY: 200,
 }

@@ -5,7 +5,7 @@ import { CONFIG, KEY } from '../../config/Config'
 import { GameEngine } from '../../core/GameEngine'
 import { GameObject } from '../../core/GameObject'
 import { Scene } from '../../core/Scene'
-import { CollisionLayer } from '../../types/enums'
+import { CollisionLayer, GameState } from '../../types/enums'
 import { ComponentConstructor, GameEvent } from '../../types/interface'
 import { Vector2 } from '../../utils/Vector2'
 import { BackgroundManager } from '../game_manager/BackgroundManager'
@@ -16,6 +16,7 @@ import { ScoreManager } from '../game_manager/ScoreManager'
 import { GAME_EVENTS } from '../types/enums'
 import { PlatformManager } from '../game_manager/PlatformManager'
 import { AnimatedRenderer } from '../../components/AnimatedRenderer'
+import { Transform } from '../../components/Transform'
 
 export class GameplayScene extends Scene {
     private gameEngine!: GameEngine
@@ -25,6 +26,7 @@ export class GameplayScene extends Scene {
     private backgroundManager!: BackgroundManager
     private scoreManager!: ScoreManager
     private inputManager!: GameInput
+    private gameState = GameState.PLAYING
 
     private isGameOver = false
 
@@ -89,6 +91,14 @@ export class GameplayScene extends Scene {
         )
 
         animatedRenderer.addAnimation(
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.frames,
+            this.gameEngine,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.frameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.loop
+        )
+
+        animatedRenderer.addAnimation(
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name,
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.frames,
             this.gameEngine,
@@ -97,11 +107,27 @@ export class GameplayScene extends Scene {
         )
 
         animatedRenderer.addAnimation(
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.frames,
+            this.gameEngine,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.frameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.loop
+        )
+
+        animatedRenderer.addAnimation(
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name,
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.frames,
             this.gameEngine,
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.frameRate,
             GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.loop
+        )
+
+        animatedRenderer.addAnimation(
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.frames,
+            this.gameEngine,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.frameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.loop
         )
 
         animatedRenderer.addAnimation(
@@ -217,6 +243,25 @@ export class GameplayScene extends Scene {
         // this.gameEngine.getAudioManager().playSound('jump');
     }
 
+    private checkGameOver(): void {
+        if (this.gameState === GameState.GAMEOVER) return
+
+        const playerTransform = this.player.getComponent(
+            Transform as ComponentConstructor<Transform>
+        )
+
+        if (!playerTransform) return
+
+        const position = playerTransform.getWorldPosition()
+        const cameraY = this.getMainCamera()!.getGameObject().getPosition().y
+
+        if (position.y > cameraY + CONFIG.CANVAS.HEIGHT / 2) {
+            console.log('Player fell below the camera view! Game Over')
+            this.triggerGameOver()
+            return
+        }
+    }
+
     private triggerGameOver(): void {
         if (this.isGameOver) return
 
@@ -237,6 +282,7 @@ export class GameplayScene extends Scene {
         if (inputManager.isKeyJustPressed(KEY.R) && this.isGameOver) {
             this.restartGame()
         }
+        this.checkGameOver()
     }
 
     protected onRender(ctx: CanvasRenderingContext2D): void {

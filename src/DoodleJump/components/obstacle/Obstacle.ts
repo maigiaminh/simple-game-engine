@@ -1,9 +1,9 @@
-import { Collider } from '../../components/Collider'
-import { Component } from '../../core/Component'
-import { GameEngine } from '../../core/GameEngine'
-import { CollisionLayer, ENGINE_EVENTS } from '../../types/enums'
-import { IGameObject, ComponentConstructor, GameEvent } from '../../types/interface'
-import { GAME_EVENTS } from '../types/enums'
+import { Collider } from '../../../components/Collider'
+import { Component } from '../../../core/Component'
+import { GameEngine } from '../../../core/GameEngine'
+import { CollisionLayer, ENGINE_EVENTS } from '../../../types/enums'
+import { IGameObject, ComponentConstructor, GameEvent } from '../../../types/interface'
+import { GAME_EVENTS } from '../../types/enums'
 
 export abstract class Obstacle extends Component {
     protected obstacleType: string

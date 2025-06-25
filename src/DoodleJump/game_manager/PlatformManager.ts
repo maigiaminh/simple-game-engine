@@ -11,13 +11,16 @@ import { Vector2 } from '../../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameplayConfig'
 import { Platform } from '../components/Platform'
 import { GameEngine } from '../../core/GameEngine'
-import { ObstacleFactory } from '../components/ObstacleFactory'
+import { ScoreManager } from './ScoreManager'
+import { MovingPlatform } from '../components/MovingPlatform'
 
 export class PlatformManager extends Component {
     private gameEngine: GameEngine
     private platformsImg: HTMLImageElement[] = []
     private platforms: Platform[] = []
     private scene!: IScene
+    private lastPlatformX: number = CONFIG.CANVAS.WIDTH / 2
+    private readonly MAX_PLATFORM_X_DIFF = CONFIG.CANVAS.WIDTH / 2
 
     constructor(gameObject: IGameObject, scene: IScene) {
         super(gameObject)
@@ -60,7 +63,7 @@ export class PlatformManager extends Component {
 
         const renderer = new Renderer(groundGO)
         renderer.setImage(
-            this.gameEngine.getResourceManager().getResource(GAME_CONFIG.IMAGES.PLATFORMS.GROUND)!
+            this.gameEngine.getResourceManager().getResource(GAME_CONFIG.IMAGES.GROUND)!
         )
         renderer.setImageSize(CONFIG.CANVAS.WIDTH + 64, 156)
         groundGO.addComponent(renderer)
@@ -75,16 +78,25 @@ export class PlatformManager extends Component {
     }
 
     private generateInitialPlatforms(): void {
-        for (let i = 0; i < GAME_CONFIG.PLATFORM.INITIAL_COUNT; i++) {
+        for (let i = 1; i < GAME_CONFIG.PLATFORM.INITIAL_COUNT; i++) {
             const y = CONFIG.CANVAS.HEIGHT - 100 - i * GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
-            const x = MathUtils.random(
-                GAME_CONFIG.PLATFORM.WIDTH / 2,
-                CONFIG.CANVAS.WIDTH - GAME_CONFIG.PLATFORM.WIDTH / 2
-            )
-            this.createPlatform(new Vector2(x, y))
+            this.createPlatformWithConstraint(y)
         }
     }
 
+    private createPlatformWithConstraint(y: number): IGameObject {
+        const minX = Math.max(
+            GAME_CONFIG.PLATFORM.WIDTH / 2,
+            this.lastPlatformX - this.MAX_PLATFORM_X_DIFF
+        )
+        const maxX = Math.min(
+            CONFIG.CANVAS.WIDTH - GAME_CONFIG.PLATFORM.WIDTH / 2,
+            this.lastPlatformX + this.MAX_PLATFORM_X_DIFF
+        )
+        const x = MathUtils.random(minX, maxX)
+        this.lastPlatformX = x
+        return this.createPlatform(new Vector2(x, y))
+    }
     private createPlatform(position: Vector2): IGameObject {
         const platformGO = new GameObject({
             name: 'Platform',
@@ -107,37 +119,28 @@ export class PlatformManager extends Component {
         collider.mask = [CollisionLayer.PLAYER]
         platformGO.addComponent(collider)
 
-        const platform = new Platform(platformGO)
+        let platform = new Platform(platformGO)
+
+        const movingPlatformSpawnChance = ScoreManager.getCurrentDifficultyLevel() * 0.05
+
+        if (MathUtils.random(0, 1) < movingPlatformSpawnChance) {
+            platform = new MovingPlatform(platformGO)
+        }
+
         platformGO.addComponent(platform)
 
         this.scene.addGameObject(platformGO)
         this.platforms.push(platform)
 
-        this.maybeAddObstacle(platformGO)
+        this.maybeAddObjectOnPlatform(platformGO)
         this.gameEngine.getCollisionManager().addCollider(collider)
 
         return platformGO
     }
 
-    private maybeAddObstacle(platformGO: IGameObject): void {
+    private maybeAddObjectOnPlatform(platformGO: IGameObject): void {
         const platform = platformGO.getComponent(Platform as ComponentConstructor<Platform>)
         if (platform === null) return
-
-        if (platformGO.getComponent(Renderer as ComponentConstructor<Renderer>) === null) return
-        if (MathUtils.random(0, 1) < 0.5) {
-            const obstacleGO = ObstacleFactory.createLandedSpike(
-                new Vector2(
-                    platformGO.getPosition().x,
-                    platformGO.getPosition().y - GAME_CONFIG.PLATFORM.HEIGHT / 2
-                )
-            )
-
-            if (obstacleGO) {
-                this.scene.addGameObject(obstacleGO)
-                platform.setHasObstacle(true)
-                platform.setObstacle(obstacleGO)
-            }
-        }
     }
 
     private generateNewPlatforms(): void {
@@ -153,11 +156,7 @@ export class PlatformManager extends Component {
 
         while (highestY > generationThreshold) {
             highestY -= GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
-            const x = MathUtils.random(
-                GAME_CONFIG.PLATFORM.WIDTH / 2,
-                CONFIG.CANVAS.WIDTH - GAME_CONFIG.PLATFORM.WIDTH / 2
-            )
-            this.createPlatform(new Vector2(x, highestY))
+            this.createPlatformWithConstraint(highestY)
         }
     }
 
@@ -167,11 +166,11 @@ export class PlatformManager extends Component {
             const pos = platform.getGameObject().getPosition()
             const platformDistance = pos.y - cameraPos
             if (platformDistance > CONFIG.CANVAS.HEIGHT / 2 + 200) {
-                if (platform.getHasObstacle()) {
-                    const obstacle = platform.getObstacle()
-                    if (obstacle) {
-                        this.scene.removeGameObject(obstacle)
-                        obstacle.destroy()
+                if (platform.containsObject()) {
+                    const object = platform.getObject()
+                    if (object) {
+                        this.scene.removeGameObject(object)
+                        object.destroy()
                     }
                 }
                 this.scene.removeGameObject(platform.getGameObject())

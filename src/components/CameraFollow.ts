@@ -48,16 +48,17 @@ export class CameraFollow extends Camera {
 
         if (targetPos.y < this.highestY) {
             this.highestY = targetPos.y
+        }
 
-            const desiredPos = new Vector2(CONFIG.CANVAS.WIDTH / 2, targetPos.y + this.offset.y)
+        const desiredY = Math.min(this.highestY + this.offset.y, targetPos.y + this.offset.y)
+        const desiredPos = new Vector2(CONFIG.CANVAS.WIDTH / 2, desiredY)
 
-            if (this.smoothing > 0) {
-                const dt = deltaTime / 1000
-                const newPos = Vector2.lerp(currentPos, desiredPos, this.smoothing * dt)
-                transform.setPosition(newPos)
-            } else {
-                transform.setPosition(desiredPos)
-            }
+        if (this.smoothing > 0) {
+            const dt = deltaTime / 1000
+            const newPos = Vector2.lerp(currentPos, desiredPos, this.smoothing * dt)
+            transform.setPosition(newPos)
+        } else {
+            transform.setPosition(desiredPos)
         }
     }
 

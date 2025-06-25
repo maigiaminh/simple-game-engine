@@ -1,9 +1,9 @@
-import { GameObject } from '../../core/GameObject'
-import { IGameObject } from '../../types/interface'
-import { Vector2 } from '../../utils/Vector2'
-import { Renderer } from '../../components/Renderer'
-import { GAME_CONFIG } from '../config/GameplayConfig'
-import { GameEngine } from '../../core/GameEngine'
+import { Renderer } from '../../../components/Renderer'
+import { GameEngine } from '../../../core/GameEngine'
+import { GameObject } from '../../../core/GameObject'
+import { IGameObject } from '../../../types/interface'
+import { Vector2 } from '../../../utils/Vector2'
+import { GAME_CONFIG } from '../../config/GameplayConfig'
 
 export class ObstacleFactory {
     private static createStaticObstacle(position: Vector2, type: StaticType): IGameObject {

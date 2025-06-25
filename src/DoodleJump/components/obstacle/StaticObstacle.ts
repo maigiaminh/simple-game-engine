@@ -1,7 +1,7 @@
-import { Renderer } from '../../components/Renderer'
-import { CONFIG } from '../../config/Config'
-import { IGameObject, ComponentConstructor } from '../../types/interface'
-import { Color } from '../../utils/Color'
+import { Renderer } from '../../../components/Renderer'
+import { CONFIG } from '../../../config/Config'
+import { IGameObject, ComponentConstructor } from '../../../types/interface'
+import { Color } from '../../../utils/Color'
 import { Obstacle } from './Obstacle'
 
 export class StaticObstacle extends Obstacle {

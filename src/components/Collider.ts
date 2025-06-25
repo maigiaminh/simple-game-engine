@@ -15,6 +15,7 @@ export class Collider extends Component implements Collider {
     public layers: number[] = [CollisionLayer.DEFAULT]
     public mask: number[] = [CollisionLayer.ALL]
     public renderer: Renderer
+    static ColliderType: any
 
     constructor(gameObject: IGameObject, type: ColliderType = ColliderType.BOX) {
         super(gameObject)

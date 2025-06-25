@@ -5,10 +5,14 @@ import { GameObject } from '../../core/GameObject'
 import { UIAnchor } from '../../types/enums'
 import { IGameObject } from '../../types/interface'
 import { Color } from '../../utils/Color'
+import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
+import { GAME_CONFIG } from '../config/GameplayConfig'
 
 export class ScoreManager extends Component {
+    private static difficultyLevel = 1
     private currentScore = 0
+    private lastDifficultyScore = 0
     private highScore = 0
     private baselineY = 0
 
@@ -34,6 +38,19 @@ export class ScoreManager extends Component {
     public update(deltaTime: number): void {
         this.updateScore()
         this.updateUI()
+        this.updateDifficultyLevel()
+    }
+
+    public static getCurrentDifficultyLevel(): number {
+        return this.difficultyLevel
+    }
+
+    private updateDifficultyLevel(): void {
+        if (this.currentScore - this.lastDifficultyScore >= GAME_CONFIG.DIFFICULTY) {
+            ScoreManager.difficultyLevel++
+            MathUtils.clamp(ScoreManager.difficultyLevel, 1, 6)
+            this.lastDifficultyScore = this.currentScore
+        }
     }
 
     private createScoreUI(): void {
@@ -84,13 +101,22 @@ export class ScoreManager extends Component {
     }
 
     private updateUI(): void {
+        const camera = GameEngine.getInstance().getCurrentScene()?.getMainCamera()
+        if (!camera) return
         if (this.scoreLabel) {
             this.scoreLabel.setText(`Score: ${this.currentScore}`)
+            const cameraPosition = camera.getGameObject().getPosition()
+            // console.log('Updating score label position', cameraPosition)
+            const newPos = new Vector2(0, cameraPosition.y - 300)
+            this.scoreLabel.setLocalPosition(newPos)
         }
 
-        if (this.highScoreLabel) {
-            this.highScoreLabel.setText(`High: ${this.highScore}`)
-        }
+        // if (this.highScoreLabel) {
+        //     this.highScoreLabel.setText(`High: ${this.highScore}`)
+        //     this.highScoreLabel.setLocalPosition(
+        //         camera.getGameObject().getPosition().add(new Vector2(-100, -300))
+        //     )
+        // }
     }
 
     public getCurrentScore(): number {

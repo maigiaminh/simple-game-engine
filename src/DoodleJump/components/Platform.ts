@@ -4,9 +4,9 @@ import { IGameObject, ComponentConstructor } from '../../types/interface'
 import { Color } from '../../utils/Color'
 
 export class Platform extends Component {
-    private hasObstacle = false
+    private hasObject = false
     private type: PlatformType = 'normal'
-    private obstacle: IGameObject | null = null
+    private object: IGameObject | null = null
     constructor(gameObject: IGameObject) {
         super(gameObject)
     }
@@ -18,20 +18,20 @@ export class Platform extends Component {
         }
     }
 
-    public setHasObstacle(hasObstacle: boolean): void {
-        this.hasObstacle = hasObstacle
+    public updateObjectStatus(hasObject: boolean): void {
+        this.hasObject = hasObject
     }
 
-    public getHasObstacle(): boolean {
-        return this.hasObstacle
+    public containsObject(): boolean {
+        return this.hasObject
     }
 
-    public setObstacle(obstacle: IGameObject | null): void {
-        this.obstacle = obstacle
+    public setObject(object: IGameObject | null): void {
+        this.object = object
     }
 
-    public getObstacle(): IGameObject | null {
-        return this.obstacle
+    public getObject(): IGameObject | null {
+        return this.object
     }
 
     public update(deltaTime: number): void {}
