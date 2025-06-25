@@ -6,53 +6,53 @@ export const GAME_CONFIG = {
         MOVE_SPEED: 300,
         MAX_FALL_SPEED: 1000,
     },
+    DECORATION: {
+        WIDTH: 64,
+        HEIGHT: 120,
+    },
     PLATFORM: {
-        WIDTH: 156,
-        HEIGHT: 48,
-        SPAWN_DISTANCE: 120,
+        WIDTH: 196,
+        HEIGHT: 64,
+        SPAWN_DISTANCE: 156,
         INITIAL_COUNT: 10,
     },
     OBSTACLES: {
-        CACTUS: {
-            ICON: 'cactus',
-            SPAWN_CHANCE: 0.3,
-            WIDTH: 32,
-            HEIGHT: 32,
-        },
-        BIRD: {
-            SPAWN_CHANCE: 0.2,
-            MOVE_SPEED: 150,
-            WIDTH: 32,
-            HEIGHT: 32,
-        },
         LANDED_SPIKE: {
             ICON: 'landed_spike',
             SPAWN_CHANCE: 0.1,
             WIDTH: 96,
-            HEIGHT: 32,
+            HEIGHT: 24,
+            SPAWN_LEVEL: 1,
         },
-        ROCK: {
-            ICON: 'rock',
-            SPAWN_CHANCE: 0.05,
-            WIDTH: 32,
-            HEIGHT: 32,
+        FLYING_MONSTER: {
+            ICON: 'flying_monster',
+            SPAWN_CHANCE: 0.1,
+            WIDTH: 96,
+            HEIGHT: 96,
+            MOVE_SPEED: 400,
+            SPAWN_LEVEL: 1,
         },
-        UFO: {
-            SPAWN_CHANCE: 0.15,
+        WITCH: {
+            ICON: 'witch',
+            SPAWN_CHANCE: 0.1,
+            WIDTH: 128,
+            HEIGHT: 128,
             MOVE_SPEED: 200,
+            MOVE_RANGE: 400,
+            SPAWN_LEVEL: 3,
         },
     },
     ITEMS: {
         TRAMPOLINE: {
             ICON: 'trampoline',
-            SPAWN_CHANCE: 0.2,
+            SPAWN_CHANCE: 0.5,
             WIDTH: 64,
             HEIGHT: 64,
             BOUNCE_FORCE: 600,
         },
         JETPACK: {
             ICON: 'jetpack',
-            SPAWN_CHANCE: 0.1,
+            SPAWN_CHANCE: 0.5,
             WIDTH: 64,
             HEIGHT: 64,
             FUEL: 25,
@@ -78,6 +78,14 @@ export const GAME_CONFIG = {
             PLATFORM_4: 'platform_4',
             PLATFORM_5: 'platform_5',
         },
+        DECORATIONS: {
+            TREE_1: 'tree_1',
+            TREE_2: 'tree_2',
+            TREE_3: 'tree_3',
+            TREE_4: 'tree_4',
+            LAMP_POST_1: 'lamp_post_1',
+            LAMP_POST_2: 'lamp_post_2',
+        },
         GROUND: 'ground',
         PLAYERS: {
             PLAYER_IDLE: 'player_idle',
@@ -87,6 +95,15 @@ export const GAME_CONFIG = {
             PLAYER_IDLE_JETPACK: 'player_idle_jetpack',
             PLAYER_MOVE_LEFT_JETPACK: 'player_move_left_jetpack',
             PLAYER_MOVE_RIGHT_JETPACK: 'player_move_right_jetpack',
+            PLAYER_DEAD: 'player_dead',
+        },
+    },
+    AUDIO: {
+        SFX: {
+            TRAMPOLINE: 'trampoline',
+            JUMP: 'jump',
+            JETPACK: 'jetpack',
+            WALK: 'walk',
         },
     },
     ANIMATIONS: {
@@ -166,6 +183,13 @@ export const GAME_CONFIG = {
             frameRate: 300,
             loop: false,
         },
+        PLAYER_DEAD: {
+            name: 'player_dead',
+            frames: ['player_dead', 'player_dead', 'player_dead'],
+            frameRate: 300,
+            loop: false,
+        },
     },
     DIFFICULTY: 200,
+    HIGH_SCORE_KEY: 'doodleJump_highScore',
 }

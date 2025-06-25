@@ -1,13 +1,10 @@
 import { Renderer } from '../../../components/Renderer'
-import { RigidBody } from '../../../components/RigidBody'
 import { Transform } from '../../../components/Transform'
 import { CONFIG } from '../../../config/Config'
 import { IGameObject, ComponentConstructor } from '../../../types/interface'
-import { Color } from '../../../utils/Color'
 import { MathUtils } from '../../../utils/MathUtils'
 import { Vector2 } from '../../../utils/Vector2'
 import { GAME_CONFIG } from '../../config/GameplayConfig'
-import { GAME_EVENTS } from '../../types/enums'
 import { Obstacle } from './Obstacle'
 
 export class MovingObstacle extends Obstacle {
@@ -19,35 +16,30 @@ export class MovingObstacle extends Obstacle {
     protected moveRange: number
     private moveTime = 0
 
-    constructor(
-        gameObject: IGameObject,
-        movingType: MovingType = 'bird',
-        movePattern: MovingPattern = 'horizontal'
-    ) {
+    constructor(gameObject: IGameObject, movingType: MovingType = 'witch') {
         super(gameObject, `moving_${movingType}`)
         this.movingType = movingType
-        this.movePattern = movePattern
         this.startPosition = new Vector2(gameObject.getPosition().x, gameObject.getPosition().y)
         this.setupMovementParameters()
     }
 
     private setupMovementParameters(): void {
         switch (this.movingType) {
-            case 'bird':
-                this.moveSpeed = GAME_CONFIG.OBSTACLES.BIRD.MOVE_SPEED
-                this.moveRange = 100
+            case 'witch':
+                this.moveSpeed = GAME_CONFIG.OBSTACLES.WITCH.MOVE_SPEED
+                this.moveRange = GAME_CONFIG.OBSTACLES.WITCH.MOVE_RANGE
+                this.movePattern = MathUtils.randomChoice(['horizontal', 'zigzag', 'circular'])
                 break
-            case 'cloud':
-                this.moveSpeed = 80
-                this.moveRange = 150
-                break
-            case 'ufo':
-                this.moveSpeed = 120
-                this.moveRange = 200
+            case 'flying_monster':
+                this.moveSpeed = GAME_CONFIG.OBSTACLES.FLYING_MONSTER.MOVE_SPEED
+                this.movePattern = MathUtils.randomChoice(['repeat'])
                 break
         }
 
         this.moveDirection = this.getInitialDirection()
+        this.gameObject
+            .getComponent(Renderer as ComponentConstructor<Renderer>)
+            ?.setFlip(this.moveDirection.x, 1)
     }
 
     private getInitialDirection(): Vector2 {
@@ -59,27 +51,14 @@ export class MovingObstacle extends Obstacle {
             case 'circular':
             case 'zigzag':
                 return new Vector2(1, 0)
+            case 'repeat':
+                return new Vector2(MathUtils.randomSign(), 0)
             default:
                 return new Vector2(1, 0)
         }
     }
 
-    protected setupRenderer(): void {
-        const renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>)
-        if (renderer) {
-            switch (this.movingType) {
-                case 'bird':
-                    renderer.setColor(Color.BROWN)
-                    break
-                case 'cloud':
-                    renderer.setColor(new Color(255, 255, 255, 0.8))
-                    break
-                case 'ufo':
-                    renderer.setColor(Color.SILVER)
-                    break
-            }
-        }
-    }
+    protected setupRenderer(): void {}
 
     protected setupObstacleSpecific(): void {}
 
@@ -108,6 +87,8 @@ export class MovingObstacle extends Obstacle {
             case 'zigzag':
                 newPosition = this.updateZigzagMovement(currentPos, deltaTime)
                 break
+            case 'repeat':
+                newPosition = this.updateRepeatMovement(currentPos, deltaTime)
         }
 
         transform.setPosition(newPosition)
@@ -119,7 +100,23 @@ export class MovingObstacle extends Obstacle {
 
         if (Math.abs(newX - this.startPosition.x) > this.moveRange) {
             this.moveDirection.x *= -1
+            this.gameObject
+                .getComponent(Renderer as ComponentConstructor<Renderer>)
+                ?.setFlip(this.moveDirection.x, 1)
             newX = currentPos.x + this.moveDirection.x * this.moveSpeed * (deltaTime / 1000)
+        }
+
+        return new Vector2(newX, currentPos.y)
+    }
+
+    private updateRepeatMovement(currentPos: Vector2, deltaTime: number): Vector2 {
+        const deltaX = this.moveDirection.x * this.moveSpeed * (deltaTime / 1000)
+        let newX = currentPos.x + deltaX
+
+        if (newX < -GAME_CONFIG.PLAYER.WIDTH / 2) {
+            newX = CONFIG.CANVAS.WIDTH
+        } else if (newX > CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
+            newX = -GAME_CONFIG.PLAYER.WIDTH / 2
         }
 
         return new Vector2(newX, currentPos.y)
@@ -144,6 +141,9 @@ export class MovingObstacle extends Obstacle {
         const angle = this.moveTime * speed
         const x = this.startPosition.x + Math.cos(angle) * radius
         const y = this.startPosition.y + Math.sin(angle) * radius * 0.5
+        this.gameObject
+            .getComponent(Renderer as ComponentConstructor<Renderer>)
+            ?.setFlip(x > this.gameObject.getPosition().x ? 1 : -1, 1)
 
         return new Vector2(x, y)
     }
@@ -162,53 +162,15 @@ export class MovingObstacle extends Obstacle {
         if (Math.abs(newX - this.startPosition.x) > this.moveRange) {
             this.moveDirection.x *= -1
             newX = currentPos.x + this.moveDirection.x * horizontalSpeed * (deltaTime / 1000)
+            this.gameObject
+                .getComponent(Renderer as ComponentConstructor<Renderer>)
+                ?.setFlip(this.moveDirection.x, 1)
         }
 
         return new Vector2(newX, zigzagY)
     }
 
-    private updateSpecialBehaviors(deltaTime: number): void {
-        switch (this.movingType) {
-            case 'bird':
-                this.updateBirdBehavior(deltaTime)
-                break
-            case 'cloud':
-                this.updateCloudBehavior(deltaTime)
-                break
-            case 'ufo':
-                this.updateUfoBehavior(deltaTime)
-                break
-        }
-    }
-
-    private updateBirdBehavior(deltaTime: number): void {
-        if (Math.random() < 0.001) {
-            this.moveSpeed = GAME_CONFIG.OBSTACLES.BIRD.MOVE_SPEED * MathUtils.random(0.8, 1.2)
-        }
-    }
-
-    private updateCloudBehavior(deltaTime: number): void {
-        const renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>)
-        if (renderer) {
-            const alpha = (Math.sin(this.moveTime * 2) + 1) * 0.3 + 0.4 // 0.4 to 1.0
-            const color = new Color(255, 255, 255, alpha)
-            renderer.setColor(color)
-        }
-    }
-
-    private updateUfoBehavior(deltaTime: number): void {
-        const renderer = this.gameObject.getComponent(Renderer as ComponentConstructor<Renderer>)
-        if (renderer) {
-            const glow = Math.sin(this.moveTime * 5) * 0.3 + 0.7
-            const color = new Color(
-                Color.SILVER.r * glow,
-                Color.SILVER.g * glow,
-                Color.SILVER.b * glow,
-                Color.SILVER.a
-            )
-            renderer.setColor(color)
-        }
-    }
+    private updateSpecialBehaviors(deltaTime: number): void {}
 
     protected checkBounds(): void {
         const position = this.gameObject.getPosition()
@@ -217,34 +179,6 @@ export class MovingObstacle extends Obstacle {
         if (position.y > CONFIG.CANVAS.HEIGHT + 500 || distanceFromStart > this.moveRange * 3) {
             this.deactivate()
         }
-    }
-
-    protected onPlayerHit(player: IGameObject): void {
-        if (this.movingType === 'cloud') {
-            const playerRigidBody = player.getComponent(
-                RigidBody as ComponentConstructor<RigidBody>
-            )
-            if (playerRigidBody) {
-                const pushForce = this.moveDirection.multiply(200)
-                playerRigidBody.addForce(pushForce)
-            }
-
-            this.dispatchEvent(GAME_EVENTS.PLAYER_PUSHED, {
-                obstacle: this.gameObject,
-                player: player,
-                pushDirection: this.moveDirection,
-            })
-        } else {
-            super.onPlayerHit(player)
-        }
-    }
-
-    public getMovingType(): 'bird' | 'cloud' | 'ufo' {
-        return this.movingType
-    }
-
-    public getMovePattern(): 'horizontal' | 'circular' | 'zigzag' | 'vertical' {
-        return this.movePattern
     }
 
     public getMoveSpeed(): number {

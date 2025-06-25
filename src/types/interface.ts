@@ -31,6 +31,7 @@ export interface ICollidable {
 
 export interface IDestroyable {
     destroy(): void
+    destroyComponent<T extends IComponent>(componentClass: ComponentConstructor<T>): void
     isDestroyed(): boolean
     onDestroy(): void
 }

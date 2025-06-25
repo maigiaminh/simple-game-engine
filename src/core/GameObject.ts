@@ -218,6 +218,15 @@ export class GameObject extends EventEmitter implements IGameObject {
         this.dispatchEvent(ENGINE_EVENTS.GAME_OBJECT_DESTROYED)
     }
 
+    public destroyComponent<T extends IComponent>(componentClass: ComponentConstructor<T>): void {
+        const componentName = componentClass.name
+        const component = this.components.get(componentName)
+        if (component) {
+            component.onDestroy()
+            this.components.delete(componentName)
+        }
+    }
+
     public isDestroyed(): boolean {
         return this.destroyed
     }

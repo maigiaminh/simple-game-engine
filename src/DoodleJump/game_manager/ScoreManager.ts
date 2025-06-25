@@ -28,6 +28,8 @@ export class ScoreManager extends Component {
 
     public onStart(): void {
         this.createScoreUI()
+        this.currentScore = 0
+        this.lastDifficultyScore = 1
     }
 
     public setPlayer(player: IGameObject): void {
@@ -57,6 +59,8 @@ export class ScoreManager extends Component {
         const scoreLabelGO = new GameObject({
             name: 'ScoreLabel',
             position: new Vector2(100, -300),
+            tag: 'UI',
+            layer: 1000,
         })
 
         this.scoreLabel = new UILabel(scoreLabelGO, 'Score: 0')
@@ -71,13 +75,15 @@ export class ScoreManager extends Component {
         const highScoreLabelGO = new GameObject({
             name: 'HighScoreLabel',
             position: new Vector2(0, 0),
+            tag: 'UI',
+            layer: 1000,
         })
 
         this.highScoreLabel = new UILabel(highScoreLabelGO, `High: ${this.highScore}`)
         this.highScoreLabel.setCanvas(GameEngine.getInstance().getCanvas())
         this.highScoreLabel.setFont('24px Arial')
         this.highScoreLabel.setColor(Color.YELLOW)
-        this.highScoreLabel.setAnchor(UIAnchor.TOP_RIGHT)
+        this.highScoreLabel.setAnchor(UIAnchor.TOP_LEFT)
         this.highScoreLabel.size = new Vector2(200, 40)
         this.highScoreLabel.margin = { top: 20, right: 20, bottom: 0, left: 0 }
         highScoreLabelGO.addComponent(this.highScoreLabel)
@@ -102,21 +108,22 @@ export class ScoreManager extends Component {
 
     private updateUI(): void {
         const camera = GameEngine.getInstance().getCurrentScene()?.getMainCamera()
+
         if (!camera) return
+
+        const cameraPosition = camera.getGameObject().getPosition()
+
         if (this.scoreLabel) {
             this.scoreLabel.setText(`Score: ${this.currentScore}`)
-            const cameraPosition = camera.getGameObject().getPosition()
-            // console.log('Updating score label position', cameraPosition)
-            const newPos = new Vector2(0, cameraPosition.y - 300)
+            const newPos = new Vector2(0, cameraPosition.y - 350)
             this.scoreLabel.setLocalPosition(newPos)
         }
 
-        // if (this.highScoreLabel) {
-        //     this.highScoreLabel.setText(`High: ${this.highScore}`)
-        //     this.highScoreLabel.setLocalPosition(
-        //         camera.getGameObject().getPosition().add(new Vector2(-100, -300))
-        //     )
-        // }
+        if (this.highScoreLabel) {
+            this.highScoreLabel.setText(`High: ${this.highScore}`)
+            const newPos = new Vector2(0, cameraPosition.y - 300)
+            this.highScoreLabel.setLocalPosition(newPos)
+        }
     }
 
     public getCurrentScore(): number {
@@ -145,7 +152,7 @@ export class ScoreManager extends Component {
 
     private loadHighScore(): void {
         try {
-            const saved = localStorage.getItem('doodleJump_highScore')
+            const saved = localStorage.getItem(GAME_CONFIG.HIGH_SCORE_KEY)
             this.highScore = saved ? parseInt(saved, 10) : 0
         } catch (error) {
             console.warn('Could not load high score:', error)
@@ -155,7 +162,7 @@ export class ScoreManager extends Component {
 
     private saveHighScore(): void {
         try {
-            localStorage.setItem('doodleJump_highScore', this.highScore.toString())
+            localStorage.setItem(GAME_CONFIG.HIGH_SCORE_KEY, this.highScore.toString())
         } catch (error) {
             console.warn('Could not save high score:', error)
         }

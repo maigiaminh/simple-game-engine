@@ -1,115 +1,186 @@
+import { Collider } from '../../../components/Collider'
 import { Renderer } from '../../../components/Renderer'
 import { GameEngine } from '../../../core/GameEngine'
 import { GameObject } from '../../../core/GameObject'
+import { ColliderType } from '../../../types/enums'
 import { IGameObject } from '../../../types/interface'
+import { MathUtils } from '../../../utils/MathUtils'
 import { Vector2 } from '../../../utils/Vector2'
 import { GAME_CONFIG } from '../../config/GameplayConfig'
+import { ScoreManager } from '../../game_manager/ScoreManager'
+import { MovingObstacle } from './MovingObstacle'
+import { StaticObstacle } from './StaticObstacle'
 
 export class ObstacleFactory {
     private static createStaticObstacle(position: Vector2, type: StaticType): IGameObject {
-        const staticTypeMap = {
-            cactus: 'CACTUS',
-            landed_spike: 'LANDED_SPIKE',
-            rock: 'ROCK',
-        } as const
-
-        const config = GAME_CONFIG.OBSTACLES[staticTypeMap[type]]
-
-        const obstacleGO = new GameObject({
+        const obstacle = new GameObject({
             name: `${type}_${Date.now()}`,
-            tag: 'Obstacle',
+            tag: 'Item',
             layer: 2,
             position,
         })
-        const renderer = new Renderer(obstacleGO)
-        renderer.setImageSize(config.WIDTH, config.HEIGHT)
-        const image = GameEngine.getInstance()
-            .getResourceManager()
-            .getResource(GAME_CONFIG.OBSTACLES[staticTypeMap[type]].ICON) as HTMLImageElement
-        renderer.setImage(image)
-        obstacleGO.addComponent(renderer)
-        // obstacleGO.addComponent(new StaticObstacle(obstacleGO, type))
-        // this.scene.addGameObject(obstacleGO) // Commented out or refactor if needed
-        return obstacleGO
+        const renderer = new Renderer(obstacle)
+        const collider = new Collider(obstacle)
+        if (type === 'landed_spike') {
+            renderer.setImageSize(
+                GAME_CONFIG.OBSTACLES.LANDED_SPIKE.WIDTH,
+                GAME_CONFIG.OBSTACLES.LANDED_SPIKE.HEIGHT
+            )
+            const image = GameEngine.getInstance()
+                .getResourceManager()
+                .getResource(GAME_CONFIG.OBSTACLES.LANDED_SPIKE.ICON) as HTMLImageElement
+            renderer.setImage(image)
+            collider.type = ColliderType.BOX
+            collider.setRenderer(renderer)
+            obstacle.addComponent(renderer)
+            obstacle.addComponent(collider)
+            const staticObstacle = new StaticObstacle(obstacle, type)
+            obstacle.addComponent(staticObstacle)
+        }
+
+        GameEngine.getInstance().getCollisionManager().addCollider(collider)
+        GameEngine.getInstance().getCurrentScene()!.addGameObject(obstacle)
+        return obstacle
     }
 
-    public static createCactus(position: Vector2): IGameObject {
-        return this.createStaticObstacle(position, 'cactus')
-    }
     public static createLandedSpike(position: Vector2): IGameObject {
         return this.createStaticObstacle(position, 'landed_spike')
     }
-    public static createRock(position: Vector2): IGameObject {
-        return this.createStaticObstacle(position, 'rock')
+
+    public static createRandomStaticObstacle(position: Vector2): IGameObject {
+        const chances = [
+            { type: 'landed_spike', chance: GAME_CONFIG.OBSTACLES.LANDED_SPIKE.SPAWN_CHANCE },
+        ] as { type: StaticType; chance: number }[]
+
+        const total = chances.reduce((sum, item) => sum + item.chance, 0)
+        let rand = MathUtils.random() * total
+
+        for (const item of chances) {
+            if (rand < item.chance) {
+                return this.createStaticObstacle(position, item.type)
+            }
+            rand -= item.chance
+        }
+
+        return this.createStaticObstacle(position, 'landed_spike')
     }
-    // private createMovingObstacle(
-    //     position: Vector2,
-    //     type: MovingType,
-    //     pattern: MovingPattern | undefined,
-    //     size: { width: number; height: number }
-    // ): IGameObject {
-    //     const obstacleGO = new GameObject({
-    //         name: `${type}_${Date.now()}`,
-    //         tag: 'Obstacle',
-    //         layer: 2,
-    //         position,
-    //     })
-    //     obstacleGO.addComponent(new Renderer(obstacleGO))
-    //     obstacleGO.addComponent(Collider.createBox(obstacleGO, size.width, size.height))
-    //     obstacleGO.addComponent(new MovingObstacle(obstacleGO, type, pattern))
-    //     this.scene.addGameObject(obstacleGO)
-    //     return obstacleGO
-    // }
 
-    // public createBird(position: Vector2, pattern: BirdPattern = 'horizontal'): IGameObject {
-    //     return this.createMovingObstacle(position, 'bird', pattern, {
-    //         width: GAME_CONFIG.OBSTACLES.BIRD.WIDTH,
-    //         height: GAME_CONFIG.OBSTACLES.BIRD.HEIGHT,
-    //     })
-    // }
-    // public createUfo(position: Vector2, pattern: UfoPattern = 'circular'): IGameObject {
-    //     return this.createMovingObstacle(position, 'ufo', pattern, {
-    //         width: 40,
-    //         height: 20,
-    //     })
-    // }
+    private static createMovingObstacle(position: Vector2, type: MovingType): IGameObject {
+        const obstacle = new GameObject({
+            name: `${type}_${Date.now()}`,
+            tag: 'Item',
+            layer: 2,
+            position,
+        })
+        const renderer = new Renderer(obstacle)
+        const collider = new Collider(obstacle)
+        if (type === 'witch') {
+            renderer.setImageSize(
+                GAME_CONFIG.OBSTACLES.WITCH.WIDTH,
+                GAME_CONFIG.OBSTACLES.WITCH.HEIGHT
+            )
+            const image = GameEngine.getInstance()
+                .getResourceManager()
+                .getResource(GAME_CONFIG.OBSTACLES.WITCH.ICON) as HTMLImageElement
+            renderer.setImage(image)
+            collider.type = ColliderType.BOX
+            collider.setRenderer(renderer)
+            obstacle.addComponent(renderer)
+            obstacle.addComponent(collider)
+            const movingObstacle = new MovingObstacle(obstacle, type)
+            obstacle.addComponent(movingObstacle)
+        } else if (type === 'flying_monster') {
+            renderer.setImageSize(
+                GAME_CONFIG.OBSTACLES.FLYING_MONSTER.WIDTH,
+                GAME_CONFIG.OBSTACLES.FLYING_MONSTER.HEIGHT
+            )
+            const image = GameEngine.getInstance()
+                .getResourceManager()
+                .getResource(GAME_CONFIG.OBSTACLES.FLYING_MONSTER.ICON) as HTMLImageElement
+            renderer.setImage(image)
+            collider.type = ColliderType.BOX
+            collider.setRenderer(renderer)
+            obstacle.addComponent(renderer)
+            obstacle.addComponent(collider)
+            const movingObstacle = new MovingObstacle(obstacle, type)
+            obstacle.addComponent(movingObstacle)
+        }
 
-    // public createRandomObstacle(position: Vector2): IGameObject {
-    //     const obstacleTypes = [
-    //         {
-    //             type: 'static',
-    //             subtype: 'cactus',
-    //             chance: GAME_CONFIG.OBSTACLES.CACTUS.SPAWN_CHANCE,
-    //         },
-    //         { type: 'static', subtype: 'spike', chance: GAME_CONFIG.OBSTACLES.SPIKE.SPAWN_CHANCE },
-    //         { type: 'static', subtype: 'rock', chance: GAME_CONFIG.OBSTACLES.ROCK.SPAWN_CHANCE },
-    //         { type: 'moving', subtype: 'bird', chance: GAME_CONFIG.OBSTACLES.BIRD.SPAWN_CHANCE },
-    //         { type: 'moving', subtype: 'ufo', chance: GAME_CONFIG.OBSTACLES.UFO.SPAWN_CHANCE },
-    //     ] as const
+        GameEngine.getInstance().getCollisionManager().addCollider(collider)
+        GameEngine.getInstance().getCurrentScene()!.addGameObject(obstacle)
+        return obstacle
+    }
 
-    //     const randomValue = MathUtils.random(0, 1)
-    //     let cumulativeChance = 0
+    public static createWitch(position: Vector2): IGameObject {
+        return this.createMovingObstacle(position, 'witch')
+    }
+    public static createFlyingMonster(position: Vector2): IGameObject {
+        return this.createMovingObstacle(position, 'flying_monster')
+    }
 
-    //     for (const obstacle of obstacleTypes) {
-    //         cumulativeChance += obstacle.chance
-    //         if (randomValue <= cumulativeChance) {
-    //             if (obstacle.type === 'static') {
-    //                 return this.createStaticObstacle(position, obstacle.subtype)
-    //             } else {
-    //                 if (obstacle.subtype === 'bird') {
-    //                     const patterns: BirdPattern[] = ['horizontal', 'circular', 'zigzag']
-    //                     const randomPattern = MathUtils.randomChoice(patterns)
-    //                     return this.createBird(position, randomPattern)
-    //                 }
-    //                 if (obstacle.subtype === 'ufo') {
-    //                     const patterns: UfoPattern[] = ['circular', 'zigzag']
-    //                     const randomPattern = MathUtils.randomChoice(patterns)
-    //                     return this.createUfo(position, randomPattern)
-    //                 }
-    //             }
-    //             break
-    //         }
-    //     }
-    //     return this.createCactus(position)
-    // }
+    public static createRandomMovingObstacle(position: Vector2): IGameObject {
+        const chances = [
+            { type: 'witch', chance: GAME_CONFIG.OBSTACLES.WITCH.SPAWN_CHANCE },
+            { type: 'flying_monster', chance: GAME_CONFIG.OBSTACLES.FLYING_MONSTER.SPAWN_CHANCE },
+        ] as { type: MovingType; chance: number }[]
+
+        const total = chances.reduce((sum, item) => sum + item.chance, 0)
+        let rand = MathUtils.random() * total
+
+        for (const item of chances) {
+            if (rand < item.chance) {
+                return this.createMovingObstacle(position, item.type)
+            }
+            rand -= item.chance
+        }
+
+        return this.createMovingObstacle(position, 'witch')
+    }
+
+    public static createRandomObstacleByLevel(position: Vector2): IGameObject {
+        const level = ScoreManager.getCurrentDifficultyLevel()
+        const candidates: {
+            type: StaticType | MovingType
+            chance: number
+            create: (pos: Vector2) => IGameObject
+        }[] = []
+
+        if (level >= GAME_CONFIG.OBSTACLES.LANDED_SPIKE.SPAWN_LEVEL) {
+            candidates.push({
+                type: 'landed_spike',
+                chance: GAME_CONFIG.OBSTACLES.LANDED_SPIKE.SPAWN_CHANCE,
+                create: (pos) => this.createLandedSpike(pos),
+            })
+        }
+
+        if (level >= GAME_CONFIG.OBSTACLES.FLYING_MONSTER.SPAWN_LEVEL) {
+            candidates.push({
+                type: 'flying_monster',
+                chance: GAME_CONFIG.OBSTACLES.FLYING_MONSTER.SPAWN_CHANCE,
+                create: (pos) => this.createFlyingMonster(pos),
+            })
+        }
+        if (level >= GAME_CONFIG.OBSTACLES.WITCH.SPAWN_LEVEL) {
+            candidates.push({
+                type: 'witch',
+                chance: GAME_CONFIG.OBSTACLES.WITCH.SPAWN_CHANCE,
+                create: (pos) => this.createWitch(pos),
+            })
+        }
+
+        const total = candidates.reduce((sum, item) => sum + item.chance, 0)
+        if (total === 0) {
+            return this.createLandedSpike(position)
+        }
+
+        let rand = MathUtils.random() * total
+        for (const item of candidates) {
+            if (rand < item.chance) {
+                return item.create(position)
+            }
+            rand -= item.chance
+        }
+
+        return this.createLandedSpike(position)
+    }
 }

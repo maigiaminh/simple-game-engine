@@ -54,6 +54,7 @@ export class GameCore {
         audio?: { name: string; url: string }[]
     }): Promise<void> {
         const resourceManager = this.engine.getResourceManager()
+        const audioManager = this.engine.getAudioManager()
         if (assets.images) {
             for (const imageData of assets.images) {
                 await resourceManager.loadResource(
@@ -65,11 +66,7 @@ export class GameCore {
         }
         if (assets.audio) {
             for (const audioData of assets.audio) {
-                await resourceManager.loadResource(
-                    audioData.name,
-                    audioData.url,
-                    ResourceType.AUDIO
-                )
+                await audioManager.loadSound(audioData.name, audioData.url)
             }
         }
     }

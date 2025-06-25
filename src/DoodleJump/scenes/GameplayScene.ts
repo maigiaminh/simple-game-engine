@@ -37,6 +37,8 @@ export class GameplayScene extends Scene {
     protected async onLoad(): Promise<void> {
         console.log('Loading Gameplay Scene...')
         this.gameEngine = GameEngine.getInstance()
+        this.gameState = GameState.PLAYING
+        this.isGameOver = false
         await this.createCamera()
         await this.createPlayer()
         await this.createPlatformManager()
@@ -138,6 +140,14 @@ export class GameplayScene extends Scene {
             GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.loop
         )
 
+        animatedRenderer.addAnimation(
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frames,
+            this.gameEngine,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.loop
+        )
+
         animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
         this.player.addComponent(animatedRenderer)
 
@@ -230,12 +240,12 @@ export class GameplayScene extends Scene {
     }
 
     private onPlayerFell(event: GameEvent): void {
-        console.log('Player fell! Game Over')
         this.triggerGameOver()
     }
 
     private onPlayerHitObstacle(event: GameEvent): void {
-        console.log('Player hit obstacle! Game Over')
+        if (this.gameState === GameState.GAMEOVER || this.isGameOver) return
+        this.gameState = GameState.GAMEOVER
         this.triggerGameOver()
     }
 
@@ -256,7 +266,6 @@ export class GameplayScene extends Scene {
         const cameraY = this.getMainCamera()!.getGameObject().getPosition().y
 
         if (position.y > cameraY + CONFIG.CANVAS.HEIGHT / 2) {
-            console.log('Player fell below the camera view! Game Over')
             this.triggerGameOver()
             return
         }

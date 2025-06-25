@@ -14,6 +14,7 @@ export class MovingPlatform extends Platform {
     constructor(gameObject: IGameObject) {
         super(gameObject)
         this.transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        this.setPlatformType('moving')
     }
 
     update(deltaTime: number): void {

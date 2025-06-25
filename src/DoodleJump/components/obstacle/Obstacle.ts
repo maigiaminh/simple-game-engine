@@ -4,19 +4,16 @@ import { GameEngine } from '../../../core/GameEngine'
 import { CollisionLayer, ENGINE_EVENTS } from '../../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent } from '../../../types/interface'
 import { GAME_EVENTS } from '../../types/enums'
+import { Player } from '../Player'
 
 export abstract class Obstacle extends Component {
     protected obstacleType: string
     protected isActive = true
-    protected spawnTime: number
 
     constructor(gameObject: IGameObject, obstacleType: string) {
         super(gameObject)
         this.obstacleType = obstacleType
-        this.spawnTime = Date.now()
-    }
 
-    public onAwake(): void {
         this.setupCollider()
         this.setupRenderer()
         this.setupObstacleSpecific()
@@ -48,23 +45,23 @@ export abstract class Obstacle extends Component {
     }
 
     protected onPlayerHit(player: IGameObject): void {
-        this.dispatchEvent(GAME_EVENTS.PLAYER_HIT_OBSTACLE, {
-            obstacle: this.gameObject,
-            player: player,
-            obstacleType: this.obstacleType,
-        })
-
-        this.deactivate()
+        player
+            .getComponent(Player as ComponentConstructor<Player>)!
+            .dispatchEvent(GAME_EVENTS.PLAYER_HIT_OBSTACLE, {
+                obstacle: this.gameObject,
+                player: player,
+                obstacleType: this.obstacleType,
+            })
     }
 
     public deactivate(): void {
         this.isActive = false
         this.gameObject.setActive(false)
-
         const collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)
         if (collider && GameEngine.getInstance()) {
             GameEngine.getInstance().getCollisionManager().removeCollider(collider)
         }
+        GameEngine.getInstance().getCurrentScene()!.removeGameObject(this.gameObject)
     }
 
     public isObstacleActive(): boolean {

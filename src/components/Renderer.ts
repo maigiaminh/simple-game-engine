@@ -6,6 +6,13 @@ import { Transform } from './Transform'
 export class Renderer extends Component {
     public color: RGBAColor = Color.WHITE
     public visible = true
+    public scaleX = 1
+    public scaleY = 1
+
+    public setFlip(x: number, y: number): void {
+        this.scaleX = x
+        this.scaleY = y
+    }
     protected image: HTMLImageElement | null = null
     protected imageWidth: number | null = null
     protected imageHeight: number | null = null
@@ -59,7 +66,7 @@ export class Renderer extends Component {
 
         ctx.translate(worldPos.x, worldPos.y)
         ctx.rotate(worldRot)
-        ctx.scale(worldScale.x, worldScale.y)
+        ctx.scale(worldScale.x * this.scaleX, worldScale.y * this.scaleY)
 
         if (this.image) {
             const drawWidth = this.imageWidth ?? this.image.width

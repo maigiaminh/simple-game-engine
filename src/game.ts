@@ -171,19 +171,72 @@ import { GameplayScene } from './DoodleJump/scenes/GameplayScene'
                         url: 'assets/images/player/jump/player_jump_3.png',
                     },
                     {
-                        name: 'landed_spike',
+                        name: GAME_CONFIG.IMAGES.PLAYERS.PLAYER_DEAD,
+                        url: 'assets/images/player/dead/player_dead.png',
+                    },
+                    {
+                        name: GAME_CONFIG.OBSTACLES.LANDED_SPIKE.ICON,
                         url: 'assets/images/obstacle/landed_spike.png',
                     },
                     {
-                        name: 'trampoline',
+                        name: GAME_CONFIG.OBSTACLES.FLYING_MONSTER.ICON,
+                        url: 'assets/images/obstacle/flying_monster.png',
+                    },
+                    {
+                        name: GAME_CONFIG.OBSTACLES.WITCH.ICON,
+                        url: 'assets/images/obstacle/witch.png',
+                    },
+                    {
+                        name: GAME_CONFIG.ITEMS.TRAMPOLINE.ICON,
                         url: 'assets/images/items/trampoline.png',
                     },
                     {
-                        name: 'jetpack',
+                        name: GAME_CONFIG.ITEMS.JETPACK.ICON,
                         url: 'assets/images/items/jetpack.png',
                     },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.TREE_1,
+                        url: 'assets/images/decoration/tree_1.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.TREE_2,
+                        url: 'assets/images/decoration/tree_2.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.TREE_3,
+                        url: 'assets/images/decoration/tree_3.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.TREE_4,
+                        url: 'assets/images/decoration/tree_4.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.LAMP_POST_1,
+                        url: 'assets/images/decoration/lamp_post_1.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.DECORATIONS.LAMP_POST_2,
+                        url: 'assets/images/decoration/lamp_post_2.png',
+                    },
                 ],
-                audio: [],
+                audio: [
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.JUMP,
+                        url: 'assets/audio/sfx/jump.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.TRAMPOLINE,
+                        url: 'assets/audio/sfx/trampoline.m4a',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.JETPACK,
+                        url: 'assets/audio/sfx/jetpack.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.WALK,
+                        url: 'assets/audio/sfx/walk.mp3',
+                    },
+                ],
             },
         })
     })()

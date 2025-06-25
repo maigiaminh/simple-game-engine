@@ -8,6 +8,7 @@ import { Scene } from '../../core/Scene'
 import { UIAnchor } from '../../types/enums'
 import { Color } from '../../utils/Color'
 import { Vector2 } from '../../utils/Vector2'
+import { GAME_CONFIG } from '../config/GameplayConfig'
 
 export class GameOverScene extends Scene {
     private gameEngine!: GameEngine
@@ -45,7 +46,7 @@ export class GameOverScene extends Scene {
 
     private loadScores(): void {
         try {
-            const savedHighScore = localStorage.getItem('doodleJump_highScore')
+            const savedHighScore = localStorage.getItem(GAME_CONFIG.HIGH_SCORE_KEY)
             this.highScore = savedHighScore ? parseInt(savedHighScore, 10) : 0
 
             this.finalScore = Math.floor(Math.random() * 1000)
@@ -53,7 +54,7 @@ export class GameOverScene extends Scene {
             this.isNewHighScore = this.finalScore > this.highScore
             if (this.isNewHighScore) {
                 this.highScore = this.finalScore
-                localStorage.setItem('doodleJump_highScore', this.highScore.toString())
+                localStorage.setItem(GAME_CONFIG.HIGH_SCORE_KEY, this.highScore.toString())
             }
         } catch (error) {
             console.warn('Error loading scores:', error)

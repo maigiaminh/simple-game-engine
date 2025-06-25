@@ -17,6 +17,7 @@ export class Player extends Component {
     private isUsingJetpack = false
     private jetpack = GAME_CONFIG.ITEMS.JETPACK
     private currentFuel = 0
+    private isDead = false
 
     private inputLeft = false
     private inputRight = false
@@ -70,6 +71,8 @@ export class Player extends Component {
             this.onCollisionExit.bind(this)
         )
 
+        this.addEventListener(GAME_EVENTS.PLAYER_HIT_OBSTACLE, this.onPlayerHitObstacle.bind(this))
+
         GameEngine.getInstance().getCollisionManager().addCollider(this.collider)
 
         this.gameObject.tag = 'Player'
@@ -101,6 +104,11 @@ export class Player extends Component {
 
     private handleJetpack(deltaTime: number): void {
         if (!this.isUsingJetpack) return
+        if (this.isDead || this.currentFuel <= 0) {
+            this.setUsingJetpack(false)
+            return
+        }
+
         const dt = deltaTime * 0.001
 
         this.currentFuel -= this.jetpack.FUEL_CONSUMPTION_RATE * dt
@@ -110,6 +118,7 @@ export class Player extends Component {
     }
 
     private handleInput(): void {
+        if (this.isDead) return
         const velocity = this.rigidBody.getVelocity()
 
         if (this.inputLeft) {
@@ -126,6 +135,9 @@ export class Player extends Component {
     }
 
     private jump(): void {
+        if (!this.isUsingJetpack) {
+            GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.JUMP)
+        }
         this.rigidBody.setVelocity(
             new Vector2(this.rigidBody.getVelocity().x, GAME_CONFIG.PLAYER.JUMP_FORCE)
         )
@@ -152,14 +164,11 @@ export class Player extends Component {
         } else if (position.x > CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
             this.transform.setPosition(new Vector2(-GAME_CONFIG.PLAYER.WIDTH / 2, position.y))
         }
-
-        // if (position.y > CONFIG.CANVAS.HEIGHT + 200) {
-        //     this.respawn()
-        // }
     }
 
     private updateVisuals(): void {
         if (!this.animatedRenderer) return
+        if (this.isDead) return
 
         const velocity = this.rigidBody.getVelocity()
 
@@ -227,6 +236,14 @@ export class Player extends Component {
         this.isGrounded = false
         this.canJump = false
         this.rigidBody.isGrounded = false
+    }
+
+    private onPlayerHitObstacle(event: GameEvent): void {
+        if (this.isDead) return
+        this.isDead = true
+        this.rigidBody.setVelocity(new Vector2(0, GAME_CONFIG.PLAYER.JUMP_FORCE))
+        this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name)
+        this.getGameObject().destroy
     }
 
     public getScore(): number {

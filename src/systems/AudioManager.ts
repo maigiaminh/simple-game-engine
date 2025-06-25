@@ -71,9 +71,20 @@ export class AudioManager extends EventEmitter {
         }
     }
 
-    public playSound(name: string, options: PlaySoundOptions = {}): void {
+    public playSound(name: string, override = false, options: PlaySoundOptions = {}): void {
         if (!this.enabled || !this.audioContext || !this.masterGainNode) {
             return
+        }
+
+        // if (!override) {
+        //     this.stopSound(name)
+        // }
+        if (!override && this.activeSources.size > 0) {
+            for (const audioSource of this.activeSources) {
+                if (audioSource.clip.name === name && audioSource.isPlaying) {
+                    return
+                }
+            }
         }
 
         const clip = this.clips.get(name)

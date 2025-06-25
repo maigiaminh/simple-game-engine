@@ -8,6 +8,7 @@ import { Collider } from '../../../components/Collider'
 import { Trampoline } from './Trampoline'
 import { ColliderType } from '../../../types/enums'
 import { Jetpack } from './Jetpack'
+import { MathUtils } from '../../../utils/MathUtils'
 
 export class ItemFactory {
     private static createItems(position: Vector2, type: ItemType): IGameObject {
@@ -60,5 +61,24 @@ export class ItemFactory {
 
     public static createJetpack(position: Vector2): IGameObject {
         return this.createItems(position, 'jetpack')
+    }
+
+    public static createRandomItem(position: Vector2): IGameObject {
+        const chances = [
+            { type: 'trampoline', chance: GAME_CONFIG.ITEMS.TRAMPOLINE.SPAWN_CHANCE },
+            { type: 'jetpack', chance: GAME_CONFIG.ITEMS.JETPACK.SPAWN_CHANCE },
+        ] as { type: ItemType; chance: number }[]
+
+        const total = chances.reduce((sum, item) => sum + item.chance, 0)
+        let rand = MathUtils.random() * total
+
+        for (const item of chances) {
+            if (rand < item.chance) {
+                return this.createItems(position, item.type)
+            }
+            rand -= item.chance
+        }
+
+        return this.createItems(position, 'trampoline')
     }
 }

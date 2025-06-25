@@ -13,6 +13,8 @@ import { Platform } from '../components/Platform'
 import { GameEngine } from '../../core/GameEngine'
 import { ScoreManager } from './ScoreManager'
 import { MovingPlatform } from '../components/MovingPlatform'
+import { ObstacleFactory } from '../components/obstacle/ObstacleFactory'
+import { ItemFactory } from '../components/items/ItemFactory'
 
 export class PlatformManager extends Component {
     private gameEngine: GameEngine
@@ -57,7 +59,7 @@ export class PlatformManager extends Component {
         const groundGO = new GameObject({
             name: 'Ground',
             tag: 'Ground',
-            layer: 0,
+            layer: 2,
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, CONFIG.CANVAS.HEIGHT),
         })
 
@@ -79,7 +81,7 @@ export class PlatformManager extends Component {
 
     private generateInitialPlatforms(): void {
         for (let i = 1; i < GAME_CONFIG.PLATFORM.INITIAL_COUNT; i++) {
-            const y = CONFIG.CANVAS.HEIGHT - 100 - i * GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
+            const y = CONFIG.CANVAS.HEIGHT - 32 - i * GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
             this.createPlatformWithConstraint(y)
         }
     }
@@ -101,7 +103,7 @@ export class PlatformManager extends Component {
         const platformGO = new GameObject({
             name: 'Platform',
             tag: 'Platform',
-            layer: 1,
+            layer: 2,
             position: position,
         })
 
@@ -126,13 +128,11 @@ export class PlatformManager extends Component {
         if (MathUtils.random(0, 1) < movingPlatformSpawnChance) {
             platform = new MovingPlatform(platformGO)
         }
-
         platformGO.addComponent(platform)
 
         this.scene.addGameObject(platformGO)
         this.platforms.push(platform)
-
-        this.maybeAddObjectOnPlatform(platformGO)
+        if (platform.getPlatformType() === 'normal') this.maybeAddObjectOnPlatform(platformGO)
         this.gameEngine.getCollisionManager().addCollider(collider)
 
         return platformGO
@@ -141,6 +141,72 @@ export class PlatformManager extends Component {
     private maybeAddObjectOnPlatform(platformGO: IGameObject): void {
         const platform = platformGO.getComponent(Platform as ComponentConstructor<Platform>)
         if (platform === null) return
+        if (platform.containsObject()) return
+
+        const level = ScoreManager.getCurrentDifficultyLevel()
+        const obstacleChance = Math.min(0.1 + level * 0.05, 0.4)
+        const itemChance = 0.1
+        const decoChance = 0.25
+
+        const rand = MathUtils.random(0, 1)
+        const spawnPos = platformGO
+            .getPosition()
+            .add(new Vector2(0, -GAME_CONFIG.PLATFORM.HEIGHT / 2))
+
+        if (rand < obstacleChance) {
+            const obstacleGO = ObstacleFactory.createRandomObstacleByLevel(spawnPos)
+            this.scene.addGameObject(obstacleGO)
+            platform.updateObjectStatus?.(true)
+            platform.setObject?.(obstacleGO)
+            return
+        }
+
+        if (rand < obstacleChance + itemChance) {
+            const itemGO = ItemFactory.createRandomItem(spawnPos.add(new Vector2(0, -24)))
+            this.scene.addGameObject(itemGO)
+            platform.updateObjectStatus?.(true)
+            platform.setObject?.(itemGO)
+            return
+        }
+
+        if (rand < obstacleChance + itemChance + decoChance) {
+            const decoGO = this.createDecorationOnPlatform(platformGO)
+            if (decoGO) {
+                this.scene.addGameObject(decoGO)
+                platform.updateObjectStatus?.(true)
+                platform.setObject?.(decoGO)
+            }
+        }
+    }
+
+    private createDecorationOnPlatform(platformGO: IGameObject): IGameObject | null {
+        type DecorationKey = keyof typeof GAME_CONFIG.IMAGES.DECORATIONS
+        const decoTypes: DecorationKey[] = Object.keys(
+            GAME_CONFIG.IMAGES.DECORATIONS
+        ) as DecorationKey[]
+        const type = MathUtils.randomChoice(decoTypes)
+        const platformPos = platformGO.getPosition()
+        const pos = platformPos.add(
+            new Vector2(
+                MathUtils.random(-30, 30),
+                -GAME_CONFIG.PLATFORM.HEIGHT / 2 - GAME_CONFIG.DECORATION.HEIGHT / 2 + 12
+            )
+        )
+
+        const decoGO = new GameObject({
+            name: `Deco_${type}`,
+            tag: 'Decoration',
+            layer: 2,
+            position: pos,
+        })
+        const renderer = new Renderer(decoGO)
+        const image = this.gameEngine
+            .getResourceManager()
+            .getResource(GAME_CONFIG.IMAGES.DECORATIONS[type]) as HTMLImageElement
+        renderer.setImage(image)
+        renderer.setImageSize(GAME_CONFIG.DECORATION.WIDTH, GAME_CONFIG.DECORATION.HEIGHT)
+        decoGO.addComponent(renderer)
+        return decoGO
     }
 
     private generateNewPlatforms(): void {

@@ -41,4 +41,8 @@ export class Platform extends Component {
     public getPlatformType(): PlatformType {
         return this.type
     }
+
+    public setPlatformType(type: PlatformType): void {
+        this.type = type
+    }
 }
