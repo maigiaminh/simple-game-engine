@@ -1,4 +1,4 @@
-type PlatformType = 'normal' | 'fragile' | 'moving' | 'spring'
+type PlatformType = 'normal' | 'breakable' | 'moving'
 type StaticType = 'landed_spike'
 type ItemType = 'trampoline' | 'jetpack'
 type MovingType = 'witch' | 'flying_monster'

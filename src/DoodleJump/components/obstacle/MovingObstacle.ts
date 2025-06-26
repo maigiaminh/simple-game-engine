@@ -113,10 +113,10 @@ export class MovingObstacle extends Obstacle {
         const deltaX = this.moveDirection.x * this.moveSpeed * (deltaTime / 1000)
         let newX = currentPos.x + deltaX
 
-        if (newX < -GAME_CONFIG.PLAYER.WIDTH / 2) {
+        if (newX < -CONFIG.CANVAS) {
             newX = CONFIG.CANVAS.WIDTH
-        } else if (newX > CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
-            newX = -GAME_CONFIG.PLAYER.WIDTH / 2
+        } else if (newX > CONFIG.CANVAS.WIDTH) {
+            newX = 0
         }
 
         return new Vector2(newX, currentPos.y)

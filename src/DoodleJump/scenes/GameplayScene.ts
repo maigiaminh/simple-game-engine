@@ -153,11 +153,7 @@ export class GameplayScene extends Scene {
         animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
         this.player.addComponent(animatedRenderer)
 
-        const collider = Collider.createBox(
-            this.player,
-            GAME_CONFIG.PLAYER.WIDTH,
-            GAME_CONFIG.PLAYER.HEIGHT
-        )
+        const collider = new Collider(this.player)
         collider.layers = [CollisionLayer.PLAYER]
         collider.mask = [CollisionLayer.GROUND, CollisionLayer.ENVIRONMENT]
         this.player.addComponent(collider)

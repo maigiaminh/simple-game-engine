@@ -60,7 +60,7 @@ export class CameraFollow extends Camera {
             this.highestY = targetPos.y
         }
 
-        const desiredY = this.highestY + this.offset.y
+        const desiredY = this.highestY + this.offset.y - 100
         const desiredPos = new Vector2(CONFIG.CANVAS.WIDTH / 2, desiredY)
 
         if (this.player) {

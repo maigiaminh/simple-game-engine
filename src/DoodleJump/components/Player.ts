@@ -10,6 +10,7 @@ import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../
 import { Vector2 } from '../../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameplayConfig'
 import { GAME_EVENTS } from '../types/enums'
+import { BreakablePlatform } from './BreakablePlatform'
 
 export class Player extends Component {
     private isGrounded = false
@@ -158,12 +159,12 @@ export class Player extends Component {
     private checkBounds(): void {
         const position = this.transform.getWorldPosition()
 
-        if (position.x < -GAME_CONFIG.PLAYER.WIDTH / 2) {
+        if (position.x < this.collider.width / 2) {
             this.transform.setPosition(
-                new Vector2(CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2, position.y)
+                new Vector2(CONFIG.CANVAS.WIDTH + this.collider.width / 2, position.y)
             )
-        } else if (position.x > CONFIG.CANVAS.WIDTH + GAME_CONFIG.PLAYER.WIDTH / 2) {
-            this.transform.setPosition(new Vector2(-GAME_CONFIG.PLAYER.WIDTH / 2, position.y))
+        } else if (position.x > CONFIG.CANVAS.WIDTH + this.collider.width / 2) {
+            this.transform.setPosition(new Vector2(this.collider.width / 2, position.y))
         }
     }
 
@@ -220,6 +221,14 @@ export class Player extends Component {
                     .getComponent(Transform as ComponentConstructor<Transform>)!
                     .getWorldPosition().y
         ) {
+            if (other.getGameObject().tag === 'breakable_platform') {
+                const breakablePlatform = other
+                    .getGameObject()
+                    .getComponent(BreakablePlatform as ComponentConstructor<BreakablePlatform>)
+                if (breakablePlatform) {
+                    breakablePlatform.breakPlatform()
+                }
+            }
             if (!this.rigidBody.isGrounded) this.rigidBody.isGrounded = true
             const transform = this.gameObject.getComponent(
                 Transform as ComponentConstructor<Transform>

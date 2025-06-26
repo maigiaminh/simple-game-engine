@@ -15,6 +15,7 @@ import { ScoreManager } from './ScoreManager'
 import { MovingPlatform } from '../components/MovingPlatform'
 import { ObstacleFactory } from '../components/obstacle/ObstacleFactory'
 import { ItemFactory } from '../components/items/ItemFactory'
+import { BreakablePlatform } from '../components/BreakablePlatform'
 
 export class PlatformManager extends Component {
     private gameEngine: GameEngine
@@ -124,11 +125,14 @@ export class PlatformManager extends Component {
         platformGO.addComponent(collider)
 
         let platform = new Platform(platformGO)
-
-        const movingPlatformSpawnChance = ScoreManager.getCurrentDifficultyLevel() * 0.05
-
-        if (MathUtils.random(0, 1) < movingPlatformSpawnChance) {
+        const rand = MathUtils.random(0, 1)
+        if (rand < GAME_CONFIG.MOVING_PLATFORM_SPAWN_CHANCE) {
             platform = new MovingPlatform(platformGO)
+        } else if (
+            rand <
+            GAME_CONFIG.BREAKABLE_PLATFORM_SPAWN_CHANCE + GAME_CONFIG.MOVING_PLATFORM_SPAWN_CHANCE
+        ) {
+            platform = new BreakablePlatform(platformGO)
         }
         platformGO.addComponent(platform)
 

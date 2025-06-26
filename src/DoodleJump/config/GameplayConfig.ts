@@ -1,7 +1,5 @@
 export const GAME_CONFIG = {
     PLAYER: {
-        WIDTH: 32,
-        HEIGHT: 32,
         JUMP_FORCE: -800,
         MOVE_SPEED: 600,
         MAX_FALL_SPEED: 2200,
@@ -96,6 +94,10 @@ export const GAME_CONFIG = {
             LAMP_POST_1: 'lamp_post_1',
             LAMP_POST_2: 'lamp_post_2',
         },
+
+        BREAKABLE_PLATFORM: 'breakable_platform',
+        BROKEN_PLATFORM: 'broken_platform',
+
         GROUND: 'ground',
         PLAYERS: {
             PLAYER_IDLE: 'player_idle',
@@ -209,4 +211,6 @@ export const GAME_CONFIG = {
     HIGH_SCORE_KEY: 'doodleJump_highScore',
     CURRENT_SCORE_KEY: 'doodleJump_currentScore',
     AUDIO_ENABLED_KEY: 'doodleJump_audioEnabled',
+    MOVING_PLATFORM_SPAWN_CHANCE: 0.2,
+    BREAKABLE_PLATFORM_SPAWN_CHANCE: 0.1,
 }

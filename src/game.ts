@@ -47,6 +47,14 @@ import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
                         url: 'assets/images/platform/platform_5.png',
                     },
                     {
+                        name: GAME_CONFIG.IMAGES.BREAKABLE_PLATFORM,
+                        url: 'assets/images/platform/breakable_platform.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BROKEN_PLATFORM,
+                        url: 'assets/images/platform/broken_platform.png',
+                    },
+                    {
                         name: GAME_CONFIG.IMAGES.PLAYERS.PLAYER_IDLE + '_1',
                         url: 'assets/images/player/idle/player_idle_1.png',
                     },
