@@ -12,6 +12,7 @@ export const GAME_CONFIG = {
         WIDTH: 196,
         HEIGHT: 64,
         SPAWN_DISTANCE: 96,
+        MAX_SPAWN_DISTANCE: 400,
         INITIAL_COUNT: 10,
     },
     OBSTACLES: {

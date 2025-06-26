@@ -131,7 +131,7 @@ export class Player extends Component {
             this.rigidBody.setVelocity(new Vector2(velocity.x * 0.8, velocity.y))
         }
 
-        if (this.inputJump && this.isUsingJetpack) {
+        if (this.isUsingJetpack) {
             this.jump()
         }
     }

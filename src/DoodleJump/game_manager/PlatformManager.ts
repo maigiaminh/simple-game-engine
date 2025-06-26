@@ -24,6 +24,7 @@ export class PlatformManager extends Component {
     private scene!: IScene
     private lastPlatformX: number = CONFIG.CANVAS.WIDTH / 2
     private readonly MAX_PLATFORM_X_DIFF = CONFIG.CANVAS.WIDTH / 2
+    private spawnDistance: number = GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
 
     constructor(gameObject: IGameObject, scene: IScene) {
         super(gameObject)
@@ -40,8 +41,17 @@ export class PlatformManager extends Component {
     public update(deltaTime: number): void {
         this.generateNewPlatforms()
         this.removeOldPlatforms()
+        this.increateSpawnDistance()
     }
 
+    private increateSpawnDistance(): void {
+        this.spawnDistance =
+            GAME_CONFIG.PLATFORM.SPAWN_DISTANCE *
+            ((ScoreManager.getCurrentDifficultyLevel() - 1) * 0.25 + 1)
+        if (this.spawnDistance > GAME_CONFIG.PLATFORM.MAX_SPAWN_DISTANCE) {
+            this.spawnDistance = GAME_CONFIG.PLATFORM.MAX_SPAWN_DISTANCE
+        }
+    }
     private loadPlatformImages(): void {
         for (const key of Object.keys(GAME_CONFIG.IMAGES.PLATFORMS)) {
             this.platformsImg.push(
@@ -228,7 +238,7 @@ export class PlatformManager extends Component {
         const generationThreshold = cameraY - CONFIG.CANVAS.HEIGHT / 2 - 200
 
         while (highestY > generationThreshold) {
-            highestY -= GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
+            highestY -= this.spawnDistance
             this.createPlatformWithConstraint(highestY)
         }
     }
