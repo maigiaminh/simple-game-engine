@@ -152,13 +152,13 @@ export class Collider extends Component implements Collider {
     public update(deltaTime: number): void {}
 
     public render(ctx: CanvasRenderingContext2D): void {
-        // if (!this.gameObject.isVisible()) return
-        // const bounds = this.getBounds()
-        // ctx.save()
-        // ctx.strokeStyle = 'red'
-        // ctx.lineWidth = 2
-        // ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height)
-        // ctx.restore()
+        if (!this.gameObject.isVisible()) return
+        const bounds = this.getBounds()
+        ctx.save()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 2
+        ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height)
+        ctx.restore()
     }
 
     public serialize(): SerializedData {

@@ -13,9 +13,9 @@ export class RigidBody extends Component {
     public isGrounded = false
 
     private force: Vector2 = Vector2.zero()
-    private static readonly GRAVITY: Vector2 = new Vector2(0, 500)
+    private static readonly GRAVITY: Vector2 = new Vector2(0, 900)
 
-    constructor(gameObject: IGameObject, mass = 1) {
+    constructor(gameObject: IGameObject, mass = 5) {
         super(gameObject)
         this.mass = mass
     }

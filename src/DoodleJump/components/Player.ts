@@ -55,7 +55,7 @@ export class Player extends Component {
         this.animatedRenderer.setVisible(true)
 
         this.collider.setColliderSize(
-            this.animatedRenderer.getWidth() - 32,
+            this.animatedRenderer.getWidth() - 48,
             this.animatedRenderer.getHeight()
         )
         this.collider.setColliderType(ColliderType.BOX)
@@ -130,7 +130,7 @@ export class Player extends Component {
             this.rigidBody.setVelocity(new Vector2(velocity.x * 0.8, velocity.y))
         }
 
-        if (this.inputJump && ((this.canJump && this.isGrounded) || this.isUsingJetpack)) {
+        if (this.inputJump && this.isUsingJetpack) {
             this.jump()
         }
     }
@@ -214,7 +214,7 @@ export class Player extends Component {
         if (other.isTrigger) return
         if (
             this.rigidBody.velocity.y > 0 &&
-            this.transform.getWorldPosition().y <
+            this.transform.getWorldPosition().y + this.collider.height * 0.75 <
                 other
                     .getGameObject()
                     .getComponent(Transform as ComponentConstructor<Transform>)!
@@ -237,9 +237,11 @@ export class Player extends Component {
                         8
                 )
             )
+
             this.isGrounded = true
             this.canJump = true
             this.rigidBody.setVelocity(new Vector2(this.rigidBody.getVelocity().x, 0))
+            this.jump()
         }
     }
 
@@ -253,6 +255,8 @@ export class Player extends Component {
     private onPlayerHitObstacle(event: GameEvent): void {
         if (this.isDead) return
         this.isDead = true
+        this.gameObject.removeComponent(Collider as ComponentConstructor<Collider>)
+        GameEngine.getInstance().getCollisionManager().removeCollider(this.collider)
         this.rigidBody.setVelocity(new Vector2(0, GAME_CONFIG.PLAYER.JUMP_FORCE))
         this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name)
         this.getGameObject().destroy
@@ -264,6 +268,14 @@ export class Player extends Component {
         const startY = CONFIG.CANVAS.HEIGHT - 150
         const currentY = this.transform.getWorldPosition().y
         return Math.max(0, Math.floor((startY - currentY) / 10))
+    }
+
+    public setPlayerDead(isDead: boolean): void {
+        this.isDead = isDead
+    }
+
+    public isPlayerDead(): boolean {
+        return this.isDead
     }
 
     public render(ctx: CanvasRenderingContext2D): void {}

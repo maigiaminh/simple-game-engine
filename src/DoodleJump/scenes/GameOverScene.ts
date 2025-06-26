@@ -1,8 +1,10 @@
+import { AnimatedRenderer } from '../../components/AnimatedRenderer'
 import { EnhancedButton } from '../../components/EnhancedButton'
 import { EnhancedLabel } from '../../components/EnhancedLabel'
 import { EnhancedPanel } from '../../components/EnhancedPanel'
 import { ParticleSystem } from '../../components/ParticleSystem'
 import { Renderer } from '../../components/Renderer'
+import { RigidBody } from '../../components/RigidBody'
 import { UIAnimator, Easing } from '../../components/UIAnimator'
 import { CONFIG } from '../../config/Config'
 import { GameEngine } from '../../core/GameEngine'
@@ -45,6 +47,8 @@ export class GameOverScene extends Scene {
 
         await this.createEffectSystems()
 
+        await this.createPlayerDead()
+
         await this.createUI()
 
         await this.playEntranceAnimation()
@@ -54,6 +58,10 @@ export class GameOverScene extends Scene {
 
     protected async onUnload(): Promise<void> {
         console.log('Unloading Enhanced Game Over Scene...')
+        const uiManager = this.gameEngine.getUIManager()
+        if (uiManager && this.backgroundPanel) {
+            uiManager.removeRootElement(this.backgroundPanel)
+        }
     }
 
     private loadScores(): void {
@@ -96,6 +104,27 @@ export class GameOverScene extends Scene {
         this.addUIToManager()
     }
 
+    private async createPlayerDead(): Promise<void> {
+        const playerDeadGO = new GameObject({
+            name: 'PlayerDead',
+            position: new Vector2(CONFIG.CANVAS.WIDTH / 2, -CONFIG.CANVAS.HEIGHT / 2),
+        })
+
+        const rigidBody = new RigidBody(playerDeadGO, 1)
+        rigidBody.useGravity = true
+        const animatedRenderer = new AnimatedRenderer(playerDeadGO)
+        animatedRenderer.addAnimation(
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frames,
+            this.gameEngine,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.loop
+        )
+        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name)
+        playerDeadGO.addComponent(rigidBody)
+        playerDeadGO.addComponent(animatedRenderer)
+        this.addGameObject(playerDeadGO)
+    }
     private async createBackgroundPanel(): Promise<void> {
         const panelGO = new GameObject({
             name: 'GameOverPanel',

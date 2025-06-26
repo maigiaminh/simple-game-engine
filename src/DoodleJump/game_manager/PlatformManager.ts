@@ -75,6 +75,7 @@ export class PlatformManager extends Component {
         collider.layers = [CollisionLayer.GROUND]
         collider.mask = [CollisionLayer.PLAYER]
         groundGO.addComponent(collider)
+        this.platforms.push(new Platform(groundGO))
         this.scene.addGameObject(groundGO)
         this.gameEngine.getCollisionManager().addCollider(collider)
     }
@@ -82,11 +83,11 @@ export class PlatformManager extends Component {
     private generateInitialPlatforms(): void {
         for (let i = 1; i < GAME_CONFIG.PLATFORM.INITIAL_COUNT; i++) {
             const y = CONFIG.CANVAS.HEIGHT - 32 - i * GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
-            this.createPlatformWithConstraint(y)
+            this.createPlatformWithConstraint(y, false)
         }
     }
 
-    private createPlatformWithConstraint(y: number): IGameObject {
+    private createPlatformWithConstraint(y: number, createObstacle = true): IGameObject {
         const minX = Math.max(
             GAME_CONFIG.PLATFORM.WIDTH / 2,
             this.lastPlatformX - this.MAX_PLATFORM_X_DIFF
@@ -97,9 +98,9 @@ export class PlatformManager extends Component {
         )
         const x = MathUtils.random(minX, maxX)
         this.lastPlatformX = x
-        return this.createPlatform(new Vector2(x, y))
+        return this.createPlatform(new Vector2(x, y), createObstacle)
     }
-    private createPlatform(position: Vector2): IGameObject {
+    private createPlatform(position: Vector2, createObstacle = true): IGameObject {
         const platformGO = new GameObject({
             name: 'Platform',
             tag: 'Platform',
@@ -116,6 +117,7 @@ export class PlatformManager extends Component {
 
         const collider = new Collider(platformGO)
         collider.setRenderer(renderer)
+        collider.setColliderSize(renderer.getWidth() - 12, renderer.getHeight())
         collider.setColliderType(ColliderType.POLYGON)
         collider.layers = [CollisionLayer.GROUND]
         collider.mask = [CollisionLayer.PLAYER]
@@ -132,7 +134,8 @@ export class PlatformManager extends Component {
 
         this.scene.addGameObject(platformGO)
         this.platforms.push(platform)
-        if (platform.getPlatformType() === 'normal') this.maybeAddObjectOnPlatform(platformGO)
+        if (createObstacle)
+            if (platform.getPlatformType() === 'normal') this.maybeAddObjectOnPlatform(platformGO)
         this.gameEngine.getCollisionManager().addCollider(collider)
 
         return platformGO
@@ -231,7 +234,7 @@ export class PlatformManager extends Component {
         this.platforms = this.platforms.filter((platform) => {
             const pos = platform.getGameObject().getPosition()
             const platformDistance = pos.y - cameraPos
-            if (platformDistance > CONFIG.CANVAS.HEIGHT / 2 + 200) {
+            if (platformDistance > CONFIG.CANVAS.HEIGHT / 2 + GAME_CONFIG.PLATFORM.HEIGHT) {
                 if (platform.containsObject()) {
                     const object = platform.getObject()
                     if (object) {

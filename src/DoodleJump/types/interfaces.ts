@@ -18,3 +18,12 @@ export interface GameStats {
     difficulty: number
     platformsJumped: number
 }
+
+export interface GameSettings {
+    soundEnabled: boolean
+    musicEnabled: boolean
+    vibrationEnabled: boolean
+    showFPS: boolean
+    particleEffects: boolean
+    difficulty: 'Easy' | 'Normal' | 'Hard'
+}

@@ -2,9 +2,9 @@ export const GAME_CONFIG = {
     PLAYER: {
         WIDTH: 32,
         HEIGHT: 32,
-        JUMP_FORCE: -400,
-        MOVE_SPEED: 300,
-        MAX_FALL_SPEED: 1000,
+        JUMP_FORCE: -800,
+        MOVE_SPEED: 600,
+        MAX_FALL_SPEED: 2200,
     },
     DECORATION: {
         WIDTH: 64,
@@ -13,7 +13,7 @@ export const GAME_CONFIG = {
     PLATFORM: {
         WIDTH: 196,
         HEIGHT: 64,
-        SPAWN_DISTANCE: 156,
+        SPAWN_DISTANCE: 96,
         INITIAL_COUNT: 10,
     },
     OBSTACLES: {
@@ -48,7 +48,7 @@ export const GAME_CONFIG = {
             SPAWN_CHANCE: 0.5,
             WIDTH: 64,
             HEIGHT: 64,
-            BOUNCE_FORCE: 600,
+            BOUNCE_FORCE: 1200,
         },
         JETPACK: {
             ICON: 'jetpack',
@@ -205,7 +205,7 @@ export const GAME_CONFIG = {
             loop: false,
         },
     },
-    DIFFICULTY: 200,
+    DIFFICULTY: 500,
     HIGH_SCORE_KEY: 'doodleJump_highScore',
     CURRENT_SCORE_KEY: 'doodleJump_currentScore',
     AUDIO_ENABLED_KEY: 'doodleJump_audioEnabled',

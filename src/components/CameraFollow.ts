@@ -3,6 +3,7 @@ import { Transform } from './Transform'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 import { Vector2 } from '../utils/Vector2'
 import { CONFIG } from '../config/Config'
+import { Player } from '../DoodleJump/components/Player'
 
 type CameraViewBounds = {
     top: number
@@ -15,6 +16,10 @@ export class CameraFollow extends Camera {
     private offset: Vector2 = new Vector2(0, CONFIG.CAMERA.FOLLOW_OFFSET)
     private smoothing = 5
     private highestY = 0
+    private player: Player
+    private playerDeadTimer = 0
+    private hasPlayerDied = false
+    private readonly DEAD_FOLLOW_DURATION = 1 // seconds
 
     constructor(gameObject: IGameObject) {
         super(gameObject)
@@ -24,6 +29,12 @@ export class CameraFollow extends Camera {
         this.target = target
         if (target) {
             this.highestY = target.getPosition().y
+            const playerComponent = target.getComponent(Player as ComponentConstructor<Player>)
+            if (playerComponent) {
+                this.player = playerComponent
+            } else {
+                console.warn('CameraFollow: Target does not have a Player component.')
+            }
         }
     }
 
@@ -45,20 +56,33 @@ export class CameraFollow extends Camera {
         )!
         const targetPos = this.target.getPosition()
         const currentPos = transform.getWorldPosition()
-
         if (targetPos.y < this.highestY) {
             this.highestY = targetPos.y
         }
 
-        const desiredY = Math.min(this.highestY + this.offset.y, targetPos.y + this.offset.y)
+        const desiredY = this.highestY + this.offset.y
         const desiredPos = new Vector2(CONFIG.CANVAS.WIDTH / 2, desiredY)
 
-        if (this.smoothing > 0) {
-            const dt = deltaTime / 1000
-            const newPos = Vector2.lerp(currentPos, desiredPos, this.smoothing * dt)
-            transform.setPosition(newPos)
-        } else {
+        if (this.player) {
+            if (this.player.isPlayerDead()) {
+                if (!this.hasPlayerDied) {
+                    this.hasPlayerDied = true
+                    this.playerDeadTimer = 0
+                } else {
+                    this.playerDeadTimer += deltaTime / 1000
+                }
+            } else {
+                this.hasPlayerDied = false
+                this.playerDeadTimer = 0
+            }
+        }
+
+        if (this.player && !this.player.isPlayerDead()) {
             transform.setPosition(desiredPos)
+        } else if (this.hasPlayerDied && this.playerDeadTimer <= this.DEAD_FOLLOW_DURATION) {
+            const dt = deltaTime / 1000
+            const newPos = Vector2.lerp(currentPos, targetPos, this.smoothing * dt)
+            transform.setPosition(newPos)
         }
     }
 

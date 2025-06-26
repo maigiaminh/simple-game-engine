@@ -21,6 +21,7 @@ import { Transform } from '../../components/Transform'
 export class GameplayScene extends Scene {
     private gameEngine!: GameEngine
     private player!: GameObject
+    private playerComponent!: Player
     private camera!: GameObject
     private platformManager!: PlatformManager
     private backgroundManager!: BackgroundManager
@@ -53,6 +54,7 @@ export class GameplayScene extends Scene {
 
     protected async onUnload(): Promise<void> {
         console.log('Unloading Gameplay Scene...')
+        const uiManager = this.gameEngine.getUIManager()
     }
 
     private async createCamera(): Promise<void> {
@@ -72,7 +74,7 @@ export class GameplayScene extends Scene {
         this.player = new GameObject({
             name: 'Player',
             tag: 'Player',
-            layer: 2,
+            layer: 1000,
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, CONFIG.CANVAS.HEIGHT - 120),
         })
 
@@ -161,6 +163,7 @@ export class GameplayScene extends Scene {
         this.player.addComponent(collider)
 
         const playerComponent = new Player(this.player)
+        this.playerComponent = playerComponent
         this.player.addComponent(playerComponent)
 
         playerComponent.addEventListener(GAME_EVENTS.PLAYER_FELL, this.onPlayerFell.bind(this))
@@ -264,6 +267,7 @@ export class GameplayScene extends Scene {
         const cameraY = this.getMainCamera()!.getGameObject().getPosition().y
 
         if (position.y > cameraY + CONFIG.CANVAS.HEIGHT / 2) {
+            this.playerComponent.setPlayerDead(true)
             this.triggerGameOver()
             return
         }
@@ -284,7 +288,7 @@ export class GameplayScene extends Scene {
 
         setTimeout(() => {
             this.gameEngine.setScene('GameOverScene')
-        }, 1000)
+        }, 2000)
     }
 
     protected onUpdate(deltaTime: number): void {
