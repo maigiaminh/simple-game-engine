@@ -246,7 +246,7 @@ export class MainMenuScene extends Scene {
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 300, CONFIG.CANVAS.HEIGHT - 100),
         })
 
-        const instructionText = '🎮 Controls: Arrow Keys or WASD to move • SPACE to jump'
+        const instructionText = '🎮 Controls: ← → or A D to move • ↑ or W to use Boost'
         this.instructionsLabel = new EnhancedLabel(instructionsGO, instructionText)
         this.instructionsLabel.setAnchor(UIAnchor.MIDDLE_CENTER)
         this.instructionsLabel.setFont('16px Arial')
