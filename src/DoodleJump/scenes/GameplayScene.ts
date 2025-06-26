@@ -249,9 +249,7 @@ export class GameplayScene extends Scene {
         this.triggerGameOver()
     }
 
-    private onPlayerJump(event: GameEvent): void {
-        // this.gameEngine.getAudioManager().playSound('jump');
-    }
+    private onPlayerJump(event: GameEvent): void {}
 
     private checkGameOver(): void {
         if (this.gameState === GameState.GAMEOVER) return
@@ -278,6 +276,9 @@ export class GameplayScene extends Scene {
 
         const finalScore = this.scoreManager.getCurrentScore()
         const highScore = this.scoreManager.getHighScore()
+
+        localStorage.setItem(GAME_CONFIG.HIGH_SCORE_KEY, highScore.toString())
+        localStorage.setItem(GAME_CONFIG.CURRENT_SCORE_KEY, finalScore.toString())
 
         console.log(`Game Over! Score: ${finalScore}, High Score: ${highScore}`)
 

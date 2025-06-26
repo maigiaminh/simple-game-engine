@@ -73,7 +73,7 @@ export class UIPanel extends UIElement {
         ctx.restore()
     }
 
-    private drawRoundedRect(
+    protected drawRoundedRect(
         ctx: CanvasRenderingContext2D,
         bounds: Rectangle,
         radius: number

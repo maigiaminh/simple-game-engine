@@ -4,7 +4,15 @@ import { Renderer } from '../components/Renderer'
 import { RigidBody } from '../components/RigidBody'
 import { Transform } from '../components/Transform'
 import { Vector2 } from '../utils/Vector2'
-import { ColliderType, EventPhase, LoadState, ResourceType, SceneState, TouchPhase } from './enums'
+import {
+    AnimationType,
+    ColliderType,
+    EventPhase,
+    LoadState,
+    ResourceType,
+    SceneState,
+    TouchPhase,
+} from './enums'
 // ==================== CORE INTERFACES ====================
 // #region Core Interfaces
 export interface IUpdatable {
@@ -282,6 +290,15 @@ export interface IAnimator extends IComponent {
     getCurrentAnimation(): string | null
     isAnimationPlaying(): boolean
 }
+
+export interface AnimationConfig {
+    type: AnimationType
+    duration: number
+    delay?: number
+    easing?: (t: number) => number
+    onComplete?: () => void
+    loop?: boolean
+}
 // #endregion
 
 // ==================== PARTICLE SYSTEM INTERFACES ====================
@@ -311,6 +328,18 @@ export interface IParticleSystem extends IComponent {
     startEmission(): void
     stopEmission(): void
     getParticleCount(): number
+}
+
+export interface ParticleConfig {
+    position: Vector2
+    velocity?: Vector2
+    acceleration?: Vector2
+    life: number
+    size: number
+    color: RGBAColor
+    fadeOut?: boolean
+    shrink?: boolean
+    gravity?: boolean
 }
 
 // #endregion

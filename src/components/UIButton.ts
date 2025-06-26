@@ -1,4 +1,6 @@
+import { GameEngine } from '../core/GameEngine'
 import { GameObject } from '../core/GameObject'
+import { GAME_CONFIG } from '../DoodleJump/config/GameplayConfig'
 import { ButtonState, UIAnchor } from '../types/enums'
 import { IGameObject } from '../types/interface'
 import { Color } from '../utils/Color'
@@ -108,6 +110,7 @@ export class UIButton extends UIPanel {
         this.state = ButtonState.PRESSED
         this.onPress?.()
         this.updateAppearance()
+        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.BUTTON_CLICK)
     }
 
     public handleMouseUp(mousePos: Vector2): void {

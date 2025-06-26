@@ -7,6 +7,8 @@ export class AudioManager extends EventEmitter {
     private masterGainNode: GainNode | null = null
     private clips: Map<string, AudioClip> = new Map()
     private activeSources: Set<AudioSource> = new Set()
+    private bgmSource: AudioSource | null = null
+    private bgmName: string | null = null
 
     private masterVolume = 1.0
     private enabled = true
@@ -43,6 +45,47 @@ export class AudioManager extends EventEmitter {
             } catch (error) {
                 console.error('Failed to resume audio context:', error)
             }
+        }
+    }
+
+    public playBackgroundMusic(name: string, options: PlaySoundOptions = {}): void {
+        this.bgmName = name
+        this.stopBackgroundMusic()
+        if (!this.enabled) return
+
+        const clip = this.clips.get(name)
+        if (!clip) return
+
+        try {
+            const source = this.audioContext!.createBufferSource()
+            const gainNode = this.audioContext!.createGain()
+            source.buffer = clip.buffer
+            source.loop = options.loop ?? true
+            gainNode.gain.value = (options.volume ?? clip.volume) * this.masterVolume
+            source.connect(gainNode)
+            gainNode.connect(this.masterGainNode!)
+
+            const audioSource: AudioSource = {
+                clip,
+                source,
+                gainNode,
+                isPlaying: true,
+            }
+            this.bgmSource = audioSource
+            source.onended = () => {
+                if (this.bgmSource === audioSource) this.bgmSource = null
+            }
+            source.start()
+        } catch (error) {
+            console.error(`Failed to play background music: ${name}`, error)
+        }
+    }
+
+    public stopBackgroundMusic(): void {
+        if (this.bgmSource && this.bgmSource.isPlaying) {
+            this.bgmSource.source.stop()
+            this.bgmSource.isPlaying = false
+            this.bgmSource = null
         }
     }
 
@@ -159,6 +202,11 @@ export class AudioManager extends EventEmitter {
         this.enabled = enabled
         if (!enabled) {
             this.stopAllSounds()
+            this.stopBackgroundMusic()
+        } else {
+            if (this.bgmName) {
+                this.playBackgroundMusic(this.bgmName)
+            }
         }
     }
 

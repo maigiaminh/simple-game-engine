@@ -98,7 +98,7 @@ export class UILabel extends UIElement {
         })
     }
 
-    private getTextX(bounds: Rectangle): number {
+    protected getTextX(bounds: Rectangle): number {
         switch (this.textAlign) {
             case 'left':
                 return bounds.x + this.padding.left
@@ -111,12 +111,12 @@ export class UILabel extends UIElement {
         }
     }
 
-    private getTextY(bounds: Rectangle): number {
+    protected getTextY(bounds: Rectangle): number {
         switch (this.textBaseline) {
             case 'top':
                 return bounds.y + this.padding.top
             case 'middle':
-                return bounds.y + bounds.height / 2
+                return bounds.y + bounds.height / 2 + this.padding.top - this.padding.bottom + 8
             case 'bottom':
                 return bounds.y + bounds.height - this.padding.bottom
             default:

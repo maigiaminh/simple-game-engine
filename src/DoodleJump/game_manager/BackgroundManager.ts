@@ -30,7 +30,7 @@ export class BackgroundManager extends Component {
     public onStart(): void {
         this.bgImage = GameEngine.getInstance()
             .getResourceManager()
-            .getResource(GAME_CONFIG.IMAGES.BACKGROUND_2) as HTMLImageElement
+            .getResource(GAME_CONFIG.IMAGES.BACKGROUND.GAMEPLAY_BACKGROUND) as HTMLImageElement
         this.cloudImage = GameEngine.getInstance()
             .getResourceManager()
             .getResource(GAME_CONFIG.IMAGES.CLOUD) as HTMLImageElement

@@ -3,6 +3,7 @@ import { Component } from '../../../core/Component'
 import { GameEngine } from '../../../core/GameEngine'
 import { CollisionLayer, ENGINE_EVENTS } from '../../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent } from '../../../types/interface'
+import { GAME_CONFIG } from '../../config/GameplayConfig'
 import { GAME_EVENTS } from '../../types/enums'
 import { Player } from '../Player'
 
@@ -52,6 +53,7 @@ export abstract class Obstacle extends Component {
                 player: player,
                 obstacleType: this.obstacleType,
             })
+        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.HIT)
     }
 
     public deactivate(): void {

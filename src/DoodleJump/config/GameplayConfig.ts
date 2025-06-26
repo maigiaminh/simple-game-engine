@@ -68,8 +68,18 @@ export const GAME_CONFIG = {
         },
     },
     IMAGES: {
-        BACKGROUND: 'background',
-        BACKGROUND_2: 'background_2',
+        BACKGROUND: {
+            GAMEPLAY_BACKGROUND: 'gameplay_background',
+            MAINMENU_BACKGROUND: 'main_menu_background',
+        },
+        BUTTON: {
+            PLAY_BUTTON: 'play_button',
+            SETTINGS_BUTTON: 'settings_button',
+            BACK_BUTTON: 'back_button',
+            RESTART_BUTTON: 'restart_button',
+            SOUND_ON_BUTTON: 'sound_on_button',
+            SOUND_OFF_BUTTON: 'sound_off_button',
+        },
         CLOUD: 'cloud',
         PLATFORMS: {
             PLATFORM_1: 'platform_1',
@@ -103,7 +113,12 @@ export const GAME_CONFIG = {
             TRAMPOLINE: 'trampoline',
             JUMP: 'jump',
             JETPACK: 'jetpack',
+            HIT: 'hit',
             WALK: 'walk',
+            BUTTON_CLICK: 'button_click',
+        },
+        MUSIC: {
+            BACKGROUND_MUSIC: 'background_music',
         },
     },
     ANIMATIONS: {
@@ -192,4 +207,6 @@ export const GAME_CONFIG = {
     },
     DIFFICULTY: 200,
     HIGH_SCORE_KEY: 'doodleJump_highScore',
+    CURRENT_SCORE_KEY: 'doodleJump_currentScore',
+    AUDIO_ENABLED_KEY: 'doodleJump_audioEnabled',
 }

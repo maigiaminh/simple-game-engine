@@ -187,8 +187,10 @@ export class Player extends Component {
         } else {
             if (velocity.x > 1) {
                 this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name)
+                GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.WALK)
             } else if (velocity.x < -1) {
                 this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name)
+                GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.WALK)
             } else {
                 this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
             }

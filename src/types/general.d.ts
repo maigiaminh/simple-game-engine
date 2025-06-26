@@ -50,3 +50,10 @@ type BoxSpacing = {
     bottom: number
     left: number
 }
+
+type Bound = {
+    x: number
+    y: number
+    width: number
+    height: number
+}

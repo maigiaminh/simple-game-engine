@@ -136,4 +136,30 @@ export const ENGINE_EVENTS = {
     RESOURCE_LOADED: 'resource_loaded',
     RESOURCE_LOAD_ERROR: 'resource_load_error',
 }
+
+export enum AnimationType {
+    FADE_IN = 'fade_in',
+    FADE_OUT = 'fade_out',
+    SLIDE_IN_FROM_TOP = 'slide_in_from_top',
+    SLIDE_IN_FROM_BOTTOM = 'slide_in_from_bottom',
+    SLIDE_IN_FROM_LEFT = 'slide_in_from_left',
+    SLIDE_IN_FROM_RIGHT = 'slide_in_from_right',
+    SCALE_IN = 'scale_in',
+    SCALE_OUT = 'scale_out',
+    BOUNCE = 'bounce',
+    PULSE = 'pulse',
+    SHAKE = 'shake',
+    FadeIn = 'FadeIn',
+}
+
+export enum ParticlePreset {
+    EXPLOSION = 'explosion',
+    STARS = 'stars',
+    SPARKLES = 'sparkles',
+    SMOKE = 'smoke',
+    FIRE = 'fire',
+    CONFETTI = 'confetti',
+    HEARTS = 'hearts',
+    SNOW = 'snow',
+}
 // #endregion

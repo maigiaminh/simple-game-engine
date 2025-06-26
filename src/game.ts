@@ -2,6 +2,7 @@ import { GameCore } from './core/GameCore'
 import { GAME_CONFIG } from './DoodleJump/config/GameplayConfig'
 import { GameOverScene } from './DoodleJump/scenes/GameOverScene'
 import { GameplayScene } from './DoodleJump/scenes/GameplayScene'
+import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
 
 {
     (async () => {
@@ -9,16 +10,16 @@ import { GameplayScene } from './DoodleJump/scenes/GameplayScene'
             width: 1000,
             height: 800,
             targetFPS: 60,
-            scenes: [new GameplayScene('GameplayScene'), new GameOverScene('GameOverScene')],
+            scenes: [new MainMenuScene(), new GameplayScene(), new GameOverScene()],
             preloadAssets: {
                 images: [
                     {
-                        name: GAME_CONFIG.IMAGES.BACKGROUND,
-                        url: 'assets/images/background/background.jpg',
+                        name: GAME_CONFIG.IMAGES.BACKGROUND.GAMEPLAY_BACKGROUND,
+                        url: 'assets/images/background/gameplay_background.png',
                     },
                     {
-                        name: GAME_CONFIG.IMAGES.BACKGROUND_2,
-                        url: 'assets/images/background/background_2.png',
+                        name: GAME_CONFIG.IMAGES.BACKGROUND.MAINMENU_BACKGROUND,
+                        url: 'assets/images/background/main_menu_background.png',
                     },
                     { name: GAME_CONFIG.IMAGES.CLOUD, url: 'assets/images/decoration/cloud.png' },
                     {
@@ -218,6 +219,14 @@ import { GameplayScene } from './DoodleJump/scenes/GameplayScene'
                         name: GAME_CONFIG.IMAGES.DECORATIONS.LAMP_POST_2,
                         url: 'assets/images/decoration/lamp_post_2.png',
                     },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.SOUND_ON_BUTTON,
+                        url: 'assets/images/button/sound_on_button.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.SOUND_OFF_BUTTON,
+                        url: 'assets/images/button/sound_off_button.png',
+                    },
                 ],
                 audio: [
                     {
@@ -235,6 +244,18 @@ import { GameplayScene } from './DoodleJump/scenes/GameplayScene'
                     {
                         name: GAME_CONFIG.AUDIO.SFX.WALK,
                         url: 'assets/audio/sfx/walk.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.BUTTON_CLICK,
+                        url: 'assets/audio/sfx/button_click.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.MUSIC.BACKGROUND_MUSIC,
+                        url: 'assets/audio/music/background_music.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.HIT,
+                        url: 'assets/audio/sfx/hit.mp3',
                     },
                 ],
             },
