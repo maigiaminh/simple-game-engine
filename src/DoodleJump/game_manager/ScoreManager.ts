@@ -30,6 +30,7 @@ export class ScoreManager extends Component {
         this.createScoreUI()
         this.currentScore = 0
         this.lastDifficultyScore = 1
+        localStorage.removeItem(GAME_CONFIG.CURRENT_SCORE_KEY)
     }
 
     public setPlayer(player: IGameObject): void {
@@ -163,6 +164,7 @@ export class ScoreManager extends Component {
     private saveHighScore(): void {
         try {
             localStorage.setItem(GAME_CONFIG.HIGH_SCORE_KEY, this.highScore.toString())
+            localStorage.setItem(GAME_CONFIG.CURRENT_SCORE_KEY, this.currentScore.toString())
         } catch (error) {
             console.warn('Could not save high score:', error)
         }

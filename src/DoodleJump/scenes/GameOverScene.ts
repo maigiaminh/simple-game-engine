@@ -63,7 +63,7 @@ export class GameOverScene extends Scene {
             this.finalScore = savedFinalScore ? parseInt(savedFinalScore, 10) : 0
             this.highScore = savedHighScore ? parseInt(savedHighScore, 10) : 0
 
-            this.isNewHighScore = this.finalScore > this.highScore
+            this.isNewHighScore = this.finalScore >= this.highScore
             if (this.isNewHighScore) {
                 this.highScore = this.finalScore
                 localStorage.setItem(GAME_CONFIG.HIGH_SCORE_KEY, this.highScore.toString())
