@@ -21,7 +21,14 @@ import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
                         name: GAME_CONFIG.IMAGES.BACKGROUND.MAINMENU_BACKGROUND,
                         url: 'assets/images/background/main_menu_background.png',
                     },
-                    { name: GAME_CONFIG.IMAGES.CLOUD, url: 'assets/images/decoration/cloud.png' },
+                    {
+                        name: GAME_CONFIG.IMAGES.BACKGROUND.PAUSE_PANEL_BACKGROUND,
+                        url: 'assets/images/background/pause_panel_background.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.CLOUD,
+                        url: 'assets/images/decoration/cloud.png',
+                    },
                     {
                         name: GAME_CONFIG.IMAGES.GROUND,
                         url: 'assets/images/platform/ground.png',
@@ -254,6 +261,22 @@ import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
                     {
                         name: GAME_CONFIG.IMAGES.BUTTON.SOUND_OFF_BUTTON,
                         url: 'assets/images/button/sound_off_button.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.SETTINGS_BUTTON,
+                        url: 'assets/images/button/settings_button.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.RESUME_BUTTON,
+                        url: 'assets/images/button/resume_button.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.RESTART_BUTTON,
+                        url: 'assets/images/button/restart_button.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.BUTTON.BACK_BUTTON,
+                        url: 'assets/images/button/back_button.png',
                     },
                 ],
                 audio: [

@@ -17,6 +17,7 @@ import { GAME_EVENTS } from '../types/enums'
 import { PlatformManager } from '../game_manager/PlatformManager'
 import { AnimatedRenderer } from '../../components/AnimatedRenderer'
 import { Transform } from '../../components/Transform'
+import { PauseManager } from '../game_manager/PauseManager'
 
 export class GameplayScene extends Scene {
     private gameEngine!: GameEngine
@@ -27,6 +28,7 @@ export class GameplayScene extends Scene {
     private backgroundManager!: BackgroundManager
     private scoreManager!: ScoreManager
     private inputManager!: GameInput
+    private pauseManager!: PauseManager
     private gameState = GameState.PLAYING
 
     private isGameOver = false
@@ -46,6 +48,7 @@ export class GameplayScene extends Scene {
         await this.createBackgroundManager()
         await this.createScoreManager()
         await this.createInputManager()
+        await this.createPauseManager()
 
         this.setupSystemConnections()
 
@@ -55,6 +58,11 @@ export class GameplayScene extends Scene {
     protected async onUnload(): Promise<void> {
         console.log('Unloading Gameplay Scene...')
         const uiManager = this.gameEngine.getUIManager()
+        if (uiManager && this.pauseManager) {
+            uiManager.removeRootElement(this.pauseManager.getPauseOverlay())
+            uiManager.removeRootElement(this.pauseManager.getSoundToggleButton())
+            uiManager.removeRootElement(this.pauseManager.getPauseButton())
+        }
     }
 
     private async createCamera(): Promise<void> {
@@ -214,6 +222,25 @@ export class GameplayScene extends Scene {
         inputManagerGO.addComponent(this.inputManager)
 
         this.addGameObject(inputManagerGO)
+    }
+
+    private async createPauseManager(): Promise<void> {
+        const pauseManagerGO = new GameObject({
+            name: 'PauseManager',
+        })
+        this.pauseManager = new PauseManager(pauseManagerGO)
+        this.pauseManager.setOnResume(() => {
+            this.gameState = GameState.PLAYING
+            this.isGameOver = false
+        })
+        this.pauseManager.setOnMenu(() => {
+            this.gameEngine.setScene('MainMenuScene')
+        })
+        this.pauseManager.setOnRestart(() => {
+            this.restartGame()
+        })
+        pauseManagerGO.addComponent(this.pauseManager)
+        this.addGameObject(pauseManagerGO)
     }
 
     private setupSystemConnections(): void {

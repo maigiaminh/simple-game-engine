@@ -128,7 +128,7 @@ export class GameOverScene extends Scene {
     private async createBackgroundPanel(): Promise<void> {
         const panelGO = new GameObject({
             name: 'GameOverPanel',
-            position: new Vector2(0, 0),
+            position: new Vector2(-CONFIG.CANVAS.WIDTH, -CONFIG.CANVAS.HEIGHT),
         })
 
         this.backgroundPanel = new EnhancedPanel(panelGO)
@@ -136,18 +136,12 @@ export class GameOverScene extends Scene {
         this.backgroundPanel.size = new Vector2(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT)
 
         this.backgroundPanel.setGradient([
-            new Color(40, 20, 20, 0.95),
-            new Color(20, 20, 40, 0.95),
-            new Color(40, 20, 60, 0.95),
+            new Color(0, 0, 0, 0),
+            new Color(0, 0, 0, 0),
+            new Color(0, 0, 0, 0),
         ])
-
-        this.backgroundPanel.enableAnimatedGradient(true)
-        this.backgroundPanel.enableGlassEffect(true)
-        this.backgroundPanel.enableBorderGlow(true)
-        this.backgroundPanel.cornerRadius = 25
-        this.backgroundPanel.borderColor = new Color(255, 100, 100, 0.8)
-        this.backgroundPanel.borderWidth = 3
-
+        this.backgroundPanel.cornerRadius = 0
+        this.backgroundPanel.borderWidth = 0
         const backgroundRenderer = new GameObject({
             name: 'BackgroundRenderer',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, CONFIG.CANVAS.HEIGHT / 2),
@@ -196,6 +190,11 @@ export class GameOverScene extends Scene {
         })
 
         this.scorePanel = new EnhancedPanel(scorePanelGO)
+        this.scorePanel.setAnchor(UIAnchor.MIDDLE_CENTER)
+        this.scorePanel.size = new Vector2(0, 0)
+        this.scorePanel.setGradient([new Color(0, 0, 0, 0), new Color(0, 0, 0, 0)])
+        this.scorePanel.cornerRadius = 0
+        this.scorePanel.borderWidth = 0
 
         scorePanelGO.addComponent(this.scorePanel)
         this.backgroundPanel.addChild(this.scorePanel)

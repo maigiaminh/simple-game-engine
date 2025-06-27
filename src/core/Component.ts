@@ -36,7 +36,9 @@ export abstract class Component extends EventEmitter implements IComponent {
         return this.enabled && this.gameObject.isActive() && !this.destroyed
     }
 
-    public setVisible(visible: boolean): void {}
+    public setVisible(visible: boolean): void {
+        this.setEnabled(visible)
+    }
 
     public isVisible(): boolean {
         return this.isEnabled()

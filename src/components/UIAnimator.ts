@@ -156,6 +156,18 @@ class Animation {
             case AnimationType.SLIDE_IN_FROM_RIGHT:
                 this.applySlideFromRight(progress)
                 break
+            case AnimationType.SLIDE_OUT_TO_TOP:
+                this.applySlideOutToTop(progress)
+                break
+            case AnimationType.SLIDE_OUT_TO_BOTTOM:
+                this.applySlideOutToBottom(progress)
+                break
+            case AnimationType.SLIDE_OUT_TO_LEFT:
+                this.applySlideOutToLeft(progress)
+                break
+            case AnimationType.SLIDE_OUT_TO_RIGHT:
+                this.applySlideOutToRight(progress)
+                break
             case AnimationType.SCALE_IN:
                 this.applyScaleIn(progress)
                 break
@@ -209,6 +221,42 @@ class Animation {
         const originalX = this.originalValues.position.x
         const offsetX = 200
         const currentX = originalX + offsetX * (1 - progress)
+        this.element
+            .getGameObject()
+            .setPosition(new Vector2(currentX, this.originalValues.position.y))
+    }
+
+    private applySlideOutToTop(progress: number): void {
+        const originalY = this.originalValues.position.y
+        const offsetY = -200
+        const currentY = originalY + offsetY * progress
+        this.element
+            .getGameObject()
+            .setPosition(new Vector2(this.originalValues.position.x, currentY))
+    }
+
+    private applySlideOutToBottom(progress: number): void {
+        const originalY = this.originalValues.position.y
+        const offsetY = 200
+        const currentY = originalY + offsetY * progress
+        this.element
+            .getGameObject()
+            .setPosition(new Vector2(this.originalValues.position.x, currentY))
+    }
+
+    private applySlideOutToLeft(progress: number): void {
+        const originalX = this.originalValues.position.x
+        const offsetX = -200
+        const currentX = originalX + offsetX * progress
+        this.element
+            .getGameObject()
+            .setPosition(new Vector2(currentX, this.originalValues.position.y))
+    }
+
+    private applySlideOutToRight(progress: number): void {
+        const originalX = this.originalValues.position.x
+        const offsetX = 200
+        const currentX = originalX + offsetX * progress
         this.element
             .getGameObject()
             .setPosition(new Vector2(currentX, this.originalValues.position.y))

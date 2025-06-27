@@ -25,5 +25,4 @@ export interface GameSettings {
     vibrationEnabled: boolean
     showFPS: boolean
     particleEffects: boolean
-    difficulty: 'Easy' | 'Normal' | 'Hard'
 }

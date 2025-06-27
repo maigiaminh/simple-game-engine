@@ -14,6 +14,7 @@ export class EnhancedButton extends UIButton {
     private targetScale = 1
     private glowIntensity = 0
     private pulseTime = 0
+    private enableParticleSystem = true
 
     public enableHoverEffect = true
     public enableClickEffect = true
@@ -103,6 +104,10 @@ export class EnhancedButton extends UIButton {
         }
     }
 
+    public toggleParticleSystem(enable: boolean): void {
+        this.enableParticleSystem = enable
+    }
+
     private onHoverStart(): void {
         this.targetScale = 1.05
 
@@ -132,7 +137,7 @@ export class EnhancedButton extends UIButton {
             super.onRender(ctx)
         }
 
-        if (this.particleSystem) {
+        if (this.particleSystem && this.enableParticleSystem) {
             this.particleSystem.render(ctx)
         }
 

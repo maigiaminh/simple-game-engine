@@ -4,6 +4,7 @@ import { CONFIG } from '../config/Config'
 import { ENGINE_EVENTS, SceneState } from '../types/enums'
 import { ComponentConstructor, IGameObject, IScene } from '../types/interface'
 import { EventEmitter } from './EventEmitter'
+import { GameEngine } from './GameEngine'
 
 export abstract class Scene extends EventEmitter implements IScene {
     protected gameObjects: Map<string, IGameObject> = new Map()
@@ -233,6 +234,7 @@ export abstract class Scene extends EventEmitter implements IScene {
         this.renderGameObjects(ctx)
 
         ctx.restore()
+        GameEngine.getInstance().getUIManager().render(ctx)
     }
 
     private renderGameObjects(ctx: CanvasRenderingContext2D): void {

@@ -57,3 +57,5 @@ type Bound = {
     width: number
     height: number
 }
+
+type BackgroundImageMode = 'stretch' | 'cover' | 'contain'

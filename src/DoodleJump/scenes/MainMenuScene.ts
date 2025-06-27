@@ -107,30 +107,26 @@ export class MainMenuScene extends Scene {
     private async createBackgroundPanel(): Promise<void> {
         const panelGO = new GameObject({
             name: 'MenuBackgroundPanel',
-            position: new Vector2(0, 0),
+            position: new Vector2(-CONFIG.CANVAS.WIDTH / 2, -CONFIG.CANVAS.HEIGHT / 2),
+            layer: -1000,
         })
 
         this.backgroundPanel = new EnhancedPanel(panelGO)
         this.backgroundPanel.setAnchor(UIAnchor.MIDDLE_CENTER)
-        this.backgroundPanel.size = new Vector2(800, 700)
-
+        this.backgroundPanel.size = new Vector2(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT)
+        this.backgroundPanel.backgroundColor = new Color(0, 0, 0, 0)
+        this.backgroundPanel.cornerRadius = 0
+        this.backgroundPanel.borderWidth = 0
         this.backgroundPanel.setGradient([
-            new Color(20, 30, 60, 0.95),
-            new Color(40, 20, 80, 0.95),
-            new Color(60, 30, 100, 0.95),
+            new Color(0, 0, 0, 0),
+            new Color(0, 0, 0, 0),
+            new Color(0, 0, 0, 0),
         ])
-
-        this.backgroundPanel.enableAnimatedGradient(true)
-        this.backgroundPanel.enableGlassEffect(true)
-        this.backgroundPanel.enableBorderGlow(true)
-        this.backgroundPanel.enableFloating(true, 3)
-        this.backgroundPanel.cornerRadius = 25
-        this.backgroundPanel.borderColor = new Color(100, 200, 255, 0.6)
-        this.backgroundPanel.borderWidth = 3
 
         const bgReder = new GameObject({
             name: 'BackgroundRenderer',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, CONFIG.CANVAS.HEIGHT / 2 - 50),
+            layer: 0,
         })
         const bgRenderer = bgReder.addComponent(new Renderer(bgReder))
         bgRenderer.setColor(new Color(255, 255, 255, 0.1))
@@ -148,12 +144,12 @@ export class MainMenuScene extends Scene {
     private async createTitle(): Promise<void> {
         const titleGO = new GameObject({
             name: 'GameTitle',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 300, 150),
+            position: new Vector2(-300, 128),
             layer: 10,
         })
 
         this.titleLabel = new EnhancedLabel(titleGO, 'DOODLE JUMP')
-        this.titleLabel.setAnchor(UIAnchor.MIDDLE_CENTER)
+        this.titleLabel.setAnchor(UIAnchor.TOP_CENTER)
         this.titleLabel.setFont('48px "Arial Black", Arial')
         this.titleLabel.setColor(Color.BLACK)
         this.titleLabel.setTextAlign('center')
@@ -169,11 +165,11 @@ export class MainMenuScene extends Scene {
     private async createSubtitle(): Promise<void> {
         const subtitleGO = new GameObject({
             name: 'GameSubtitle',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 200, 225),
+            position: new Vector2(-200, 225),
         })
 
         this.subtitleLabel = new EnhancedLabel(subtitleGO, 'Jump to the Sky!')
-        this.subtitleLabel.setAnchor(UIAnchor.MIDDLE_CENTER)
+        this.subtitleLabel.setAnchor(UIAnchor.TOP_CENTER)
         this.subtitleLabel.setFont('24px Arial')
         this.subtitleLabel.setColor(new Color(200, 200, 200, 0.9))
         this.subtitleLabel.setTextAlign('center')
@@ -189,11 +185,11 @@ export class MainMenuScene extends Scene {
         const highScore = this.getHighScore()
         const highScoreGO = new GameObject({
             name: 'HighScoreDisplay',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 150, 325),
+            position: new Vector2(-150, 280),
         })
 
         this.highScoreLabel = new EnhancedLabel(highScoreGO, `🏆 High Score: ${highScore}`)
-        this.highScoreLabel.setAnchor(UIAnchor.MIDDLE_CENTER)
+        this.highScoreLabel.setAnchor(UIAnchor.TOP_CENTER)
         this.highScoreLabel.setFont('20px Arial')
         this.highScoreLabel.setColor(new Color(255, 215, 0, 1))
         this.highScoreLabel.setTextAlign('center')
@@ -208,7 +204,7 @@ export class MainMenuScene extends Scene {
     private async createPlayButton(): Promise<void> {
         const playButtonGO = new GameObject({
             name: 'PlayButton',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 100, CONFIG.CANVAS.HEIGHT / 2 + 50),
+            position: new Vector2(-105, 0),
         })
 
         this.playButton = new EnhancedButton(playButtonGO, 'PLAY GAME')
@@ -243,7 +239,7 @@ export class MainMenuScene extends Scene {
     private async createInstructions(): Promise<void> {
         const instructionsGO = new GameObject({
             name: 'Instructions',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 300, CONFIG.CANVAS.HEIGHT - 100),
+            position: new Vector2(-300, 300),
         })
 
         const instructionText = '🎮 Controls: ← → or A D to move • ↑ or W to shoot'
@@ -262,10 +258,11 @@ export class MainMenuScene extends Scene {
     private async createSoundToggleButton(): Promise<void> {
         const btnGO = new GameObject({
             name: 'SoundToggleButton',
-            position: new Vector2(CONFIG.CANVAS.WIDTH / 2 + 300, 75),
+            position: new Vector2(300, 75),
         })
 
         this.soundToggleButton = new EnhancedButton(btnGO, '')
+        this.soundToggleButton.setAnchor(UIAnchor.TOP_CENTER)
         this.soundToggleButton.size = new Vector2(48, 48)
         this.soundToggleButton.setColors(
             new Color(220, 220, 220, 1),

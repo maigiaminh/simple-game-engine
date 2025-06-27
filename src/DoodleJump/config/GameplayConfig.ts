@@ -70,9 +70,11 @@ export const GAME_CONFIG = {
         BACKGROUND: {
             GAMEPLAY_BACKGROUND: 'gameplay_background',
             MAINMENU_BACKGROUND: 'main_menu_background',
+            PAUSE_PANEL_BACKGROUND: 'pause_panel_background',
         },
         BUTTON: {
             PLAY_BUTTON: 'play_button',
+            RESUME_BUTTON: 'resume_button',
             SETTINGS_BUTTON: 'settings_button',
             BACK_BUTTON: 'back_button',
             RESTART_BUTTON: 'restart_button',
@@ -222,6 +224,7 @@ export const GAME_CONFIG = {
     HIGH_SCORE_KEY: 'doodleJump_highScore',
     CURRENT_SCORE_KEY: 'doodleJump_currentScore',
     AUDIO_ENABLED_KEY: 'doodleJump_audioEnabled',
+    SETTING_KEY: 'doodleJump_settings',
     MOVING_PLATFORM_SPAWN_CHANCE: 0.2,
     BREAKABLE_PLATFORM_SPAWN_CHANCE: 0.1,
 }

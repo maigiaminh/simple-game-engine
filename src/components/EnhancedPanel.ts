@@ -11,11 +11,20 @@ export class EnhancedPanel extends UIPanel {
     private floatingEffect = false
     private floatTime = 0
     private floatAmplitude = 5
+    private backgroundImage: HTMLImageElement | null = null
+    private backgroundImageMode: BackgroundImageMode = 'stretch'
+
+    public setBackgroundImage(
+        image: HTMLImageElement,
+        mode: BackgroundImageMode = 'stretch'
+    ): void {
+        this.backgroundImage = image
+        this.backgroundImageMode = mode
+    }
 
     constructor(gameObject: IGameObject) {
         super(gameObject)
 
-        // Default gradient
         this.gradientColors = [new Color(50, 50, 100, 0.9), new Color(30, 30, 80, 0.9)]
 
         this.cornerRadius = 15
@@ -66,26 +75,32 @@ export class EnhancedPanel extends UIPanel {
         ctx.save()
         ctx.globalAlpha = this.alpha
 
-        // const gradient = this.createGradient(ctx, bounds)
+        if (bounds === undefined) return
 
-        // if (this.cornerRadius > 0) {
-        //     this.drawRoundedRect(ctx, bounds, this.cornerRadius)
-        //     ctx.fillStyle = gradient
-        //     ctx.fill()
-        // } else {
-        //     ctx.fillStyle = gradient
-        //     ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height)
-        // }
+        if (this.backgroundImage) {
+            this.drawBackgroundImage(ctx, bounds)
+        }
 
-        // if (this.glassEffect) {
-        //     this.drawGlassEffect(ctx, bounds)
-        // }
+        const gradient = this.createGradient(ctx, bounds)
 
-        // if (this.borderWidth > 0) {
-        //     this.drawBorder(ctx, bounds)
-        // }
+        if (this.cornerRadius > 0) {
+            this.drawRoundedRect(ctx, bounds, this.cornerRadius)
+            ctx.fillStyle = gradient
+            ctx.fill()
+        } else {
+            ctx.fillStyle = gradient
+            ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height)
+        }
 
-        // ctx.restore()
+        if (this.glassEffect) {
+            this.drawGlassEffect(ctx, bounds)
+        }
+
+        if (this.borderWidth > 0) {
+            this.drawBorder(ctx, bounds)
+        }
+
+        ctx.restore()
     }
 
     private createGradient(ctx: CanvasRenderingContext2D, bounds: Bound): CanvasGradient {
@@ -104,6 +119,8 @@ export class EnhancedPanel extends UIPanel {
 
             const color1 = this.gradientColors[colorIndex]
             const color2 = this.gradientColors[nextIndex]
+
+            if (color1 === undefined || color2 === undefined) return gradient
 
             const interpolated = new Color(
                 color1.r + (color2.r - color1.r) * t,
@@ -206,5 +223,47 @@ export class EnhancedPanel extends UIPanel {
         ctx.lineTo(bounds.x, bounds.y + radius)
         ctx.quadraticCurveTo(bounds.x, bounds.y, bounds.x + radius, bounds.y)
         ctx.closePath()
+    }
+
+    private drawBackgroundImage(ctx: CanvasRenderingContext2D, bounds: Bound): void {
+        if (!this.backgroundImage) return
+
+        const sx = 0,
+            sy = 0,
+            sw = this.backgroundImage.width,
+            sh = this.backgroundImage.height
+        let dx = bounds.x,
+            dy = bounds.y,
+            dw = bounds.width,
+            dh = bounds.height
+
+        if (this.backgroundImageMode === 'cover') {
+            const scale = Math.max(dw / sw, dh / sh)
+            const scaledWidth = sw * scale
+            const scaledHeight = sh * scale
+            dx = bounds.x + (dw - scaledWidth) / 2
+            dy = bounds.y + (dh - scaledHeight) / 2
+            dw = scaledWidth
+            dh = scaledHeight
+        } else if (this.backgroundImageMode === 'contain') {
+            const scale = Math.min(dw / sw, dh / sh)
+            const scaledWidth = sw * scale
+            const scaledHeight = sh * scale
+            dx = bounds.x + (dw - scaledWidth) / 2
+            dy = bounds.y + (dh - scaledHeight) / 2
+            dw = scaledWidth
+            dh = scaledHeight
+        }
+        // 'stretch' mode is default
+
+        if (this.cornerRadius > 0) {
+            ctx.save()
+            this.drawRoundedRect(ctx, bounds, this.cornerRadius)
+            ctx.clip()
+            ctx.drawImage(this.backgroundImage, sx, sy, sw, sh, dx, dy, dw, dh)
+            ctx.restore()
+        } else {
+            ctx.drawImage(this.backgroundImage, sx, sy, sw, sh, dx, dy, dw, dh)
+        }
     }
 }
