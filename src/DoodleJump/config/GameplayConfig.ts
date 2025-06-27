@@ -110,6 +110,7 @@ export const GAME_CONFIG = {
             PLAYER_MOVE_RIGHT_JETPACK: 'player_move_right_jetpack',
             PLAYER_DEAD: 'player_dead',
         },
+        PROJECTILE: 'projectile',
     },
     AUDIO: {
         SFX: {
@@ -119,6 +120,9 @@ export const GAME_CONFIG = {
             HIT: 'hit',
             WALK: 'walk',
             BUTTON_CLICK: 'button_click',
+            SHOOT: 'shoot',
+            PLATFORM_BREAK: 'platform_break',
+            DESTROY_OBSTACLE: 'destroy_obstacle',
         },
         MUSIC: {
             BACKGROUND_MUSIC: 'background_music',
@@ -206,6 +210,12 @@ export const GAME_CONFIG = {
             frames: ['player_dead', 'player_dead', 'player_dead'],
             frameRate: 300,
             loop: false,
+        },
+        PROJECTILE: {
+            name: 'projectile',
+            frames: ['projectile_1', 'projectile_2', 'projectile_3', 'projectile_4'],
+            frameRate: 15,
+            loop: true,
         },
     },
     DIFFICULTY: 500,

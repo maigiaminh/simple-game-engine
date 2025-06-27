@@ -1,8 +1,8 @@
-import { Renderer } from '../../components/Renderer'
-import { RigidBody } from '../../components/RigidBody'
-import { GameEngine } from '../../core/GameEngine'
-import { ComponentConstructor, IGameObject } from '../../types/interface'
-import { GAME_CONFIG } from '../config/GameplayConfig'
+import { Renderer } from '../../../components/Renderer'
+import { RigidBody } from '../../../components/RigidBody'
+import { GameEngine } from '../../../core/GameEngine'
+import { IGameObject, ComponentConstructor } from '../../../types/interface'
+import { GAME_CONFIG } from '../../config/GameplayConfig'
 import { Platform } from './Platform'
 
 export class BreakablePlatform extends Platform {
@@ -48,5 +48,7 @@ export class BreakablePlatform extends Platform {
             rigidBody.useGravity = true
             rigidBody.isKinematic = false
         }
+
+        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.PLATFORM_BREAK)
     }
 }

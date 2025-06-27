@@ -238,7 +238,7 @@ class Animation {
             .setPosition(new Vector2(this.originalValues.position.x, currentY))
     }
 
-    private applyPulse(progress: number): void {
+    applyPulse(progress: number): void {
         const scale = 1 + Math.sin(progress * Math.PI * 4) * 0.1
         this.element.size = new Vector2(
             this.originalValues.size.x * scale,

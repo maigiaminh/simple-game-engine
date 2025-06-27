@@ -6,6 +6,7 @@ import { IGameObject, ComponentConstructor, GameEvent } from '../../../types/int
 import { GAME_CONFIG } from '../../config/GameplayConfig'
 import { GAME_EVENTS } from '../../types/enums'
 import { Player } from '../Player'
+import { Projectile } from '../Projectile/Projectile'
 
 export abstract class Obstacle extends Component {
     protected obstacleType: string
@@ -31,6 +32,11 @@ export abstract class Obstacle extends Component {
                 ENGINE_EVENTS.TRIGGER_ENTER,
                 this.onPlayerCollision.bind(this)
             )
+
+            collider.addEventListener(
+                ENGINE_EVENTS.TRIGGER_ENTER,
+                this.onProjectileCollision.bind(this)
+            )
         }
     }
 
@@ -43,6 +49,19 @@ export abstract class Obstacle extends Component {
         if (other.getGameObject().tag === 'Player') {
             this.onPlayerHit(other.getGameObject())
         }
+    }
+
+    protected onProjectileCollision(event: GameEvent): void {
+        const { other } = event.data as { other: Collider }
+        if (other.getGameObject().tag === 'Projectile') {
+            this.onProjectileHit(other.getGameObject())
+        }
+    }
+
+    protected onProjectileHit(projectile: IGameObject): void {
+        if (this.gameObject.tag === 'landed_spike') return
+        this.deactivate()
+        projectile.getComponent(Projectile as ComponentConstructor<Projectile>)!.deactivate()
     }
 
     protected onPlayerHit(player: IGameObject): void {
@@ -63,7 +82,9 @@ export abstract class Obstacle extends Component {
         if (collider && GameEngine.getInstance()) {
             GameEngine.getInstance().getCollisionManager().removeCollider(collider)
         }
+        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.DESTROY_OBSTACLE)
         GameEngine.getInstance().getCurrentScene()!.removeGameObject(this.gameObject)
+        this.gameObject.destroy()
     }
 
     public isObstacleActive(): boolean {

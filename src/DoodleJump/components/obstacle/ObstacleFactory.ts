@@ -22,6 +22,7 @@ export class ObstacleFactory {
         const renderer = new Renderer(obstacle)
         const collider = new Collider(obstacle)
         if (type === 'landed_spike') {
+            obstacle.tag = 'landed_spike'
             renderer.setImageSize(
                 GAME_CONFIG.OBSTACLES.LANDED_SPIKE.WIDTH,
                 GAME_CONFIG.OBSTACLES.LANDED_SPIKE.HEIGHT

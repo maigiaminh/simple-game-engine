@@ -1,10 +1,10 @@
-import { CONFIG } from '../../config/Config'
-import { ComponentConstructor, IGameObject } from '../../types/interface'
-import { MathUtils } from '../../utils/MathUtils'
-import { Vector2 } from '../../utils/Vector2'
+import { Transform } from '../../../components/Transform'
+import { CONFIG } from '../../../config/Config'
+import { IGameObject, ComponentConstructor } from '../../../types/interface'
+import { MathUtils } from '../../../utils/MathUtils'
+import { Vector2 } from '../../../utils/Vector2'
+import { ScoreManager } from '../../game_manager/ScoreManager'
 import { Platform } from './Platform'
-import { Transform } from '../../components/Transform'
-import { ScoreManager } from '../game_manager/ScoreManager'
 
 export class MovingPlatform extends Platform {
     private moveSpeed = 50

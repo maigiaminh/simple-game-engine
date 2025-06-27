@@ -9,13 +9,13 @@ import { Color } from '../../utils/Color'
 import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameplayConfig'
-import { Platform } from '../components/Platform'
 import { GameEngine } from '../../core/GameEngine'
 import { ScoreManager } from './ScoreManager'
-import { MovingPlatform } from '../components/MovingPlatform'
 import { ObstacleFactory } from '../components/obstacle/ObstacleFactory'
 import { ItemFactory } from '../components/items/ItemFactory'
-import { BreakablePlatform } from '../components/BreakablePlatform'
+import { BreakablePlatform } from '../components/platform/BreakablePlatform'
+import { MovingPlatform } from '../components/platform/MovingPlatform'
+import { Platform } from '../components/platform/Platform'
 
 export class PlatformManager extends Component {
     private gameEngine: GameEngine

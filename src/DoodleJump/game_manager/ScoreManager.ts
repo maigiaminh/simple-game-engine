@@ -61,7 +61,7 @@ export class ScoreManager extends Component {
             name: 'ScoreLabel',
             position: new Vector2(100, -300),
             tag: 'UI',
-            layer: 1000,
+            layer: 1001,
         })
 
         this.scoreLabel = new UILabel(scoreLabelGO, 'Score: 0')
@@ -77,7 +77,7 @@ export class ScoreManager extends Component {
             name: 'HighScoreLabel',
             position: new Vector2(0, 0),
             tag: 'UI',
-            layer: 1000,
+            layer: 1001,
         })
 
         this.highScoreLabel = new UILabel(highScoreLabelGO, `High: ${this.highScore}`)

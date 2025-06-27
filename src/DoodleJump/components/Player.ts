@@ -5,16 +5,17 @@ import { Transform } from '../../components/Transform'
 import { CONFIG } from '../../config/Config'
 import { Component } from '../../core/Component'
 import { GameEngine } from '../../core/GameEngine'
+import { GameObject } from '../../core/GameObject'
 import { ColliderType, CollisionLayer, ENGINE_EVENTS } from '../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent, CollisionInfo } from '../../types/interface'
 import { Vector2 } from '../../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameplayConfig'
 import { GAME_EVENTS } from '../types/enums'
-import { BreakablePlatform } from './BreakablePlatform'
+import { BreakablePlatform } from './platform/BreakablePlatform'
+import { Projectile } from './Projectile/Projectile'
 
 export class Player extends Component {
     private isGrounded = false
-    private canJump = true
     private isUsingJetpack = false
     private jetpack = GAME_CONFIG.ITEMS.JETPACK
     private currentFuel = 0
@@ -22,12 +23,15 @@ export class Player extends Component {
 
     private inputLeft = false
     private inputRight = false
-    private inputJump = false
+    private inputShoot = false
 
     private transform!: Transform
     private rigidBody!: RigidBody
     private collider!: Collider
     private animatedRenderer!: AnimatedRenderer
+
+    private shootCooldown = 0
+    private readonly SHOOT_INTERVAL = 800
 
     constructor(gameObject: IGameObject) {
         super(gameObject)
@@ -79,13 +83,10 @@ export class Player extends Component {
         this.gameObject.tag = 'Player'
     }
 
-    public setInput(left: boolean, right: boolean, jump: boolean): void {
-        if (!jump) {
-            this.inputLeft = left
-            this.inputRight = right
-        }
-
-        this.inputJump = jump
+    public setInput(left: boolean, right: boolean, shoot: boolean): void {
+        this.inputLeft = left
+        this.inputRight = right
+        this.inputShoot = shoot
     }
 
     public update(deltaTime: number): void {
@@ -97,6 +98,10 @@ export class Player extends Component {
         this.updateVisuals()
         this.handleJetpack(deltaTime)
         this.updateAudio()
+
+        if (this.shootCooldown > 0) {
+            this.shootCooldown -= deltaTime
+        }
     }
 
     public setUsingJetpack(isUsing: boolean): void {
@@ -131,6 +136,10 @@ export class Player extends Component {
             this.rigidBody.setVelocity(new Vector2(velocity.x * 0.8, velocity.y))
         }
 
+        if (this.inputShoot) {
+            this.shoot()
+        }
+
         if (this.isUsingJetpack) {
             this.jump()
         }
@@ -144,9 +153,24 @@ export class Player extends Component {
             new Vector2(this.rigidBody.getVelocity().x, GAME_CONFIG.PLAYER.JUMP_FORCE)
         )
         this.isGrounded = false
-        this.canJump = false
 
         this.dispatchEvent(GAME_EVENTS.PLAYER_JUMP)
+    }
+
+    private shoot(): void {
+        if (this.isDead) return
+        if (this.shootCooldown > 0) return
+
+        this.shootCooldown = this.SHOOT_INTERVAL
+        const projectileGO = new GameObject({
+            name: 'Projectile',
+            position: this.transform.getWorldPosition(),
+            tag: 'Projectile',
+            layer: 10,
+        })
+        projectileGO.addComponent(new Projectile(projectileGO))
+        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.SHOOT)
+        this.dispatchEvent(GAME_EVENTS.PLAYER_SHOOT)
     }
 
     private updateMovement(): void {
@@ -248,7 +272,6 @@ export class Player extends Component {
             )
 
             this.isGrounded = true
-            this.canJump = true
             this.rigidBody.setVelocity(new Vector2(this.rigidBody.getVelocity().x, 0))
             this.jump()
         }
@@ -257,7 +280,6 @@ export class Player extends Component {
     private onCollisionExit(event: GameEvent): void {
         const { other } = event.data as { other: Collider }
         this.isGrounded = false
-        this.canJump = false
         this.rigidBody.isGrounded = false
     }
 

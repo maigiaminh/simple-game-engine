@@ -11,7 +11,7 @@ export class GameInput extends Component {
 
     private leftPressed = false
     private rightPressed = false
-    private jumpPressed = false
+    private shootPressed = false
 
     private isTouching = false
 
@@ -39,7 +39,7 @@ export class GameInput extends Component {
         this.rightPressed =
             this.inputManager.isKeyPressed(KEY.RIGHT) || this.inputManager.isKeyPressed(KEY.D)
 
-        this.jumpPressed =
+        this.shootPressed =
             this.inputManager.isKeyPressed(KEY.SPACE) ||
             this.inputManager.isKeyPressed(KEY.UP) ||
             this.inputManager.isKeyPressed(KEY.W)
@@ -56,7 +56,7 @@ export class GameInput extends Component {
                 this.rightPressed = true
             }
 
-            this.jumpPressed = true
+            this.shootPressed = true
         }
     }
 
@@ -69,7 +69,7 @@ export class GameInput extends Component {
 
             if (!this.isTouching) {
                 this.isTouching = true
-                this.jumpPressed = true
+                this.shootPressed = true
             } else {
                 if (touch.position.x < canvasWidth / 3) {
                     this.leftPressed = true
@@ -93,7 +93,7 @@ export class GameInput extends Component {
 
     private sendInputToPlayer(): void {
         if (this.player) {
-            this.player.setInput(this.leftPressed, this.rightPressed, this.jumpPressed)
+            this.player.setInput(this.leftPressed, this.rightPressed, this.shootPressed)
         }
 
         this.resetInputStates()
@@ -107,7 +107,7 @@ export class GameInput extends Component {
             !this.inputManager.isMouseButtonPressed(MouseButton.LEFT) &&
             this.inputManager.getTouchCount() === 0
         ) {
-            this.jumpPressed = false
+            this.shootPressed = false
         }
 
         if (
@@ -145,7 +145,7 @@ export class GameInput extends Component {
 
             ctx.fillText('→', 833, 750)
 
-            ctx.fillText('TAP TO JUMP', 500, 750)
+            ctx.fillText('TAP TO SHOOT', 500, 750)
 
             ctx.restore()
         }

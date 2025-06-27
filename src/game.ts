@@ -184,6 +184,26 @@ import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
                         url: 'assets/images/player/dead/player_dead.png',
                     },
                     {
+                        name: GAME_CONFIG.IMAGES.PROJECTILE + '_1',
+                        url: 'assets/images/projectile/projectile_1.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.PROJECTILE + '_2',
+                        url: 'assets/images/projectile/projectile_2.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.PROJECTILE + '_3',
+                        url: 'assets/images/projectile/projectile_3.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.PROJECTILE + '_4',
+                        url: 'assets/images/projectile/projectile_4.png',
+                    },
+                    {
+                        name: GAME_CONFIG.IMAGES.PROJECTILE + '_5',
+                        url: 'assets/images/projectile/projectile_5.png',
+                    },
+                    {
                         name: GAME_CONFIG.OBSTACLES.LANDED_SPIKE.ICON,
                         url: 'assets/images/obstacle/landed_spike.png',
                     },
@@ -264,6 +284,18 @@ import { MainMenuScene } from './DoodleJump/scenes/MainMenuScene'
                     {
                         name: GAME_CONFIG.AUDIO.SFX.HIT,
                         url: 'assets/audio/sfx/hit.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.SHOOT,
+                        url: 'assets/audio/sfx/shoot.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.PLATFORM_BREAK,
+                        url: 'assets/audio/sfx/platform_break.mp3',
+                    },
+                    {
+                        name: GAME_CONFIG.AUDIO.SFX.DESTROY_OBSTACLE,
+                        url: 'assets/audio/sfx/destroy_obstacle.mp3',
                     },
                 ],
             },
