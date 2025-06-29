@@ -40,7 +40,7 @@ export class ScoreManager extends Component {
 
     public update(deltaTime: number): void {
         this.updateScore()
-        this.updateUI()
+        // this.updateUI()
         this.updateDifficultyLevel()
     }
 
@@ -59,7 +59,7 @@ export class ScoreManager extends Component {
     private createScoreUI(): void {
         const scoreLabelGO = new GameObject({
             name: 'ScoreLabel',
-            position: new Vector2(100, -300),
+            position: new Vector2(50, 50),
             tag: 'UI',
             layer: 1001,
         })
@@ -75,7 +75,7 @@ export class ScoreManager extends Component {
 
         const highScoreLabelGO = new GameObject({
             name: 'HighScoreLabel',
-            position: new Vector2(0, 0),
+            position: new Vector2(50, 100),
             tag: 'UI',
             layer: 1001,
         })
@@ -88,6 +88,9 @@ export class ScoreManager extends Component {
         this.highScoreLabel.size = new Vector2(200, 40)
         this.highScoreLabel.margin = { top: 20, right: 20, bottom: 0, left: 0 }
         highScoreLabelGO.addComponent(this.highScoreLabel)
+
+        GameEngine.getInstance().getUIManager().addRootElement(this.scoreLabel)
+        GameEngine.getInstance().getUIManager().addRootElement(this.highScoreLabel)
     }
 
     private updateScore(): void {
@@ -104,26 +107,6 @@ export class ScoreManager extends Component {
                 this.highScore = this.currentScore
                 this.saveHighScore()
             }
-        }
-    }
-
-    private updateUI(): void {
-        const camera = GameEngine.getInstance().getCurrentScene()?.getMainCamera()
-
-        if (!camera) return
-
-        const cameraPosition = camera.getGameObject().getPosition()
-
-        if (this.scoreLabel) {
-            this.scoreLabel.setText(`Score: ${this.currentScore}`)
-            const newPos = new Vector2(0, cameraPosition.y - 350)
-            this.scoreLabel.setLocalPosition(newPos)
-        }
-
-        if (this.highScoreLabel) {
-            this.highScoreLabel.setText(`High: ${this.highScore}`)
-            const newPos = new Vector2(0, cameraPosition.y - 300)
-            this.highScoreLabel.setLocalPosition(newPos)
         }
     }
 
@@ -171,7 +154,6 @@ export class ScoreManager extends Component {
     }
 
     public render(ctx: CanvasRenderingContext2D): void {
-        this.scoreLabel?.render(ctx)
-        this.highScoreLabel?.render(ctx)
+        //
     }
 }

@@ -14,17 +14,17 @@ import { Vector2 } from '../../utils/Vector2'
 import { GAME_CONFIG } from '../config/GameplayConfig'
 
 export class MainMenuScene extends Scene {
-    private gameEngine!: GameEngine
-    private animator!: UIAnimator
-    private particleSystem!: ParticleSystem
+    private gameEngine: GameEngine
+    private animator: UIAnimator
+    private particleSystem: ParticleSystem
 
-    private backgroundPanel!: EnhancedPanel
-    private titleLabel!: EnhancedLabel
-    private subtitleLabel!: EnhancedLabel
-    private playButton!: EnhancedButton
-    private highScoreLabel!: EnhancedLabel
-    private instructionsLabel!: EnhancedLabel
-    private soundToggleButton!: EnhancedButton
+    private backgroundPanel: EnhancedPanel
+    private titleLabel: EnhancedLabel
+    private subtitleLabel: EnhancedLabel
+    private playButton: EnhancedButton
+    private highScoreLabel: EnhancedLabel
+    private instructionsLabel: EnhancedLabel
+    private soundToggleButton: EnhancedButton
     private isSoundOn = localStorage.getItem(GAME_CONFIG.AUDIO_ENABLED_KEY) === 'true'
 
     private introAnimationComplete = false
@@ -279,8 +279,6 @@ export class MainMenuScene extends Scene {
         this.soundToggleButton.setBackgroundImage(
             this.isSoundOn ? (imgSoundOn as HTMLImageElement) : (imgSoundOff as HTMLImageElement)
         )
-        this.soundToggleButton.enableHoverEffect = true
-        this.soundToggleButton.enableClickEffect = true
         this.soundToggleButton.cornerRadius = 12
         this.soundToggleButton.borderWidth = 2
         this.soundToggleButton.borderColor = new Color(100, 100, 100, 0.4)

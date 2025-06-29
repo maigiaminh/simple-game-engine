@@ -132,8 +132,8 @@ export const GAME_CONFIG = {
     },
     ANIMATIONS: {
         PLAYER_IDLE: {
-            name: 'player_idle',
-            frames: [
+            Name: 'player_idle',
+            Frames: [
                 'player_idle_1',
                 'player_idle_2',
                 'player_idle_3',
@@ -141,12 +141,12 @@ export const GAME_CONFIG = {
                 'player_idle_5',
                 'player_idle_6',
             ],
-            frameRate: 500,
-            loop: true,
+            FrameRate: 500,
+            Loop: true,
         },
         PLAYER_IDLE_JETPACK: {
-            name: 'player_idle_jetpack',
-            frames: [
+            Name: 'player_idle_jetpack',
+            Frames: [
                 'player_idle_jetpack_1',
                 'player_idle_jetpack_2',
                 'player_idle_jetpack_3',
@@ -154,70 +154,70 @@ export const GAME_CONFIG = {
                 'player_idle_jetpack_5',
                 'player_idle_jetpack_6',
             ],
-            frameRate: 500,
-            loop: true,
+            FrameRate: 500,
+            Loop: true,
         },
         PLAYER_MOVE_LEFT: {
-            name: 'player_move_left',
-            frames: [
+            Name: 'player_move_left',
+            Frames: [
                 'player_move_left_1',
                 'player_move_left_2',
                 'player_move_left_3',
                 'player_move_left_4',
             ],
-            frameRate: 300,
-            loop: true,
+            FrameRate: 300,
+            Loop: true,
         },
         PLAYER_MOVE_LEFT_JETPACK: {
-            name: 'player_move_left_jetpack',
-            frames: [
+            Name: 'player_move_left_jetpack',
+            Frames: [
                 'player_move_left_jetpack_1',
                 'player_move_left_jetpack_2',
                 'player_move_left_jetpack_3',
                 'player_move_left_jetpack_4',
             ],
-            frameRate: 300,
-            loop: true,
+            FrameRate: 300,
+            Loop: true,
         },
         PLAYER_MOVE_RIGHT: {
-            name: 'player_move_right',
-            frames: [
+            Name: 'player_move_right',
+            Frames: [
                 'player_move_right_1',
                 'player_move_right_2',
                 'player_move_right_3',
                 'player_move_right_4',
             ],
-            frameRate: 300,
-            loop: true,
+            FrameRate: 300,
+            Loop: true,
         },
         PLAYER_MOVE_RIGHT_JETPACK: {
-            name: 'player_move_right_jetpack',
-            frames: [
+            Name: 'player_move_right_jetpack',
+            Frames: [
                 'player_move_right_jetpack_1',
                 'player_move_right_jetpack_2',
                 'player_move_right_jetpack_3',
                 'player_move_right_jetpack_4',
             ],
-            frameRate: 300,
-            loop: true,
+            FrameRate: 300,
+            Loop: true,
         },
         PLAYER_JUMP: {
-            name: 'player_jump',
-            frames: ['player_jump_1', 'player_jump_2', 'player_jump_3'],
-            frameRate: 300,
-            loop: false,
+            Name: 'player_jump',
+            Frames: ['player_jump_1', 'player_jump_2', 'player_jump_3'],
+            FrameRate: 300,
+            Loop: false,
         },
         PLAYER_DEAD: {
-            name: 'player_dead',
-            frames: ['player_dead', 'player_dead', 'player_dead'],
-            frameRate: 300,
-            loop: false,
+            Name: 'player_dead',
+            Frames: ['player_dead', 'player_dead', 'player_dead'],
+            FrameRate: 300,
+            Loop: false,
         },
         PROJECTILE: {
-            name: 'projectile',
-            frames: ['projectile_1', 'projectile_2', 'projectile_3', 'projectile_4'],
-            frameRate: 15,
-            loop: true,
+            Name: 'projectile',
+            Frames: ['projectile_1', 'projectile_2', 'projectile_3', 'projectile_4'],
+            FrameRate: 15,
+            Loop: true,
         },
     },
     DIFFICULTY: 500,

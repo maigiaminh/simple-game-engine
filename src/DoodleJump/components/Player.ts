@@ -161,8 +161,6 @@ export class Player extends Component {
             new Vector2(this.rigidBody.getVelocity().x, GAME_CONFIG.PLAYER.JUMP_FORCE)
         )
         this.isGrounded = false
-
-        this.dispatchEvent(GAME_EVENTS.PLAYER_JUMP)
     }
 
     private shoot(): void {
@@ -178,7 +176,6 @@ export class Player extends Component {
         })
         projectileGO.addComponent(new Projectile(projectileGO))
         GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.SHOOT)
-        this.dispatchEvent(GAME_EVENTS.PLAYER_SHOOT)
     }
 
     private updateMovement(): void {
@@ -209,22 +206,22 @@ export class Player extends Component {
         if (this.isUsingJetpack) {
             if (velocity.x > 1) {
                 this.animatedRenderer.playAnimation(
-                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.name
+                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.Name
                 )
             } else if (velocity.x < -1) {
                 this.animatedRenderer.playAnimation(
-                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.name
+                    GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.Name
                 )
             } else {
-                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.name)
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.Name)
             }
         } else {
             if (velocity.x > 1) {
-                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name)
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.Name)
             } else if (velocity.x < -1) {
-                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name)
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.Name)
             } else {
-                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
+                this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.Name)
             }
         }
     }
@@ -301,7 +298,7 @@ export class Player extends Component {
         this.gameObject.removeComponent(Collider as ComponentConstructor<Collider>)
         GameEngine.getInstance().getCollisionManager().removeCollider(this.collider)
         this.rigidBody.setVelocity(new Vector2(0, GAME_CONFIG.PLAYER.JUMP_FORCE))
-        this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name)
+        this.animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Name)
         this.getGameObject().destroy
     }
 

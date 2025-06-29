@@ -4,7 +4,7 @@ import { CONFIG } from '../../config/Config'
 import { Component } from '../../core/Component'
 import { GameObject } from '../../core/GameObject'
 import { ColliderType, CollisionLayer } from '../../types/enums'
-import { ComponentConstructor, IGameObject, IScene } from '../../types/interface'
+import { ComponentConstructor, IGameObject } from '../../types/interface'
 import { Color } from '../../utils/Color'
 import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
@@ -16,17 +16,18 @@ import { ItemFactory } from '../components/items/ItemFactory'
 import { BreakablePlatform } from '../components/platform/BreakablePlatform'
 import { MovingPlatform } from '../components/platform/MovingPlatform'
 import { Platform } from '../components/platform/Platform'
+import type { Scene } from '../../core/Scene'
 
 export class PlatformManager extends Component {
     private gameEngine: GameEngine
     private platformsImg: HTMLImageElement[] = []
     private platforms: Platform[] = []
-    private scene: IScene
+    private scene: Scene
     private lastPlatformX: number = CONFIG.CANVAS.WIDTH / 2
     private readonly MAX_PLATFORM_X_DIFF = CONFIG.CANVAS.WIDTH / 2
     private spawnDistance: number = GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
 
-    constructor(gameObject: IGameObject, scene: IScene) {
+    constructor(gameObject: IGameObject, scene: Scene) {
         super(gameObject)
         this.scene = scene
     }

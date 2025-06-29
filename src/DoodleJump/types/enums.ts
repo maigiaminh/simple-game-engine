@@ -1,10 +1,5 @@
 export const GAME_EVENTS = {
-    PLAYER_FELL: 'player_fell',
-    PLAYER_JUMP: 'player_jump',
     PLAYER_HIT_OBSTACLE: 'player_hit_obstacle',
-    PLAYER_HIT_ITEM: 'player_hit_item',
-    PLAYER_SHOOT: 'player_shoot',
-    GAME_OVER: 'game_over',
 }
 
 export enum PlayerState {

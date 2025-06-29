@@ -20,17 +20,17 @@ export class GameOverScene extends Scene {
     private finalScore = 0
     private highScore = 0
     private isNewHighScore = false
-    private animator!: UIAnimator
-    private particleSystem!: ParticleSystem
+    private animator: UIAnimator
+    private particleSystem: ParticleSystem
 
-    private backgroundPanel!: EnhancedPanel
-    private gameOverLabel!: EnhancedLabel
-    private scorePanel!: EnhancedPanel
-    private finalScoreLabel!: EnhancedLabel
-    private highScoreLabel!: EnhancedLabel
-    private performanceLabel!: EnhancedLabel
-    private restartButton!: EnhancedButton
-    private menuButton!: EnhancedButton
+    private backgroundPanel: EnhancedPanel
+    private gameOverLabel: EnhancedLabel
+    private scorePanel: EnhancedPanel
+    private finalScoreLabel: EnhancedLabel
+    private highScoreLabel: EnhancedLabel
+    private performanceLabel: EnhancedLabel
+    private restartButton: EnhancedButton
+    private menuButton: EnhancedButton
 
     private animationComplete = false
     private celebrationTime = 0
@@ -39,24 +39,24 @@ export class GameOverScene extends Scene {
         super(name)
     }
 
-    protected async onLoad(): Promise<void> {
+    protected onLoad(): void {
         console.log('Loading Enhanced Game Over Scene...')
         this.gameEngine = GameEngine.getInstance()
 
         this.loadScores()
 
-        await this.createEffectSystems()
+        this.createEffectSystems()
 
-        await this.createPlayerDead()
+        this.createPlayerDead()
 
-        await this.createUI()
+        this.createUI()
 
-        await this.playEntranceAnimation()
+        this.playEntranceAnimation()
 
         console.log('Enhanced Game Over Scene loaded!')
     }
 
-    protected async onUnload(): Promise<void> {
+    protected onUnload(): void {
         console.log('Unloading Enhanced Game Over Scene...')
         const uiManager = this.gameEngine.getUIManager()
         if (uiManager && this.backgroundPanel) {
@@ -83,7 +83,7 @@ export class GameOverScene extends Scene {
         }
     }
 
-    private async createEffectSystems(): Promise<void> {
+    private createEffectSystems(): void {
         const animatorGO = new GameObject({ name: 'GameOverAnimator' })
         this.animator = new UIAnimator(animatorGO)
         animatorGO.addComponent(this.animator)
@@ -95,16 +95,16 @@ export class GameOverScene extends Scene {
         this.addGameObject(particleGO)
     }
 
-    private async createUI(): Promise<void> {
-        await this.createBackgroundPanel()
-        await this.createGameOverTitle()
-        await this.createScorePanel()
-        await this.createButtons()
+    private createUI(): void {
+        this.createBackgroundPanel()
+        this.createGameOverTitle()
+        this.createScorePanel()
+        this.createButtons()
 
         this.addUIToManager()
     }
 
-    private async createPlayerDead(): Promise<void> {
+    private createPlayerDead(): void {
         const playerDeadGO = new GameObject({
             name: 'PlayerDead',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, -CONFIG.CANVAS.HEIGHT / 2),
@@ -114,18 +114,18 @@ export class GameOverScene extends Scene {
         rigidBody.useGravity = true
         const animatedRenderer = new AnimatedRenderer(playerDeadGO)
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Loop
         )
-        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name)
+        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Name)
         playerDeadGO.addComponent(rigidBody)
         playerDeadGO.addComponent(animatedRenderer)
         this.addGameObject(playerDeadGO)
     }
-    private async createBackgroundPanel(): Promise<void> {
+    private createBackgroundPanel(): void {
         const panelGO = new GameObject({
             name: 'GameOverPanel',
             position: new Vector2(-CONFIG.CANVAS.WIDTH, -CONFIG.CANVAS.HEIGHT),
@@ -162,7 +162,7 @@ export class GameOverScene extends Scene {
         this.addGameObject(panelGO)
     }
 
-    private async createGameOverTitle(): Promise<void> {
+    private createGameOverTitle(): void {
         const titleGO = new GameObject({
             name: 'GameOverTitle',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 250, 100),
@@ -183,7 +183,7 @@ export class GameOverScene extends Scene {
         this.backgroundPanel.addChild(this.gameOverLabel)
     }
 
-    private async createScorePanel(): Promise<void> {
+    private createScorePanel(): void {
         const scorePanelGO = new GameObject({
             name: 'ScorePanel',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 200, 300),
@@ -256,7 +256,7 @@ export class GameOverScene extends Scene {
         scorePanelGO.setActive(false)
     }
 
-    private async createButtons(): Promise<void> {
+    private createButtons(): void {
         const restartGO = new GameObject({
             name: 'RestartButton',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2 - 250, CONFIG.CANVAS.HEIGHT / 2 + 75),
@@ -307,7 +307,7 @@ export class GameOverScene extends Scene {
         }
     }
 
-    private async playEntranceAnimation(): Promise<void> {
+    private playEntranceAnimation(): void {
         this.animator.animate(this.backgroundPanel, {
             type: AnimationType.FadeIn,
             duration: 800,

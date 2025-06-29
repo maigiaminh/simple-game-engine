@@ -5,7 +5,8 @@ import { CONFIG } from '../../config/Config'
 import { Component } from '../../core/Component'
 import { GameEngine } from '../../core/GameEngine'
 import { GameObject } from '../../core/GameObject'
-import { ComponentConstructor, IGameObject, IScene } from '../../types/interface'
+import type { Scene } from '../../core/Scene'
+import { ComponentConstructor, IGameObject } from '../../types/interface'
 import { Color } from '../../utils/Color'
 import { MathUtils } from '../../utils/MathUtils'
 import { Vector2 } from '../../utils/Vector2'
@@ -16,9 +17,9 @@ export class BackgroundManager extends Component {
     private bgImage: HTMLImageElement
     private cloudImage: HTMLImageElement
     private clouds: IGameObject[] = []
-    private scene!: IScene
+    private scene: Scene
     private camera: Camera | null = null
-    constructor(gameObject: IGameObject, scene: IScene) {
+    constructor(gameObject: IGameObject, scene: Scene) {
         super(gameObject)
         this.scene = scene
     }

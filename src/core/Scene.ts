@@ -2,11 +2,11 @@ import { Camera } from '../components/Camera'
 import { Transform } from '../components/Transform'
 import { CONFIG } from '../config/Config'
 import { ENGINE_EVENTS, SceneState } from '../types/enums'
-import { ComponentConstructor, IGameObject, IScene } from '../types/interface'
+import { ComponentConstructor, IGameObject } from '../types/interface'
 import { EventEmitter } from './EventEmitter'
 import { GameEngine } from './GameEngine'
 
-export abstract class Scene extends EventEmitter implements IScene {
+export abstract class Scene extends EventEmitter {
     protected gameObjects: Map<string, IGameObject> = new Map()
     protected gameObjectsByTag: Map<string, Set<IGameObject>> = new Map()
     protected gameObjectsByLayer: Map<number, Set<IGameObject>> = new Map()
@@ -144,14 +144,14 @@ export abstract class Scene extends EventEmitter implements IScene {
         return this.gameObjects.size
     }
 
-    public async load(): Promise<void> {
+    public load(): void {
         if (this.state !== SceneState.NOT_LOADED) return
 
         this.state = SceneState.LOADING
         this.loadProgress = 0
 
         try {
-            await this.onLoad()
+            this.onLoad()
 
             this.gameObjects.forEach((gameObject) => {
                 gameObject.awake()
@@ -171,7 +171,7 @@ export abstract class Scene extends EventEmitter implements IScene {
         }
     }
 
-    public async unload(): Promise<void> {
+    public unload(): void {
         if (this.state !== SceneState.LOADED) return
 
         this.state = SceneState.UNLOADING
@@ -182,7 +182,7 @@ export abstract class Scene extends EventEmitter implements IScene {
             this.gameObjectsByTag.clear()
             this.gameObjectsByLayer.clear()
 
-            await this.onUnload()
+            this.onUnload()
 
             this.state = SceneState.NOT_LOADED
             this.loadProgress = 0
@@ -193,8 +193,8 @@ export abstract class Scene extends EventEmitter implements IScene {
         }
     }
 
-    protected abstract onLoad(): Promise<void>
-    protected abstract onUnload(): Promise<void>
+    protected abstract onLoad(): void
+    protected abstract onUnload(): void
 
     public update(deltaTime: number): void {
         if (this.state !== SceneState.LOADED) return

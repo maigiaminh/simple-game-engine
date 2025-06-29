@@ -20,15 +20,15 @@ import { Transform } from '../../components/Transform'
 import { PauseManager } from '../game_manager/PauseManager'
 
 export class GameplayScene extends Scene {
-    private gameEngine!: GameEngine
-    private player!: GameObject
-    private playerComponent!: Player
-    private camera!: GameObject
-    private platformManager!: PlatformManager
-    private backgroundManager!: BackgroundManager
-    private scoreManager!: ScoreManager
-    private inputManager!: GameInput
-    private pauseManager!: PauseManager
+    private gameEngine: GameEngine
+    private player: GameObject
+    private playerComponent: Player
+    private camera: GameObject
+    private platformManager: PlatformManager
+    private backgroundManager: BackgroundManager
+    private scoreManager: ScoreManager
+    private inputManager: GameInput
+    private pauseManager: PauseManager
     private gameState = GameState.PLAYING
 
     private isGameOver = false
@@ -37,25 +37,25 @@ export class GameplayScene extends Scene {
         super(name)
     }
 
-    protected async onLoad(): Promise<void> {
+    protected onLoad(): void {
         console.log('Loading Gameplay Scene...')
         this.gameEngine = GameEngine.getInstance()
         this.gameState = GameState.PLAYING
         this.isGameOver = false
-        await this.createCamera()
-        await this.createPlayer()
-        await this.createPlatformManager()
-        await this.createBackgroundManager()
-        await this.createScoreManager()
-        await this.createInputManager()
-        await this.createPauseManager()
+        this.createCamera()
+        this.createPlayer()
+        this.createPlatformManager()
+        this.createBackgroundManager()
+        this.createScoreManager()
+        this.createInputManager()
+        this.createPauseManager()
 
         this.setupSystemConnections()
 
         console.log('Gameplay Scene loaded successfully!')
     }
 
-    protected async onUnload(): Promise<void> {
+    protected onUnload(): void {
         console.log('Unloading Gameplay Scene...')
         const uiManager = this.gameEngine.getUIManager()
         if (uiManager && this.pauseManager) {
@@ -65,7 +65,7 @@ export class GameplayScene extends Scene {
         }
     }
 
-    private async createCamera(): Promise<void> {
+    private createCamera(): void {
         this.camera = new GameObject({
             name: 'MainCamera',
             position: new Vector2(CONFIG.CANVAS.WIDTH / 2, CONFIG.CANVAS.HEIGHT / 2),
@@ -78,7 +78,7 @@ export class GameplayScene extends Scene {
         this.mainCamera = cameraComponent
     }
 
-    private async createPlayer(): Promise<void> {
+    private createPlayer(): void {
         this.player = new GameObject({
             name: 'Player',
             tag: 'Player',
@@ -95,70 +95,70 @@ export class GameplayScene extends Scene {
 
         const animatedRenderer = new AnimatedRenderer(this.player)
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_IDLE_JETPACK.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_LEFT_JETPACK.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_MOVE_RIGHT_JETPACK.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_JUMP.Loop
         )
 
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.name,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frames,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Name,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.frameRate,
-            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.loop
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PLAYER_DEAD.Loop
         )
 
-        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.name)
+        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PLAYER_IDLE.Name)
         this.player.addComponent(animatedRenderer)
 
         const collider = new Collider(this.player)
@@ -170,7 +170,6 @@ export class GameplayScene extends Scene {
         this.playerComponent = playerComponent
         this.player.addComponent(playerComponent)
 
-        playerComponent.addEventListener(GAME_EVENTS.PLAYER_FELL, this.onPlayerFell.bind(this))
         playerComponent.addEventListener(
             GAME_EVENTS.PLAYER_HIT_OBSTACLE,
             this.onPlayerHitObstacle.bind(this)
@@ -179,7 +178,7 @@ export class GameplayScene extends Scene {
         this.addGameObject(this.player)
     }
 
-    private async createPlatformManager(): Promise<void> {
+    private createPlatformManager(): void {
         const platformManagerGO = new GameObject({
             name: 'PlatformManager',
         })
@@ -190,7 +189,7 @@ export class GameplayScene extends Scene {
         this.addGameObject(platformManagerGO)
     }
 
-    private async createBackgroundManager(): Promise<void> {
+    private createBackgroundManager(): void {
         const backgroundManagerGO = new GameObject({
             name: 'BackgroundManager',
         })
@@ -201,7 +200,7 @@ export class GameplayScene extends Scene {
         this.addGameObject(backgroundManagerGO)
     }
 
-    private async createScoreManager(): Promise<void> {
+    private createScoreManager(): void {
         const scoreManagerGO = new GameObject({
             name: 'ScoreManager',
         })
@@ -212,7 +211,7 @@ export class GameplayScene extends Scene {
         this.addGameObject(scoreManagerGO)
     }
 
-    private async createInputManager(): Promise<void> {
+    private createInputManager(): void {
         const inputManagerGO = new GameObject({
             name: 'InputManager',
         })
@@ -223,7 +222,7 @@ export class GameplayScene extends Scene {
         this.addGameObject(inputManagerGO)
     }
 
-    private async createPauseManager(): Promise<void> {
+    private createPauseManager(): void {
         const pauseManagerGO = new GameObject({
             name: 'PauseManager',
         })

@@ -10,7 +10,6 @@ import {
     EventPhase,
     LoadState,
     ResourceType,
-    SceneState,
     TouchPhase,
 } from './enums'
 // ==================== CORE INTERFACES ====================
@@ -95,29 +94,6 @@ export interface IGameObject
     setRotation(rotation: number): void
     translate(delta: Vector2): void
     rotate(angle: number): void
-}
-// #endregion
-
-// ==================== SCENE INTERFACE ====================
-// #region Scene Interface
-export interface IScene extends IUpdatable, IRenderable, ISerializable {
-    getName(): string
-    getState(): SceneState
-    getLoadProgress(): number
-
-    addGameObject(gameObject: IGameObject): void
-    removeGameObject(gameObject: IGameObject): void
-    findGameObject(id: string): IGameObject | null
-    findGameObjectByName(name: string): IGameObject | null
-    findGameObjectByTag(tag: string): IGameObject | null
-    findGameObjectsByTag(tag: string): IGameObject[]
-    getAllGameObjects(): IGameObject[]
-    getGameObjectCount(): number
-
-    load(): Promise<void>
-    unload(): Promise<void>
-
-    getMainCamera(): Camera | null
 }
 // #endregion
 

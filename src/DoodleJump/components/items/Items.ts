@@ -3,7 +3,6 @@ import { Component } from '../../../core/Component'
 import { GameEngine } from '../../../core/GameEngine'
 import { CollisionLayer, ENGINE_EVENTS } from '../../../types/enums'
 import { IGameObject, ComponentConstructor, GameEvent } from '../../../types/interface'
-import { GAME_EVENTS } from '../../types/enums'
 
 export abstract class Items extends Component {
     protected itemType: string
@@ -46,18 +45,12 @@ export abstract class Items extends Component {
     }
 
     protected onPlayerHit(player: IGameObject): void {
-        this.dispatchEvent(GAME_EVENTS.PLAYER_HIT_ITEM, {
-            item: this.gameObject,
-            player: player,
-            itemType: this.itemType,
-        })
-
         if (this.itemType !== 'trampoline') {
             this.deactivate()
         }
     }
 
-    public deactivate(): void {
+    private deactivate(): void {
         this.isActive = false
         this.gameObject.setActive(false)
         const collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)

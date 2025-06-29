@@ -5,8 +5,9 @@ import { CONFIG } from '../../../config/Config'
 import { Component } from '../../../core/Component'
 import { GameEngine } from '../../../core/GameEngine'
 import { GameObject } from '../../../core/GameObject'
+import type { Scene } from '../../../core/Scene'
 import { ColliderType, CollisionLayer } from '../../../types/enums'
-import { ComponentConstructor, IScene } from '../../../types/interface'
+import { ComponentConstructor } from '../../../types/interface'
 import { Vector2 } from '../../../utils/Vector2'
 import { GAME_CONFIG } from '../../config/GameplayConfig'
 
@@ -15,7 +16,7 @@ export class Projectile extends Component {
         //
     }
     private gameEngine: GameEngine
-    private scene: IScene | null = null
+    private scene: Scene | null = null
     private speed = 1500
 
     constructor(gameObject: GameObject) {
@@ -28,11 +29,11 @@ export class Projectile extends Component {
         this.scene = this.gameEngine.getCurrentScene()
         const animatedRenderer = new AnimatedRenderer(this.gameObject)
         animatedRenderer.addAnimation(
-            GAME_CONFIG.ANIMATIONS.PROJECTILE.name,
-            GAME_CONFIG.ANIMATIONS.PROJECTILE.frames,
+            GAME_CONFIG.ANIMATIONS.PROJECTILE.Name,
+            GAME_CONFIG.ANIMATIONS.PROJECTILE.Frames,
             this.gameEngine,
-            GAME_CONFIG.ANIMATIONS.PROJECTILE.frameRate,
-            GAME_CONFIG.ANIMATIONS.PROJECTILE.loop
+            GAME_CONFIG.ANIMATIONS.PROJECTILE.FrameRate,
+            GAME_CONFIG.ANIMATIONS.PROJECTILE.Loop
         )
 
         const collider = new Collider(this.gameObject)
@@ -43,7 +44,7 @@ export class Projectile extends Component {
         collider.isTrigger = true
         this.gameObject.addComponent(collider)
         this.gameObject.addComponent(animatedRenderer)
-        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PROJECTILE.name)
+        animatedRenderer.playAnimation(GAME_CONFIG.ANIMATIONS.PROJECTILE.Name)
 
         const rigidBody = new RigidBody(this.gameObject)
         rigidBody.useGravity = false
@@ -58,12 +59,10 @@ export class Projectile extends Component {
     public update(deltaTime: number): void {
         const pos = this.gameObject.getPosition()
         if (this.scene) {
-            const mainCamera = this.scene.getMainCamera();
+            const mainCamera = this.scene.getMainCamera()
             if (
                 mainCamera &&
-                pos.y <
-                    mainCamera.getGameObject().getPosition().y -
-                        CONFIG.CANVAS.HEIGHT / 2
+                pos.y < mainCamera.getGameObject().getPosition().y - CONFIG.CANVAS.HEIGHT / 2
             ) {
                 this.deactivate()
             }

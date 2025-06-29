@@ -4,17 +4,18 @@ import { CollisionManager } from '../systems/CollisionManager'
 import { InputManager } from '../systems/InputManager'
 import { ResourceManager } from '../systems/ResourceManager'
 import { Time } from '../utils/Time'
-import { IScene, EngineConfig } from '../types/interface'
+import { EngineConfig } from '../types/interface'
 import { UIManager } from '../systems/UIManager'
 import { ENGINE_EVENTS } from '../types/enums'
+import type { Scene } from './Scene'
 
 export class GameEngine extends EventEmitter implements GameEngine {
     private static instance: GameEngine | null = null
 
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
-    private scenes: Map<string, IScene> = new Map()
-    private currentScene: IScene | null = null
+    private scenes: Map<string, Scene> = new Map()
+    private currentScene: Scene | null = null
 
     private inputManager: InputManager
     private audioManager: AudioManager
@@ -89,7 +90,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
         this.uiManager = new UIManager(this.canvas)
     }
 
-    public addScene(name: string, scene: IScene): void {
+    public addScene(name: string, scene: Scene): void {
         this.scenes.set(name, scene)
         this.dispatchEvent(ENGINE_EVENTS.SCENE_ADDED, { name, scene })
     }
@@ -111,7 +112,7 @@ export class GameEngine extends EventEmitter implements GameEngine {
         this.dispatchEvent(ENGINE_EVENTS.SCENE_CHANGED, { name, scene })
     }
 
-    public getCurrentScene(): IScene | null {
+    public getCurrentScene(): Scene | null {
         return this.currentScene
     }
 

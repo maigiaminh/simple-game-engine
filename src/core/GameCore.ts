@@ -55,20 +55,16 @@ export class GameCore {
     }): Promise<void> {
         const resourceManager = this.engine.getResourceManager()
         const audioManager = this.engine.getAudioManager()
-        if (assets.images) {
-            for (const imageData of assets.images) {
-                await resourceManager.loadResource(
-                    imageData.name,
-                    imageData.url,
-                    ResourceType.IMAGE
-                )
-            }
-        }
-        if (assets.audio) {
-            for (const audioData of assets.audio) {
-                await audioManager.loadSound(audioData.name, audioData.url)
-            }
-        }
+
+        const imagePromises = assets.images
+            ? assets.images.map((imageData) =>
+                  resourceManager.loadResource(imageData.name, imageData.url, ResourceType.IMAGE)
+              )
+            : []
+        const audioPromises = assets.audio
+            ? assets.audio.map((audioData) => audioManager.loadSound(audioData.name, audioData.url))
+            : []
+        await Promise.all([...imagePromises, ...audioPromises])
     }
 
     public static addScene(name: string, scene: Scene): void {

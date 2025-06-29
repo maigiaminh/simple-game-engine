@@ -13,17 +13,17 @@ import { GAME_CONFIG } from '../config/GameplayConfig'
 
 export class PauseManager extends Component {
     private gameEngine: GameEngine
-    private animator!: UIAnimator
+    private animator: UIAnimator
 
     private isPaused = false
     private isSoundOn = false
-    private pauseButton!: EnhancedButton
-    private pauseOverlay!: EnhancedPanel
+    private pauseButton: EnhancedButton
+    private pauseOverlay: EnhancedPanel
     private pauseMenu!: EnhancedPanel
-    private resumeButton!: EnhancedButton
-    private soundToggleButton!: EnhancedButton
-    private restartButton!: EnhancedButton
-    private homeButton!: EnhancedButton
+    private resumeButton: EnhancedButton
+    private soundToggleButton: EnhancedButton
+    private restartButton: EnhancedButton
+    private homeButton: EnhancedButton
 
     private onResumeCallback?: () => void
     private onMenuCallback?: () => void
