@@ -128,6 +128,48 @@ export class UIButton extends UIPanel {
         this.updateAppearance()
     }
 
+    public handleTouchStart(touchPos: Vector2): void {
+        if (!this.isEnabled()) return
+
+        const bounds = this.getWorldBounds()
+        const isTouchOver =
+            touchPos.x >= bounds.x &&
+            touchPos.x <= bounds.x + bounds.width &&
+            touchPos.y >= bounds.y &&
+            touchPos.y <= bounds.y + bounds.height
+
+        if (isTouchOver) {
+            this.isMouseOver = true
+            this.isMouseDown = true
+            this.state = ButtonState.PRESSED
+            this.onPress?.()
+            this.updateAppearance()
+            GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.BUTTON_CLICK)
+        }
+    }
+
+    public handleTouchEnd(touchPos: Vector2): void {
+        if (!this.isEnabled()) return
+
+        const bounds = this.getWorldBounds()
+        const isTouchOver =
+            touchPos.x >= bounds.x &&
+            touchPos.x <= bounds.x + bounds.width &&
+            touchPos.y >= bounds.y &&
+            touchPos.y <= bounds.y + bounds.height
+
+        const wasMouseDown = this.isMouseDown
+        this.isMouseDown = false
+
+        if (wasMouseDown && isTouchOver) {
+            this.onClick?.()
+        }
+
+        this.state = isTouchOver ? ButtonState.HOVERED : ButtonState.NORMAL
+        this.onRelease?.()
+        this.updateAppearance()
+    }
+
     private updateAppearance(): void {
         switch (this.state) {
             case ButtonState.NORMAL:
