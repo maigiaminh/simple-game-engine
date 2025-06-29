@@ -61,18 +61,24 @@ export abstract class Obstacle extends Component {
     protected onProjectileHit(projectile: IGameObject): void {
         if (this.gameObject.tag === 'landed_spike') return
         this.deactivate()
-        projectile.getComponent(Projectile as ComponentConstructor<Projectile>)!.deactivate()
+        const projectileComponent = projectile.getComponent(
+            Projectile as ComponentConstructor<Projectile>
+        )
+        if (projectileComponent) {
+            projectileComponent.deactivate()
+        }
     }
 
     protected onPlayerHit(player: IGameObject): void {
-        player
-            .getComponent(Player as ComponentConstructor<Player>)!
-            .dispatchEvent(GAME_EVENTS.PLAYER_HIT_OBSTACLE, {
+        const playerComponent = player.getComponent(Player as ComponentConstructor<Player>)
+        if (playerComponent) {
+            playerComponent.dispatchEvent(GAME_EVENTS.PLAYER_HIT_OBSTACLE, {
                 obstacle: this.gameObject,
                 player: player,
                 obstacleType: this.obstacleType,
             })
-        GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.HIT)
+            GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.HIT)
+        }
     }
 
     public deactivate(): void {
@@ -83,7 +89,10 @@ export abstract class Obstacle extends Component {
             GameEngine.getInstance().getCollisionManager().removeCollider(collider)
         }
         GameEngine.getInstance().getAudioManager().playSound(GAME_CONFIG.AUDIO.SFX.DESTROY_OBSTACLE)
-        GameEngine.getInstance().getCurrentScene()!.removeGameObject(this.gameObject)
+        const currentScene = GameEngine.getInstance().getCurrentScene()
+        if (currentScene) {
+            currentScene.removeGameObject(this.gameObject)
+        }
         this.gameObject.destroy()
     }
 
@@ -104,7 +113,9 @@ export abstract class Obstacle extends Component {
 
     protected abstract updateObstacle(deltaTime: number): void
 
-    protected checkBounds(): void {}
+    protected checkBounds(): void {
+        //
+    }
 
     public render(ctx: CanvasRenderingContext2D): void {
         if (this.isActive) {
@@ -112,5 +123,7 @@ export abstract class Obstacle extends Component {
         }
     }
 
-    protected renderEffects(ctx: CanvasRenderingContext2D): void {}
+    protected renderEffects(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }

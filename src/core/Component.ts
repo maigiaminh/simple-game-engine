@@ -56,13 +56,21 @@ export abstract class Component extends EventEmitter implements IComponent {
         this.started = true
     }
 
-    protected onAwake(): void {}
+    protected onAwake(): void {
+        //
+    }
 
-    protected onStart(): void {}
+    protected onStart(): void {
+        //
+    }
 
-    public onEnable(): void {}
+    public onEnable(): void {
+        //
+    }
 
-    public onDisable(): void {}
+    public onDisable(): void {
+        //
+    }
 
     public onDestroy(): void {
         this.destroyed = true

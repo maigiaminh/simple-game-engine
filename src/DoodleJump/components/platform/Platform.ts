@@ -34,9 +34,13 @@ export class Platform extends Component {
         return this.object
     }
 
-    public update(deltaTime: number): void {}
+    public update(deltaTime: number): void {
+        //
+    }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public getPlatformType(): PlatformType {
         return this.type

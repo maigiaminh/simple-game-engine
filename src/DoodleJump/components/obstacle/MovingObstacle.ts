@@ -58,9 +58,13 @@ export class MovingObstacle extends Obstacle {
         }
     }
 
-    protected setupRenderer(): void {}
+    protected setupRenderer(): void {
+        //
+    }
 
-    protected setupObstacleSpecific(): void {}
+    protected setupObstacleSpecific(): void {
+        //
+    }
 
     protected updateObstacle(deltaTime: number): void {
         this.moveTime += deltaTime / 1000
@@ -170,7 +174,9 @@ export class MovingObstacle extends Obstacle {
         return new Vector2(newX, zigzagY)
     }
 
-    private updateSpecialBehaviors(deltaTime: number): void {}
+    private updateSpecialBehaviors(deltaTime: number): void {
+        //
+    }
 
     protected checkBounds(): void {
         const position = this.gameObject.getPosition()

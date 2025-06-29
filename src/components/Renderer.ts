@@ -50,7 +50,9 @@ export class Renderer extends Component {
         return this.imageHeight ?? (this.image ? this.image.height : 50)
     }
 
-    public update(deltaTime: number): void {}
+    public update(deltaTime: number): void {
+        //
+    }
 
     public render(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible()) return

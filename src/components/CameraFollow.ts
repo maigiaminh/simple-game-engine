@@ -51,9 +51,11 @@ export class CameraFollow extends Camera {
 
         if (!this.target) return
 
-        const transform = this.gameObject.getComponent(
-            Transform as ComponentConstructor<Transform>
-        )!
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            console.warn('CameraFollow: GameObject does not have a Transform component.')
+            return
+        }
         const targetPos = this.target.getPosition()
         const currentPos = transform.getWorldPosition()
         if (targetPos.y < this.highestY) {
@@ -87,9 +89,10 @@ export class CameraFollow extends Camera {
     }
 
     public getCameraViewBounds(): CameraViewBounds {
-        const transform = this.gameObject.getComponent(
-            Transform as ComponentConstructor<Transform>
-        )!
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            throw new Error('Transform component not found on gameObject.')
+        }
         const cameraPos = transform.getWorldPosition()
 
         return {

@@ -180,7 +180,9 @@ export class UIElement extends Component {
         })
     }
 
-    protected onRender(ctx: CanvasRenderingContext2D): void {}
+    protected onRender(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public serialize(): SerializedData {
         return {

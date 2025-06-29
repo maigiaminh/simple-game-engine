@@ -119,9 +119,13 @@ export class Transform extends Component {
         this.children.forEach((child) => child.markNeedsUpdate())
     }
 
-    public update(deltaTime: number): void {}
+    public update(deltaTime: number): void {
+        //
+    }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public serialize(): SerializedData {
         return {

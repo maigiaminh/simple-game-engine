@@ -51,7 +51,10 @@ export class ItemFactory {
         }
 
         GameEngine.getInstance().getCollisionManager().addCollider(collider)
-        GameEngine.getInstance().getCurrentScene()!.addGameObject(itemGO)
+        const currentScene = GameEngine.getInstance().getCurrentScene()
+        if (currentScene) {
+            currentScene.addGameObject(itemGO)
+        }
         return itemGO
     }
 

@@ -11,7 +11,9 @@ import { Vector2 } from '../../../utils/Vector2'
 import { GAME_CONFIG } from '../../config/GameplayConfig'
 
 export class Projectile extends Component {
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
     private gameEngine: GameEngine
     private scene: IScene | null = null
     private speed = 1500
@@ -47,17 +49,21 @@ export class Projectile extends Component {
         rigidBody.useGravity = false
         rigidBody.setVelocity(new Vector2(0, -this.speed))
         this.gameObject.addComponent(rigidBody)
-        this.scene!.addGameObject(this.gameObject)
+        if (this.scene) {
+            this.scene.addGameObject(this.gameObject)
+        }
         this.gameEngine.getCollisionManager().addCollider(collider)
     }
 
     public update(deltaTime: number): void {
         const pos = this.gameObject.getPosition()
         if (this.scene) {
+            const mainCamera = this.scene.getMainCamera();
             if (
+                mainCamera &&
                 pos.y <
-                this.scene.getMainCamera()!.getGameObject().getPosition().y -
-                    CONFIG.CANVAS.HEIGHT / 2
+                    mainCamera.getGameObject().getPosition().y -
+                        CONFIG.CANVAS.HEIGHT / 2
             ) {
                 this.deactivate()
             }
@@ -69,7 +75,9 @@ export class Projectile extends Component {
         if (collider && GameEngine.getInstance()) {
             GameEngine.getInstance().getCollisionManager().removeCollider(collider)
         }
-        this.scene!.removeGameObject(this.gameObject)
+        if (this.scene) {
+            this.scene.removeGameObject(this.gameObject)
+        }
         this.gameObject.destroy()
     }
 }

@@ -302,5 +302,7 @@ export class PauseManager extends Component {
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }

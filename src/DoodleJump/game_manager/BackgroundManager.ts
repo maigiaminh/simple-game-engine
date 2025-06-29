@@ -38,7 +38,6 @@ export class BackgroundManager extends Component {
     }
 
     public update(deltaTime: number): void {
-        this.updateClouds()
         this.manageClouds()
     }
 
@@ -78,8 +77,6 @@ export class BackgroundManager extends Component {
 
         return cloudGO
     }
-
-    private updateClouds(): void {}
 
     private manageClouds(): void {
         if (!this.camera) return

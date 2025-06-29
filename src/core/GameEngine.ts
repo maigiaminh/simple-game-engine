@@ -16,11 +16,11 @@ export class GameEngine extends EventEmitter implements GameEngine {
     private scenes: Map<string, IScene> = new Map()
     private currentScene: IScene | null = null
 
-    private inputManager!: InputManager
-    private audioManager!: AudioManager
-    private resourceManager!: ResourceManager
-    private collisionManager!: CollisionManager
-    private uiManager!: UIManager
+    private inputManager: InputManager
+    private audioManager: AudioManager
+    private resourceManager: ResourceManager
+    private collisionManager: CollisionManager
+    private uiManager: UIManager
 
     private isRunning = false
     private isPaused = false
@@ -39,11 +39,11 @@ export class GameEngine extends EventEmitter implements GameEngine {
         if (!this.canvas) {
             throw new Error(`Canvas with id '${config.canvasId}' not found`)
         }
-
-        this.ctx = this.canvas.getContext('2d')!
-        if (!this.ctx) {
+        const ctx = this.canvas.getContext('2d')
+        if (!ctx) {
             throw new Error('Could not get 2D context from canvas')
         }
+        this.ctx = ctx
 
         this.setupCanvas(config.width || 800, config.height || 600)
         this.initializeSystems()

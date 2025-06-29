@@ -4,7 +4,7 @@ import { Transform } from './Transform'
 import { CameraType } from '../types/enums'
 import { IGameObject, ComponentConstructor } from '../types/interface'
 
-export class Camera extends Component implements Camera {
+export class Camera extends Component {
     public type: CameraType = CameraType.ORTHOGRAPHIC
     public size = 5
     public fieldOfView = 60
@@ -30,9 +30,10 @@ export class Camera extends Component implements Camera {
     }
 
     public worldToScreen(worldPoint: Vector2, canvasSize: Vector2): Vector2 {
-        const transform = this.gameObject.getComponent(
-            Transform as ComponentConstructor<Transform>
-        )!
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            throw new Error('Transform component not found on gameObject.')
+        }
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset)
 
         return new Vector2(
@@ -42,9 +43,10 @@ export class Camera extends Component implements Camera {
     }
 
     public screenToWorld(screenPoint: Vector2, canvasSize: Vector2): Vector2 {
-        const transform = this.gameObject.getComponent(
-            Transform as ComponentConstructor<Transform>
-        )!
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            throw new Error('Transform component not found on gameObject.')
+        }
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset)
 
         return new Vector2(
@@ -59,9 +61,10 @@ export class Camera extends Component implements Camera {
     }
 
     private getViewBounds(canvasSize: Vector2): Rectangle {
-        const transform = this.gameObject.getComponent(
-            Transform as ComponentConstructor<Transform>
-        )!
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            throw new Error('Transform component not found on gameObject.')
+        }
         const cameraPos = transform.getWorldPosition().add(this.shakeOffset)
 
         const halfWidth = canvasSize.x / 2
@@ -91,7 +94,10 @@ export class Camera extends Component implements Camera {
             const targetPos = this.target.getPosition()
             const transform = this.gameObject.getComponent(
                 Transform as ComponentConstructor<Transform>
-            )!
+            )
+            if (!transform) {
+                throw new Error('Transform component not found on gameObject.')
+            }
             const currentPos = transform.getWorldPosition()
 
             if (this.followSmoothing > 0) {
@@ -119,7 +125,9 @@ export class Camera extends Component implements Camera {
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public serialize(): SerializedData {
         return {
@@ -138,6 +146,5 @@ export class Camera extends Component implements Camera {
         ) as CameraType
         this.size = typeof data.size === 'number' ? data.size : 5
         this.fieldOfView = typeof data.fieldOfView === 'number' ? data.fieldOfView : 60
-        this.followSmoothing = typeof data.followSmoothing === 'number' ? data.followSmoothing : 5
     }
 }

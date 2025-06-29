@@ -66,9 +66,10 @@ export class MathUtils {
         if (min === undefined && max === undefined) {
             return Math.random()
         } else if (max === undefined) {
-            return Math.random() * min!
+            return Math.random() * (min ?? 1)
         } else {
-            return Math.random() * (max - min!) + min!
+            const safeMin = min ?? 0
+            return Math.random() * (max - safeMin) + safeMin
         }
     }
 

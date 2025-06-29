@@ -69,7 +69,9 @@ export class UIAnimator extends Component {
         return `anim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }
 
 type AnimationOrginalValues = {
@@ -186,9 +188,13 @@ class Animation {
         }
     }
 
-    private applyFadeIn(progress: number): void {}
+    private applyFadeIn(progress: number): void {
+        //
+    }
 
-    private applyFadeOut(progress: number): void {}
+    private applyFadeOut(progress: number): void {
+        //
+    }
 
     private applySlideFromTop(progress: number): void {
         const originalY = this.originalValues.position.y

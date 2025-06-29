@@ -89,7 +89,11 @@ export class GameObject extends EventEmitter implements IGameObject {
     }
 
     public getTransform(): Transform {
-        return this.getComponent(Transform as ComponentConstructor<Transform>)!
+        const transform = this.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            throw new Error('Transform component not found on GameObject.')
+        }
+        return transform
     }
 
     public awake(): void {
@@ -108,9 +112,13 @@ export class GameObject extends EventEmitter implements IGameObject {
         this.started = true
     }
 
-    protected onAwake(): void {}
+    protected onAwake(): void {
+        //
+    }
 
-    protected onStart(): void {}
+    protected onStart(): void {
+        //
+    }
 
     public onEnable(): void {
         this.components.forEach((component) => component.onEnable())
@@ -201,9 +209,13 @@ export class GameObject extends EventEmitter implements IGameObject {
         this.onRender(ctx)
     }
 
-    protected onUpdate(deltaTime: number): void {}
+    protected onUpdate(deltaTime: number): void {
+        //
+    }
 
-    protected onRender(ctx: CanvasRenderingContext2D): void {}
+    protected onRender(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public destroy(): void {
         if (this.destroyed) return
@@ -231,7 +243,9 @@ export class GameObject extends EventEmitter implements IGameObject {
         return this.destroyed
     }
 
-    public onDestroy(): void {}
+    public onDestroy(): void {
+        //
+    }
 
     public serialize(): SerializedData {
         const componentData: SerializedData = {}

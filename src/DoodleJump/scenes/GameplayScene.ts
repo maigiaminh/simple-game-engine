@@ -175,7 +175,6 @@ export class GameplayScene extends Scene {
             GAME_EVENTS.PLAYER_HIT_OBSTACLE,
             this.onPlayerHitObstacle.bind(this)
         )
-        playerComponent.addEventListener(GAME_EVENTS.PLAYER_JUMP, this.onPlayerJump.bind(this))
 
         this.addGameObject(this.player)
     }
@@ -275,8 +274,6 @@ export class GameplayScene extends Scene {
         this.triggerGameOver()
     }
 
-    private onPlayerJump(event: GameEvent): void {}
-
     private checkGameOver(): void {
         if (this.gameState === GameState.GAMEOVER) return
 
@@ -287,7 +284,9 @@ export class GameplayScene extends Scene {
         if (!playerTransform) return
 
         const position = playerTransform.getWorldPosition()
-        const cameraY = this.getMainCamera()!.getGameObject().getPosition().y
+        const mainCamera = this.getMainCamera()
+        if (!mainCamera) return
+        const cameraY = mainCamera.getGameObject().getPosition().y
 
         if (position.y > cameraY + CONFIG.CANVAS.HEIGHT / 2) {
             this.playerComponent.setPlayerDead(true)

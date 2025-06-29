@@ -40,7 +40,10 @@ export class ObstacleFactory {
         }
 
         GameEngine.getInstance().getCollisionManager().addCollider(collider)
-        GameEngine.getInstance().getCurrentScene()!.addGameObject(obstacle)
+        const currentScene = GameEngine.getInstance().getCurrentScene()
+        if (currentScene) {
+            currentScene.addGameObject(obstacle)
+        }
         return obstacle
     }
 
@@ -108,7 +111,10 @@ export class ObstacleFactory {
         }
 
         GameEngine.getInstance().getCollisionManager().addCollider(collider)
-        GameEngine.getInstance().getCurrentScene()!.addGameObject(obstacle)
+        const currentScene = GameEngine.getInstance().getCurrentScene()
+        if (currentScene) {
+            currentScene.addGameObject(obstacle)
+        }
         return obstacle
     }
 

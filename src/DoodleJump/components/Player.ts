@@ -25,10 +25,10 @@ export class Player extends Component {
     private inputRight = false
     private inputShoot = false
 
-    private transform!: Transform
-    private rigidBody!: RigidBody
-    private collider!: Collider
-    private animatedRenderer!: AnimatedRenderer
+    private transform: Transform
+    private rigidBody: RigidBody
+    private collider: Collider
+    private animatedRenderer: AnimatedRenderer
 
     private shootCooldown = 0
     private readonly SHOOT_INTERVAL = 800
@@ -38,24 +38,32 @@ export class Player extends Component {
     }
 
     public onAwake(): void {
-        this.transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)!
-        this.rigidBody = this.gameObject.getComponent(RigidBody as ComponentConstructor<RigidBody>)!
-        this.collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)!
-        this.animatedRenderer = this.gameObject.getComponent(
-            AnimatedRenderer as ComponentConstructor<AnimatedRenderer>
-        )!
-
-        console.log('Player components check:', {
-            transform: !!this.transform,
-            rigidBody: !!this.rigidBody,
-            collider: !!this.collider,
-            animatedRenderer: !!this.animatedRenderer,
-        })
-
-        if (!this.transform || !this.rigidBody || !this.collider || !this.animatedRenderer) {
-            console.error('Player missing components!')
+        const transform = this.gameObject.getComponent(Transform as ComponentConstructor<Transform>)
+        if (!transform) {
+            console.error('Player missing Transform component!')
             return
         }
+        const rigidBody = this.gameObject.getComponent(RigidBody as ComponentConstructor<RigidBody>)
+        if (!rigidBody) {
+            console.error('Player missing RigidBody component!')
+            return
+        }
+        const collider = this.gameObject.getComponent(Collider as ComponentConstructor<Collider>)
+        if (!collider) {
+            console.error('Player missing Collider component!')
+            return
+        }
+        const animatedRenderer = this.gameObject.getComponent(
+            AnimatedRenderer as ComponentConstructor<AnimatedRenderer>
+        )
+        if (!animatedRenderer) {
+            console.error('Player missing AnimatedRenderer component!')
+            return
+        }
+        this.transform = transform
+        this.rigidBody = rigidBody
+        this.collider = collider
+        this.animatedRenderer = animatedRenderer
 
         this.animatedRenderer.setVisible(true)
 
@@ -240,10 +248,12 @@ export class Player extends Component {
         if (
             this.rigidBody.velocity.y > 0 &&
             this.transform.getWorldPosition().y + this.collider.height * 0.75 <
-                other
-                    .getGameObject()
-                    .getComponent(Transform as ComponentConstructor<Transform>)!
-                    .getWorldPosition().y
+                (() => {
+                    const otherTransform = other
+                        .getGameObject()
+                        .getComponent(Transform as ComponentConstructor<Transform>)
+                    return otherTransform ? otherTransform.getWorldPosition().y : 0
+                })()
         ) {
             if (other.getGameObject().tag === 'breakable_platform') {
                 const breakablePlatform = other
@@ -261,15 +271,17 @@ export class Player extends Component {
                 .getGameObject()
                 .getComponent(Transform as ComponentConstructor<Transform>)
 
-            this.transform.setPosition(
-                new Vector2(
-                    transform!.getWorldPosition().x,
-                    otherTransform!.getWorldPosition().y -
-                        other.height / 2 -
-                        this.collider.height / 2 +
-                        8
+            if (transform && otherTransform) {
+                this.transform.setPosition(
+                    new Vector2(
+                        transform.getWorldPosition().x,
+                        otherTransform.getWorldPosition().y -
+                            other.height / 2 -
+                            this.collider.height / 2 +
+                            8
+                    )
                 )
-            )
+            }
 
             this.isGrounded = true
             this.rigidBody.setVelocity(new Vector2(this.rigidBody.getVelocity().x, 0))
@@ -309,5 +321,7 @@ export class Player extends Component {
         return this.isDead
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }

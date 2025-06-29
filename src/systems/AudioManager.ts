@@ -57,13 +57,14 @@ export class AudioManager extends EventEmitter {
         if (!clip) return
 
         try {
-            const source = this.audioContext!.createBufferSource()
-            const gainNode = this.audioContext!.createGain()
+            if (!this.audioContext || !this.masterGainNode) return
+            const source = this.audioContext.createBufferSource()
+            const gainNode = this.audioContext.createGain()
             source.buffer = clip.buffer
             source.loop = options.loop ?? true
             gainNode.gain.value = (options.volume ?? clip.volume) * this.masterVolume
             source.connect(gainNode)
-            gainNode.connect(this.masterGainNode!)
+            gainNode.connect(this.masterGainNode)
 
             const audioSource: AudioSource = {
                 clip,

@@ -62,7 +62,9 @@ export class RigidBody extends Component {
         this.force = Vector2.zero()
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 
     public serialize(): SerializedData {
         return {

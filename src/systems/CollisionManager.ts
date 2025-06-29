@@ -44,8 +44,10 @@ export class CollisionManager extends EventEmitter {
                     colliderB.onCollision(colliderA, info)
                     if (!newMap.has(colliderA)) newMap.set(colliderA, new Set())
                     if (!newMap.has(colliderB)) newMap.set(colliderB, new Set())
-                    newMap.get(colliderA)!.add(colliderB)
-                    newMap.get(colliderB)!.add(colliderA)
+                    const setA = newMap.get(colliderA)
+                    const setB = newMap.get(colliderB)
+                    if (setA) setA.add(colliderB)
+                    if (setB) setB.add(colliderA)
                 }
             }
         }

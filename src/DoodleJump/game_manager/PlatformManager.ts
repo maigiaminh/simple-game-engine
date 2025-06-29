@@ -21,7 +21,7 @@ export class PlatformManager extends Component {
     private gameEngine: GameEngine
     private platformsImg: HTMLImageElement[] = []
     private platforms: Platform[] = []
-    private scene!: IScene
+    private scene: IScene
     private lastPlatformX: number = CONFIG.CANVAS.WIDTH / 2
     private readonly MAX_PLATFORM_X_DIFF = CONFIG.CANVAS.WIDTH / 2
     private spawnDistance: number = GAME_CONFIG.PLATFORM.SPAWN_DISTANCE
@@ -32,7 +32,7 @@ export class PlatformManager extends Component {
     }
 
     public onStart(): void {
-        this.gameEngine = GameEngine.getInstance()!
+        this.gameEngine = GameEngine.getInstance()
         this.generateGround()
         this.loadPlatformImages()
         this.generateInitialPlatforms()
@@ -75,9 +75,14 @@ export class PlatformManager extends Component {
         })
 
         const renderer = new Renderer(groundGO)
-        renderer.setImage(
-            this.gameEngine.getResourceManager().getResource(GAME_CONFIG.IMAGES.GROUND)!
-        )
+        const groundImage = this.gameEngine
+            .getResourceManager()
+            .getResource(GAME_CONFIG.IMAGES.GROUND)
+        if (groundImage) {
+            renderer.setImage(groundImage as HTMLImageElement)
+        } else {
+            console.warn('Ground image resource not found')
+        }
         renderer.setImageSize(CONFIG.CANVAS.WIDTH + 64, 156)
         groundGO.addComponent(renderer)
         const collider = new Collider(groundGO)
@@ -233,7 +238,11 @@ export class PlatformManager extends Component {
             if (y < highestY) highestY = y
         }
 
-        const cameraY = this.scene.getMainCamera()!.getGameObject().getPosition().y
+        const mainCamera = this.scene.getMainCamera()
+        if (!mainCamera) {
+            return
+        }
+        const cameraY = mainCamera.getGameObject().getPosition().y
 
         const generationThreshold = cameraY - CONFIG.CANVAS.HEIGHT / 2 - 200
 
@@ -244,7 +253,11 @@ export class PlatformManager extends Component {
     }
 
     private removeOldPlatforms(): void {
-        const cameraPos = this.scene.getMainCamera()!.getGameObject().getPosition().y
+        const mainCamera = this.scene.getMainCamera()
+        if (!mainCamera) {
+            return
+        }
+        const cameraPos = mainCamera.getGameObject().getPosition().y
         this.platforms = this.platforms.filter((platform) => {
             const pos = platform.getGameObject().getPosition()
             const platformDistance = pos.y - cameraPos
@@ -264,5 +277,7 @@ export class PlatformManager extends Component {
         })
     }
 
-    public render(ctx: CanvasRenderingContext2D): void {}
+    public render(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }

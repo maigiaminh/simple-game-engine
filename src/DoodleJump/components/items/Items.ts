@@ -64,7 +64,10 @@ export abstract class Items extends Component {
         if (collider && GameEngine.getInstance()) {
             GameEngine.getInstance().getCollisionManager().removeCollider(collider)
         }
-        GameEngine.getInstance().getCurrentScene()!.removeGameObject(this.gameObject)
+        const currentScene = GameEngine.getInstance().getCurrentScene()
+        if (currentScene) {
+            currentScene.removeGameObject(this.gameObject)
+        }
         this.gameObject.destroy()
     }
 
@@ -77,7 +80,9 @@ export abstract class Items extends Component {
 
     protected abstract updateItem(deltaTime: number): void
 
-    protected checkBounds(): void {}
+    protected checkBounds(): void {
+        //
+    }
 
     public render(ctx: CanvasRenderingContext2D): void {
         if (this.isActive) {
@@ -85,5 +90,7 @@ export abstract class Items extends Component {
         }
     }
 
-    protected renderEffects(ctx: CanvasRenderingContext2D): void {}
+    protected renderEffects(ctx: CanvasRenderingContext2D): void {
+        //
+    }
 }

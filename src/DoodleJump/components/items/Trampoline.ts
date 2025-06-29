@@ -5,14 +5,20 @@ import { GAME_CONFIG } from '../../config/GameplayConfig'
 import { Items } from './Items'
 
 export class Trampoline extends Items {
-    protected updateItem(deltaTime: number): void {}
+    protected updateItem(deltaTime: number): void {
+        //
+    }
     constructor(gameObject: IGameObject) {
         super(gameObject, 'trampoline')
     }
 
-    protected setupRenderer(): void {}
+    protected setupRenderer(): void {
+        //
+    }
 
-    protected setupItemSpecific(): void {}
+    protected setupItemSpecific(): void {
+        //
+    }
 
     public onPlayerHit(player: IGameObject): void {
         super.onPlayerHit(player)

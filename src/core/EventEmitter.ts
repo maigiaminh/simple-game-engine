@@ -63,7 +63,10 @@ export class EventEmitter {
             this.events.set(type, [])
         }
 
-        const listeners = this.events.get(type)!
+        const listeners = this.events.get(type)
+        if (!listeners) {
+            throw new Error(`Event type "${type}" not found in event map.`)
+        }
         listeners.push({ listener, options })
 
         listeners.sort((a, b) => (b.options.priority || 0) - (a.options.priority || 0))

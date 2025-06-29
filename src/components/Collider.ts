@@ -5,7 +5,7 @@ import { Vector2 } from '../utils/Vector2'
 import { Renderer } from './Renderer'
 import { Transform } from './Transform'
 
-export class Collider extends Component implements Collider {
+export class Collider extends Component {
     public type: ColliderType = ColliderType.BOX
     public width = 50
     public height = 50
@@ -149,7 +149,9 @@ export class Collider extends Component implements Collider {
         return canThisCollide && canOtherCollide
     }
 
-    public update(deltaTime: number): void {}
+    public update(deltaTime: number): void {
+        //
+    }
 
     public render(ctx: CanvasRenderingContext2D): void {
         // if (!this.gameObject.isVisible()) return

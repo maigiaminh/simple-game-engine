@@ -111,7 +111,7 @@ export class ParticleSystem extends Component {
                     gravity: false,
                 }
 
-            case ParticlePreset.CONFETTI:
+            case ParticlePreset.CONFETTI: {
                 const colors = [
                     { r: 255, g: 0, b: 0 },
                     { r: 0, g: 255, b: 0 },
@@ -132,6 +132,7 @@ export class ParticleSystem extends Component {
                     shrink: false,
                     gravity: true,
                 }
+            }
 
             case ParticlePreset.HEARTS:
                 return {

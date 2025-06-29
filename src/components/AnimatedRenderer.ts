@@ -45,8 +45,10 @@ export class AnimatedRenderer extends Renderer {
             this.currentAnimation = animation
             this.currentFrame = 0
             this.animationTime = 0
-            this.imageWidth = this.currentAnimation!.frames[this.currentFrame].width
-            this.imageHeight = this.currentAnimation!.frames[this.currentFrame].height
+            if (this.currentAnimation && this.currentAnimation.frames.length > 0) {
+                this.imageWidth = this.currentAnimation.frames[this.currentFrame].width
+                this.imageHeight = this.currentAnimation.frames[this.currentFrame].height
+            }
         }
     }
 

@@ -67,12 +67,19 @@ export abstract class Scene extends EventEmitter implements IScene {
         if (!this.gameObjectsByTag.has(gameObject.tag)) {
             this.gameObjectsByTag.set(gameObject.tag, new Set())
         }
-        this.gameObjectsByTag.get(gameObject.tag)!.add(gameObject)
+
+        const tagSet = this.gameObjectsByTag.get(gameObject.tag)
+        if (tagSet) {
+            tagSet.add(gameObject)
+        }
 
         if (!this.gameObjectsByLayer.has(gameObject.layer)) {
             this.gameObjectsByLayer.set(gameObject.layer, new Set())
         }
-        this.gameObjectsByLayer.get(gameObject.layer)!.add(gameObject)
+        const layerSet = this.gameObjectsByLayer.get(gameObject.layer)
+        if (layerSet) {
+            layerSet.add(gameObject)
+        }
 
         if (this.state === SceneState.LOADED) {
             gameObject.awake()
